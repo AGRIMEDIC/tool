@@ -174,11 +174,49 @@ body{font-family:'DM Sans',sans-serif;background:#1a1a1a;color:var(--text-dark);
 
 @media print{
   *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;color-adjust:exact!important;}
+  @page{size:A4;margin:0;}
   body{background:white;margin:0;padding:0;}
   .input-panel,.preview-toolbar{display:none!important;}
   .preview-panel{background:white;padding:0;margin:0;display:block;}
   .one-pager{box-shadow:none;width:100%;max-width:100%;margin:0;}
-  @page{size:A4;margin:0;}
+  /* Compact everything to fit one page */
+  .doc-header{padding:14px 28px 12px!important;}
+  .doc-brand-name{font-size:14px!important;}
+  .doc-product-name{font-size:22px!important;}
+  .doc-recipient-name{font-size:15px!important;}
+  .doc-meta{font-size:9px!important;}
+  .doc-numbers-strip{padding:0 28px!important;}
+  .doc-number-item{padding:10px 12px!important;}
+  .doc-number-val{font-size:18px!important;}
+  .doc-number-label{font-size:7px!important;height:18px!important;margin-bottom:5px!important;}
+  .doc-number-sub{font-size:8px!important;margin-top:3px!important;}
+  .doc-body{padding:12px 28px!important;}
+  .doc-section-title{font-size:9px!important;margin-bottom:7px!important;}
+  .comparison-grid{gap:7px!important;margin-bottom:10px!important;}
+  .cmp-card{padding:9px 12px!important;}
+  .cmp-card-label{font-size:9px!important;margin-bottom:6px!important;}
+  .cmp-row{font-size:10px!important;padding:3px 0!important;}
+  .bar-section{margin-bottom:10px!important;}
+  .bar-row{margin-bottom:3px!important;}
+  .bar-track{height:16px!important;}
+  .bar-row-label{font-size:9px!important;width:95px!important;}
+  .roi-callout{padding:12px 18px!important;margin-bottom:10px!important;}
+  .roi-callout-number{font-size:30px!important;}
+  .roi-callout-title{font-size:9px!important;}
+  .roi-callout-sub{font-size:9px!important;margin-top:3px!important;}
+  .roi-callout-right{padding-left:16px!important;}
+  .roi-detail-row{font-size:10px!important;padding:3px 0!important;}
+  .features-grid{gap:6px!important;margin-bottom:10px!important;}
+  .feature-item{padding:8px 10px!important;}
+  .feature-title{font-size:10px!important;}
+  .feature-desc{font-size:9px!important;line-height:1.3!important;}
+  .feature-icon{width:20px!important;height:20px!important;}
+  .trial-note{padding:7px 11px!important;}
+  .trial-note p{font-size:9px!important;line-height:1.4!important;}
+  .doc-footer{padding:9px 28px!important;}
+  .doc-footer-brand{font-size:9px!important;}
+  .doc-footer-reg{font-size:7px!important;}
+  .doc-footer-contact{font-size:8px!important;}
 }
 @media(max-width:900px){
   .app-shell{flex-direction:column;}
@@ -213,6 +251,7 @@ body{font-family:'DM Sans',sans-serif;background:#1a1a1a;color:var(--text-dark);
           <option value="af">Afrikaans</option>
           <option value="fr">Français</option>
           <option value="es">Español</option>
+          <option value="sw">Kiswahili</option>
         </select>
       </div>
       <div>
