@@ -41,7 +41,7 @@ body{font-family:'DM Sans',sans-serif;background:#1a1a1a;color:var(--text-dark);
 .rate-display.err{color:#f0a060;}
 
 .form-section{margin-bottom:18px;}
-.fsec-title{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--bright-green);font-weight:500;margin-bottom:8px;}
+.fsec-title{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--bright-green);font-weight:600;margin-bottom:8px;}
 .field{margin-bottom:7px;}
 .field label{display:block;font-size:11px;color:#888;margin-bottom:2px;}
 .field input,.field select,.field textarea{width:100%;background:#1e1e1e;border:1px solid #2e2e2e;border-radius:6px;color:#e8e8e8;font-family:'DM Sans',sans-serif;font-size:12px;padding:6px 9px;}
@@ -177,46 +177,55 @@ body{font-family:'DM Sans',sans-serif;background:#1a1a1a;color:var(--text-dark);
   @page{size:A4;margin:0;}
   body{background:white;margin:0;padding:0;}
   .input-panel,.preview-toolbar{display:none!important;}
-  .preview-panel{background:white;padding:0;margin:0;display:block;}
-  .one-pager{box-shadow:none;width:100%;max-width:100%;margin:0;}
-  /* Compact everything to fit one page */
-  .doc-header{padding:14px 28px 12px!important;}
-  .doc-brand-name{font-size:14px!important;}
-  .doc-product-name{font-size:22px!important;}
-  .doc-recipient-name{font-size:15px!important;}
+  .preview-panel{background:white;padding:0;margin:0;display:block;overflow:hidden;}
+  .one-pager{box-shadow:none;width:100%;max-width:100%;margin:0;overflow:hidden;}
+  /* Header */
+  .doc-header{padding:12px 24px 10px!important;}
+  .doc-brand-name{font-size:13px!important;}
+  .doc-product-name{font-size:20px!important;}
+  .doc-recipient-name{font-size:14px!important;}
   .doc-meta{font-size:9px!important;}
-  .doc-numbers-strip{padding:0 28px!important;}
-  .doc-number-item{padding:10px 12px!important;}
-  .doc-number-val{font-size:18px!important;}
-  .doc-number-label{font-size:7px!important;height:18px!important;margin-bottom:5px!important;}
-  .doc-number-sub{font-size:8px!important;margin-top:3px!important;}
-  .doc-body{padding:12px 28px!important;}
-  .doc-section-title{font-size:9px!important;margin-bottom:7px!important;}
-  .comparison-grid{gap:7px!important;margin-bottom:10px!important;}
-  .cmp-card{padding:9px 12px!important;}
-  .cmp-card-label{font-size:9px!important;margin-bottom:6px!important;}
-  .cmp-row{font-size:10px!important;padding:3px 0!important;}
-  .bar-section{margin-bottom:10px!important;}
-  .bar-row{margin-bottom:3px!important;}
-  .bar-track{height:16px!important;}
-  .bar-row-label{font-size:9px!important;width:95px!important;}
-  .roi-callout{padding:12px 18px!important;margin-bottom:10px!important;}
-  .roi-callout-number{font-size:30px!important;}
+  /* Numbers strip — allow value to shrink if large */
+  .doc-numbers-strip{padding:0 24px!important;}
+  .doc-number-item{padding:8px 10px!important;}
+  .doc-number-val{font-size:16px!important;word-break:break-all;line-height:1.1!important;}
+  .doc-number-label{font-size:7px!important;height:16px!important;margin-bottom:4px!important;}
+  .doc-number-sub{font-size:7px!important;margin-top:2px!important;}
+  /* Body */
+  .doc-body{padding:10px 24px!important;}
+  .doc-section-title{font-size:9px!important;margin-bottom:6px!important;}
+  /* Comparison cards */
+  .comparison-grid{gap:6px!important;margin-bottom:8px!important;}
+  .cmp-card{padding:8px 10px!important;page-break-inside:avoid;}
+  .cmp-card-label{font-size:9px!important;margin-bottom:5px!important;}
+  .cmp-row{font-size:9px!important;padding:2px 0!important;}
+  /* Bars */
+  .bar-section{margin-bottom:8px!important;}
+  .bar-row{margin-bottom:2px!important;}
+  .bar-track{height:14px!important;}
+  .bar-fill{font-size:9px!important;}
+  .bar-row-label{font-size:9px!important;width:90px!important;}
+  /* ROI callout */
+  .roi-callout{padding:10px 16px!important;margin-bottom:8px!important;page-break-inside:avoid;}
+  .roi-callout-number{font-size:28px!important;}
   .roi-callout-title{font-size:9px!important;}
-  .roi-callout-sub{font-size:9px!important;margin-top:3px!important;}
-  .roi-callout-right{padding-left:16px!important;}
-  .roi-detail-row{font-size:10px!important;padding:3px 0!important;}
-  .features-grid{gap:6px!important;margin-bottom:10px!important;}
-  .feature-item{padding:8px 10px!important;}
-  .feature-title{font-size:10px!important;}
-  .feature-desc{font-size:9px!important;line-height:1.3!important;}
-  .feature-icon{width:20px!important;height:20px!important;}
-  .trial-note{padding:7px 11px!important;}
-  .trial-note p{font-size:9px!important;line-height:1.4!important;}
-  .doc-footer{padding:9px 28px!important;}
+  .roi-callout-sub{font-size:8px!important;margin-top:2px!important;}
+  .roi-callout-right{padding-left:14px!important;}
+  .roi-detail-row{font-size:9px!important;padding:2px 0!important;}
+  /* Features */
+  .features-grid{gap:5px!important;margin-bottom:8px!important;}
+  .feature-item{padding:7px 9px!important;page-break-inside:avoid;}
+  .feature-title{font-size:9px!important;}
+  .feature-desc{font-size:8px!important;line-height:1.3!important;}
+  .feature-icon{width:18px!important;height:18px!important;}
+  /* Disclaimer + footer */
+  .trial-note{padding:6px 10px!important;}
+  .trial-note p{font-size:8px!important;line-height:1.4!important;}
+  .custom-note-block{font-size:8px!important;padding:5px 10px!important;}
+  .doc-footer{padding:8px 24px!important;}
   .doc-footer-brand{font-size:9px!important;}
   .doc-footer-reg{font-size:7px!important;}
-  .doc-footer-contact{font-size:8px!important;}
+  .doc-footer-contact{font-size:7px!important;}
 }
 @media(max-width:900px){
   .app-shell{flex-direction:column;}
@@ -357,6 +366,56 @@ body{font-family:'DM Sans',sans-serif;background:#1a1a1a;color:var(--text-dark);
         <div class="field"><label id="lbl-sugarPrice">Sugar price per MT</label><input id="scSugarPrice" type="number" value="6200" min="1"></div>
         <div style="font-size:10px;color:#555;margin-top:3px;line-height:1.5;" id="sc-hint">Revenue = Yield &times; RV% &times; Sugar price. PV typically lifts RV by 0.5&ndash;1.5 points.</div>
       </div>
+
+      <!-- BANANA EXTRA FIELDS -->
+      <div class="sc-section" id="bnSection">
+        <div style="height:1px;background:#2e2e2e;margin:8px 0;"></div>
+        <div style="font-size:10px;color:var(--bright-green);text-transform:uppercase;letter-spacing:.1em;margin-bottom:7px;">Bananas — grade &amp; cycle inputs</div>
+        <div style="font-size:10px;color:#666;margin-bottom:8px;line-height:1.5;">Revenue = Trees/Ha &times; Bunches/tree &times; Crates/bunch &times; Weighted price/crate. PV improves both bunches per tree and grade quality.</div>
+        <div class="field-row">
+          <div class="field"><label>Trees per Ha</label><input id="bnTreesHa" type="number" value="2222" min="1"></div>
+          <div class="field"><label>Crate weight (kg)</label><input id="bnCrateKg" type="number" value="18" min="1"></div>
+        </div>
+        <div class="field-row">
+          <div class="field"><label>Bunches/tree (without PV)</label><input id="bnBunchesNPV" type="number" value="2.0" step="0.1" min="0.1"></div>
+          <div class="field"><label>Bunches/tree (with PV)</label><input id="bnBunchesPV" type="number" value="2.2" step="0.1" min="0.1"></div>
+        </div>
+        <div class="field-row">
+          <div class="field"><label>Crates/bunch (without PV)</label><input id="bnCratesNPV" type="number" value="1.58" step="0.01" min="0.1"></div>
+          <div class="field"><label>Crates/bunch (with PV)</label><input id="bnCratesPV" type="number" value="1.80" step="0.01" min="0.1"></div>
+        </div>
+        <div style="font-size:10px;color:var(--bright-green);margin:8px 0 5px;">Grade mix — WITHOUT PV (% of crates)</div>
+        <div class="field-row">
+          <div class="field"><label>Class 1 export %</label><input id="bnNPVg1" type="number" value="56" min="0" max="100"></div>
+          <div class="field"><label>Class 2 export %</label><input id="bnNPVg2" type="number" value="29" min="0" max="100"></div>
+        </div>
+        <div class="field-row">
+          <div class="field"><label>Cluster/local %</label><input id="bnNPVg3" type="number" value="5" min="0" max="100"></div>
+          <div class="field"><label>Singles %</label><input id="bnNPVg4" type="number" value="7" min="0" max="100"></div>
+        </div>
+        <div class="field"><label>Dumps/loss %</label><input id="bnNPVg5" type="number" value="3" min="0" max="100"></div>
+        <div style="font-size:10px;color:var(--bright-green);margin:8px 0 5px;">Grade mix — WITH PV (% of crates)</div>
+        <div class="field-row">
+          <div class="field"><label>Class 1 export %</label><input id="bnPVg1" type="number" value="73" min="0" max="100"></div>
+          <div class="field"><label>Class 2 export %</label><input id="bnPVg2" type="number" value="14" min="0" max="100"></div>
+        </div>
+        <div class="field-row">
+          <div class="field"><label>Cluster/local %</label><input id="bnPVg3" type="number" value="4" min="0" max="100"></div>
+          <div class="field"><label>Singles %</label><input id="bnPVg4" type="number" value="7" min="0" max="100"></div>
+        </div>
+        <div class="field"><label>Dumps/loss %</label><input id="bnPVg5" type="number" value="2" min="0" max="100"></div>
+        <div style="font-size:10px;color:var(--bright-green);margin:8px 0 5px;">Price per crate (R)</div>
+        <div class="field-row">
+          <div class="field"><label>Class 1 (R/crate)</label><input id="bnP1" type="number" value="145" min="0"></div>
+          <div class="field"><label>Class 2 (R/crate)</label><input id="bnP2" type="number" value="125" min="0"></div>
+        </div>
+        <div class="field-row">
+          <div class="field"><label>Cluster/local (R/crate)</label><input id="bnP3" type="number" value="100" min="0"></div>
+          <div class="field"><label>Singles (R/crate)</label><input id="bnP4" type="number" value="50" min="0"></div>
+        </div>
+        <div class="field"><label>Dumps (R/crate)</label><input id="bnP5" type="number" value="0" min="0"></div>
+        <div style="font-size:10px;color:#555;margin-top:5px;line-height:1.5;">Defaults from Nisela harvest records. Class 1 % is the key PV lever — PV typically lifts Class 1 from ~56% to ~73% of total crates.</div>
+      </div>
     </div>
 
     <div class="div-line"></div>
@@ -364,21 +423,22 @@ body{font-family:'DM Sans',sans-serif;background:#1a1a1a;color:var(--text-dark);
     <div class="form-section">
       <div class="fsec-title" id="fsec-apps">Application plan</div>
       <div class="field-row">
-        <div class="field"><label id="lbl-knapsackN">Knapsack apps</label><input id="knapsackN" type="number" value="0" min="0" max="5"></div>
+        <div class="field"><label id="lbl-knapsackN">Knapsack apps</label><input id="knapsackN" type="number" value="0" min="0"></div>
         <div class="field"><label id="lbl-knapsackC">Cost per Ha</label><input id="knapsackC" type="number" value="125"></div>
       </div>
       <div class="field-row">
-        <div class="field"><label id="lbl-cropsprayN">Crop sprayer apps</label><input id="cropsprayN" type="number" value="4" min="0" max="5"></div>
+        <div class="field"><label id="lbl-cropsprayN">Crop sprayer apps</label><input id="cropsprayN" type="number" value="4" min="0"></div>
         <div class="field"><label id="lbl-cropsprayC">Cost per Ha</label><input id="cropsprayC" type="number" value="270"></div>
       </div>
       <div class="field-row">
-        <div class="field"><label id="lbl-droneN">Drone apps</label><input id="droneN" type="number" value="0" min="0" max="5"></div>
+        <div class="field"><label id="lbl-droneN">Drone apps</label><input id="droneN" type="number" value="0" min="0"></div>
         <div class="field"><label id="lbl-droneC">Cost per Ha</label><input id="droneC" type="number" value="387"></div>
       </div>
       <div class="app-total-row">
         <span class="app-total-label" id="lbl-totalApps">Total applications</span>
-        <span class="app-total-chip" id="appTotalChip">4 &#10003;</span>
+        <span class="app-total-chip" id="appTotalChip">4</span>
       </div>
+      <div style="font-size:10px;color:#555;margin-top:6px;line-height:1.5;">&#9432; More applications increase both PV product cost and application cost, which directly affects net gain and ROI. Standard protocol is 3&ndash;5 per season; bananas may use up to 8 per cycle.</div>
     </div>
 
     <div class="div-line"></div>
@@ -637,17 +697,17 @@ var LANG = {
     fsecCrop:'Gewas- en plaasdata', lblCrop:'Gewas', lblCropName:'Gewasnaam (vir dokument)',
     lblArea:'Aangeplante oppervlak (Ha)', lblYield:'Huidige opbrengs (MT/Ha)',
     lblPrice:'Verkoopprys per MT', lblPvPrice:'Plantos Verde prys per kg',
-    scTitle:'Suikerriet — RV% invoer', lblRvCurrent:'Huidige RV%',
+    scTitle:'Suikerriet — RV% invoere', lblRvCurrent:'Huidige RV%',
     lblRvProjected:'Geprojekteerde RV% met PV', lblSugarPrice:'Suikerprys per MT',
     scHint:'Inkomste = Opbrengs × RV% × Suikerprys. PV verhoog tipies RV met 0.5–1.5 punte.',
-    fsecApps:'Toepassingsplan', lblKnapsackN:'Rugsak aansoeke', lblKnapsackC:'Koste per Ha',
-    lblCropsprayN:'Gewaspuit aansoeke', lblDroneN:'Droon aansoeke', lblTotalApps:'Totale aansoeke',
+    fsecApps:'Toepassingsplan', lblKnapsackN:'Rugsak toepassings', lblKnapsackC:'Koste per Ha',
+    lblCropsprayN:'Gewaspuiter toepassings', lblDroneN:'Dronespuit toepassings', lblTotalApps:'Totale toepassings',
     fsecUplift:'Verwagte opbrengsverhoging', fsecFert:'Kunsmisbesparing',
     lblFertKg:'Kunsmis (kg/Ha)', lblFertPrice:'Prys per kg',
     lblFertCost:'Huidige kunsmiskoste per Ha', lblFertSaving:'Besparing per Ha',
-    fsecNote:'Aangepaste nota (opsioneel)', btnUpdate:'Opdateer een-bladsy', btnPrint:'Stoor / Druk as PDF',
+    fsecNote:'Persoonlike nota (opsioneel)', btnUpdate:'Opdateer dokument', btnPrint:'Stoor / Druk as PDF',
     lblPreview:'Kliënt voorskou', lblSavePdf:'Stoor as PDF',
-    tagline:'Werklik doeltreffend · Opbrengs OBI Projeksie', preparedFor:'Voorberei vir',
+    tagline:'Werklik Doeltreffend · OBI Projeksie', preparedFor:'Voorberei vir',
     preparedBy:'Voorberei deur', totalArea:'Totale oppervlak', hectares:'hektaar',
     yieldUplift:'Opbrengsverhoging', projectedIncrease:'geprojekteerde verhoging',
     netGainTotal:'Netto wins (totaal)', afterPVcosts:'na alle PV-koste',
@@ -662,15 +722,15 @@ var LANG = {
     netGainTot:'Netto wins (totaal)', netGainHa:'Netto wins per Ha',
     whyPV:'Hoekom Plantos Verde',
     feat1Title:'10–50% opbrengsverhoging',
-    feat1Desc:'Bevestig oor 30+ SA plaasproefneming. Saamgestelde biomassa- en kwaliteitswinste seisoen na seisoen.',
+    feat1Desc:'Bevestig deur veldproewe regoor Suider-Afrika. Saamgestelde biomassa- en kwaliteitswinste seisoen na seisoen.',
     feat2Title:'Droogte-, plaag- en insekweerstand',
     feat2Desc:'Verhoogde plantvitaliteit dryf huidmondreguling, selwandversterking en geïnduseerde sistemiese weerstand — bevestig in SA-toestande.',
     feat3Title:'100% organies',
     feat3Desc:'FiBL en ECOCERT gesertifiseer. Veilig vir personeel, grond, voordelige insekte en alle uitvoermarkte.',
-    feat4Title:'Gewaarborgde proef',
-    feat4Desc:'Volle terugbetaling as PV-behandelde lande nie kontroles oortref by oes nie. Geen risiko om te begin.',
-    disclaimer:'<strong>Hierdie syfers is aanwysende projeksies</strong> gebaseer op u gewasdata en gepubliseerde opbrengsverhoging. Werklike resultate hang af van seisoentoestande, toepassingstyd en bestaande grondgesondheid. Agrimedic Global beveel aan om resultate te bevestig deur \'n <strong>gestruktureerde, meetbare plaasproef</strong> voor volskaalse uitrol — met gewaarborgde OBI of volle terugbetaling.',
-    crops:{custom:'Aangepas / Ander',apples:'Appels',bananas:'Piesangs',barley:'Gars',beetroot:'Beet',berries:'Bessies',butternut:'Butternut',cabbage:'Kool',cannabis:'Cannabis',canola:'Canola',carrots:'Wortels',cassava:'Kassava',chillies:'Chillies',citrus:'Sitrus',coffee:'Koffie',eggplant:'Eiervrug',grapes:'Druiwe (tafel)',lettuce:'Slaai',lucerne:'Lusern',macadamia:'Makadamia',maize:'Mielies',melon:'Spanspek',oranges:'Lemoene',palmoil:'Palmolie',peaches:'Perskes',peppers:'Soetrissies',potatoes:'Aartappels',pumpkin:'Pampoene',rubber:'Rubber',spinach:'Spinasie',sugarcane:'Suikerriet',tea:'Tee',tobacco:'Tabak',tomatoes:'Tamaties',vegetables:'Verskillende Groente',watermelon:'Waatlemoen',wheat:'Koring'}
+    feat4Title:'Geldterugwaarborg',
+    feat4Desc:'Bespreek \'n demonstrasie en sien die resultate in u eie lande. As behandelde lande nie onbehandelde lande by oes oortref nie, kry u u geld terug.',
+    disclaimer:'<strong>Hierdie syfers is aanwysende projeksies</strong> gebaseer op u gewasdata en gepubliseerde opbrengsverhoging. Werklike resultate hang af van seisoentoestande, toepassingstyd en bestaande grondgesondheid. Agrimedic Global beveel aan om resultate te bevestig deur \'n <strong>gestruktureerde, meetbare plaasdemonstrasie</strong> voor volskaalse uitrol — met volle geldterugwaarborg.',
+    crops:{custom:'Aangepas / Ander',apples:'Appels',bananas:'Piesangs',barley:'Gars',beetroot:'Beet',berries:'Bessies',butternut:'Botterskorsie',cabbage:'Kool',cannabis:'Cannabis',canola:'Canola',carrots:'Wortels',cassava:'Kassava',chillies:'Chillies',citrus:'Sitrus',coffee:'Koffie',eggplant:'Eiervrug',grapes:'Druiwe (tafel)',lettuce:'Slaai',lucerne:'Lusern',macadamia:'Makadamia',maize:'Mielies',melon:'Spanspek',oranges:'Lemoene',palmoil:'Palmolie',peaches:'Perskes',peppers:'Soetrissies',potatoes:'Aartappels',pumpkin:'Pampoene',rubber:'Rubber',spinach:'Spinasie',sugarcane:'Suikerriet',tea:'Tee',tobacco:'Tabak',tomatoes:'Tamaties',vegetables:'Verskillende Groente',watermelon:'Waatlemoen',wheat:'Koring'}
   },
   pt: {
     panelSub:'Uso interno · Agrimedic SA', lblLanguage:'Idioma', lblCurrency:'Moeda',
@@ -746,14 +806,14 @@ var LANG = {
     netGainTot:'Gain net (total)', netGainHa:'Gain net par Ha',
     whyPV:'Pourquoi Plantos Verde',
     feat1Title:'Hausse de rendement de 10–50%',
-    feat1Desc:'Validé sur 30+ essais en Afrique du Sud. Gains composés de biomasse et de qualité saison après saison.',
-    feat2Title:'Résistance à la sécheresse, ravageurs et insectes',
-    feat2Desc:'La vitalité végétale élevée améliore la régulation stomatique, le renforcement des parois cellulaires et la résistance systémique induite — validé en conditions sud-africaines.',
+    feat1Desc:'Validé lors de plus de 30 essais terrain en Afrique du Sud. Gains composés de biomasse et de qualité saison après saison.',
+    feat2Title:'Résistance à la sécheresse, aux ravageurs et aux insectes',
+    feat2Desc:'La vitalité végétale élevée améliore la régulation stomatique, le renforcement des parois cellulaires et la résistance systémique induite — validé dans les conditions sud-africaines.',
     feat3Title:'100% biologique',
-    feat3Desc:'Certifié FiBL et ECOCERT. Sûr pour le personnel, le sol, les insectes utiles et tous les marchés d\'exportation.',
-    feat4Title:'Essai garanti',
-    feat4Desc:'Remboursement total si les parcelles traitées ne surpassent pas les témoins à la récolte. Zéro risque pour commencer.',
-    disclaimer:'<strong>Ces chiffres sont des projections indicatives</strong> basées sur vos données de culture et les plages d\'augmentation de rendement publiées. Les résultats réels dépendent des conditions saisonnières, du calendrier d\'application et de la santé des sols. Agrimedic Global recommande de confirmer les résultats par un <strong>essai structuré et mesurable sur la ferme</strong> avant un déploiement à grande échelle — avec un ROI garanti ou un remboursement total.',
+    feat3Desc:'Sans danger pour le personnel, le sol, les insectes utiles et tous les marchés d\'exportation. Certifié FiBL et ECOCERT.',
+    feat4Title:'Garantie de remboursement',
+    feat4Desc:'Réservez une démonstration et constatez les résultats dans vos propres champs. Si les parcelles traitées ne surpassent pas les parcelles témoins à la récolte, vous êtes intégralement remboursé.',
+    disclaimer:'<strong>Ces chiffres sont des projections indicatives</strong> basées sur vos données de culture et les plages publiées. Les résultats réels dépendent des conditions saisonnières, du calendrier d\'application et de la santé des sols. Agrimedic Global recommande de confirmer les résultats par une <strong>démonstration structurée et mesurable sur la ferme</strong> avant un déploiement à grande échelle — avec garantie de remboursement.',
     crops:{custom:'Personnalisé / Autre',apples:'Pommes',bananas:'Bananes',barley:'Orge',beetroot:'Betterave',berries:'Baies',butternut:'Courge butternut',cabbage:'Chou',cannabis:'Cannabis',canola:'Colza',carrots:'Carottes',cassava:'Manioc',chillies:'Piments',citrus:'Agrumes',coffee:'Café',eggplant:'Aubergine',grapes:'Raisins (table)',lettuce:'Laitue',lucerne:'Luzerne',macadamia:'Macadamia',maize:'Maïs',melon:'Melon',oranges:'Oranges',palmoil:'Huile de palme',peaches:'Pêches',peppers:'Poivrons',potatoes:'Pommes de terre',pumpkin:'Citrouille',rubber:'Caoutchouc',spinach:'Épinards',sugarcane:'Canne à sucre',tea:'Thé',tobacco:'Tabac',tomatoes:'Tomates',vegetables:'Divers légumes',watermelon:'Pastèque',wheat:'Blé'}
   },
   sw: {
@@ -788,14 +848,14 @@ var LANG = {
     netGainTot:'Faida halisi (jumla)', netGainHa:'Faida halisi kwa Ha',
     whyPV:'Kwa nini Plantos Verde',
     feat1Title:'Ongezeko la mavuno la 10–50%',
-    feat1Desc:'Imethibitishwa katika majaribio 30+ ya mashamba SA. Ongezeko linalojengwa la biomasi na ubora msimu baada ya msimu.',
+    feat1Desc:'Imethibitishwa katika majaribio zaidi ya 30 ya mashamba Afrika ya Kusini. Ongezeko linalojengwa la biomasi na ubora msimu baada ya msimu.',
     feat2Title:'Ustahimilivu wa ukame, wadudu na wadudu waharibifu',
-    feat2Desc:'Uhai wa juu wa mmea husababisha udhibiti wa stomata, uimarishaji wa ukuta wa seli na upinzani wa kimfumo uliosababishwa — imethibitishwa katika hali za SA.',
+    feat2Desc:'Uhai wa juu wa mmea husababisha udhibiti wa stomata, uimarishaji wa ukuta wa seli na upinzani wa kimfumo uliosababishwa — imethibitishwa katika hali za Afrika ya Kusini.',
     feat3Title:'100% kikaboni',
     feat3Desc:'Imeidhinishwa na FiBL na ECOCERT. Salama kwa wafanyakazi, udongo, wadudu wenye manufaa, na masoko yote ya mauzo nje.',
-    feat4Title:'Jaribio lenye dhamana',
-    feat4Desc:'Marejesho kamili ikiwa mashamba yaliyotibiwa na PV hayazidi mashamba ya udhibiti wakati wa mavuno. Hatari sifuri kuanza.',
-    disclaimer:'<strong>Takwimu hizi ni makadirio ya dalili</strong> kulingana na data ya zao lako na miongozo iliyochapishwa ya ongezeko la mavuno. Matokeo halisi yanategemea hali za msimu, wakati wa kutumia, na afya ya udongo iliyopo. Agrimedic Global inapendekeza kuthibitisha matokeo kupitia <strong>jaribio lililopangwa, linalopimika shambani</strong> kabla ya upanuzi kamili — na ROI iliyohakikishwa au marejesho kamili.',
+    feat4Title:'Dhamana ya kurudishiwa pesa',
+    feat4Desc:'Panga maonyesho na uone matokeo katika mashamba yako mwenyewe. Ikiwa mashamba yaliyotibiwa hayazidi mashamba ya udhibiti wakati wa mavuno, utarudishiwa pesa yako yote.',
+    disclaimer:'<strong>Takwimu hizi ni makadirio ya dalili</strong> kulingana na data ya zao lako na miongozo iliyochapishwa ya ongezeko la mavuno. Matokeo halisi yanategemea hali za msimu, wakati wa kutumia, na afya ya udongo iliyopo. Agrimedic Global inapendekeza kuthibitisha matokeo kupitia <strong>maonyesho yaliyopangwa, yanayopimika shambani</strong> kabla ya upanuzi kamili — yanayoungwa mkono na dhamana ya kurudishiwa pesa.',
     crops:{custom:'Maalum / Nyingine',apples:'Tofaa',bananas:'Ndizi',barley:'Shayiri',beetroot:'Beet',berries:'Matunda madogo',butternut:'Boga',cabbage:'Kabichi',cannabis:'Cannabis',canola:'Canola',carrots:'Karoti',cassava:'Muhogo',chillies:'Pilipili',citrus:'Matunda ya machungwa',coffee:'Kahawa',eggplant:'Bilinganya',grapes:'Zabibu',lettuce:'Letisi',lucerne:'Lucerne',macadamia:'Macadamia',maize:'Mahindi',melon:'Tikiti',oranges:'Machungwa',palmoil:'Mafuta ya mawese',peaches:'Pichi',peppers:'Pilipili hoho',potatoes:'Viazi',pumpkin:'Malenge',rubber:'Mpira',spinach:'Mchicha',sugarcane:'Miwa',tea:'Chai',tobacco:'Tumbaku',tomatoes:'Nyanya',vegetables:'Mboga mbalimbali',watermelon:'Tikiti maji',wheat:'Ngano'}
   },
   es: {
@@ -830,14 +890,14 @@ var LANG = {
     netGainTot:'Ganancia neta (total)', netGainHa:'Ganancia neta por Ha',
     whyPV:'Por qué Plantos Verde',
     feat1Title:'Aumento de rendimiento del 10–50%',
-    feat1Desc:'Validado en más de 30 ensayos en fincas de SA. Ganancias compuestas de biomasa y calidad temporada tras temporada.',
-    feat2Title:'Resiliencia a sequía, plagas e insectos',
-    feat2Desc:'La vitalidad vegetal elevada impulsa la regulación estomática, el refuerzo de paredes celulares y la resistencia sistémica inducida — validado en condiciones de SA.',
+    feat1Desc:'Validado en más de 30 ensayos de campo en Sudáfrica. Ganancias acumuladas de biomasa y calidad temporada tras temporada.',
+    feat2Title:'Resiliencia frente a sequía, plagas e insectos',
+    feat2Desc:'La vitalidad vegetal elevada impulsa la regulación estomática, el refuerzo de las paredes celulares y la resistencia sistémica inducida — validado en condiciones sudafricanas.',
     feat3Title:'100% orgánico',
-    feat3Desc:'Certificado FiBL y ECOCERT. Seguro para el personal, el suelo, los insectos beneficiosos y todos los mercados de exportación.',
-    feat4Title:'Ensayo garantizado',
-    feat4Desc:'Reembolso completo si los campos tratados con PV no superan los controles en la cosecha. Riesgo cero para comenzar.',
-    disclaimer:'<strong>Estas cifras son proyecciones indicativas</strong> basadas en los datos de su cultivo y los rangos de aumento de rendimiento publicados. Los resultados reales dependen de las condiciones de la temporada, el momento de aplicación y la salud del suelo existente. Agrimedic Global recomienda confirmar los resultados mediante un <strong>ensayo estructurado y medible en la finca</strong> antes de la implementación a gran escala — con ROI garantizado o reembolso total.',
+    feat3Desc:'Sin riesgo para el personal, el suelo, los insectos beneficiosos y todos los mercados de exportación. Certificado FiBL y ECOCERT.',
+    feat4Title:'Garantía de devolución',
+    feat4Desc:'Reserve una demostración y compruebe los resultados en sus propios campos. Si los campos tratados no superan los campos de control en la cosecha, le devolvemos su dinero íntegramente.',
+    disclaimer:'<strong>Estas cifras son proyecciones indicativas</strong> basadas en los datos de su cultivo y los rangos de aumento de rendimiento publicados. Los resultados reales dependen de las condiciones de la temporada, el momento de aplicación y la salud del suelo. Agrimedic Global recomienda confirmar los resultados mediante una <strong>demostración estructurada y medible en la finca</strong> antes de la implementación a gran escala — respaldada por nuestra garantía de devolución.',
     crops:{custom:'Personalizado / Otro',apples:'Manzanas',bananas:'Plátanos',barley:'Cebada',beetroot:'Remolacha',berries:'Bayas',butternut:'Calabaza mantequilla',cabbage:'Repollo',cannabis:'Cannabis',canola:'Canola',carrots:'Zanahorias',cassava:'Yuca',chillies:'Chiles',citrus:'Cítricos',coffee:'Café',eggplant:'Berenjena',grapes:'Uvas (mesa)',lettuce:'Lechuga',lucerne:'Alfalfa',macadamia:'Macadamia',maize:'Maíz',melon:'Melón',oranges:'Naranjas',palmoil:'Palma aceitera',peaches:'Duraznos',peppers:'Pimientos',potatoes:'Papas',pumpkin:'Calabaza',rubber:'Caucho',spinach:'Espinaca',sugarcane:'Caña de azúcar',tea:'Té',tobacco:'Tabaco',tomatoes:'Tomates',vegetables:'Varias Hortalizas',watermelon:'Sandía',wheat:'Trigo'}
   }
 };
@@ -859,7 +919,6 @@ var CURRENCIES = {
   AUD:{sym:'A$',  name:'AUD'},  CAD:{sym:'C$',  name:'CAD'}
 };
 
-var PV_KG_HA = 12;
 var exchangeRates = { ZAR: 1 }; /* rates FROM ZAR */
 var ratesFetched  = false;
 var currentCurrency = 'ZAR';
@@ -1044,11 +1103,11 @@ function render() {
   var sgPx    = val('scSugarPrice',6200)||6200;
   var price   = val('pricePerMT',3500)||3500;
 
-  /* App chip */
+  /* App chip — just show total, no hard cap since bananas use more */
   var apps = kN+cN+dN;
   var chip = g('appTotalChip');
-  chip.textContent = apps+(apps>=3&&apps<=5?' \u2713':' \u2190 3\u20135');
-  chip.className = 'app-total-chip'+(apps<3||apps>5?' warn':'');
+  chip.textContent = apps;
+  chip.className = 'app-total-chip'+(apps===0?' warn':'');
 
   /* Slider displays */
   g('upliftValDisplay').textContent = Math.round(uplift*100)+'%';
@@ -1057,8 +1116,9 @@ function render() {
   g('fertCostDisplay').textContent   = fmtAmt(fertCostHa)+'/Ha';
   g('fertSavingDisplay').textContent = fmtAmt(fertCostHa*fertRed)+'/Ha';
 
-  /* Costs (in ZAR) */
-  var pvCostHa    = PV_KG_HA*pvPrice;
+  /* PV cost — uses total applications × 3kg/Ha × price */
+  var totalAppsForCost = apps > 0 ? apps : 4;
+  var pvCostHa    = totalAppsForCost * 3 * pvPrice;
   var appCostHa   = kN*kC+cN*cC+dN*dC;
   var totCostHa   = pvCostHa+appCostHa;
   var totCost     = totCostHa*area;
@@ -1066,7 +1126,10 @@ function render() {
   var fertSavingTotal = fertSavingHa*area;
 
   /* Revenue */
+  var cropKey = g('cropPreset').value;
+  var bn = cropKey === 'bananas';
   var baseRevHa, newRevHa, baseHarvestLbl, newHarvestLbl, newYld;
+
   if (sc) {
     newYld        = yld*(1+uplift);
     baseRevHa     = yld*rvCur*sgPx;
@@ -1076,6 +1139,30 @@ function render() {
     show('sc-base-rv-row',true); show('sc-pv-rv-row',true);
     st('out-cmp-base-rv',(rvCur*100).toFixed(1)+'%');
     st('out-cmp-pv-rv',(rvProj*100).toFixed(1)+'% (projected)');
+  } else if (bn) {
+    /* Banana: Revenue = Trees/Ha × Bunches/tree × Crates/bunch × Weighted price/crate */
+    var treesHa   = val('bnTreesHa',2222)||2222;
+    var bunchNPV  = val('bnBunchesNPV',2.0)||2.0;
+    var bunchPV   = val('bnBunchesPV',2.2)||2.2;
+    var crNPV     = val('bnCratesNPV',1.58)||1.58;
+    var crPV      = val('bnCratesPV',1.80)||1.80;
+    /* Grade mix — 5 grades */
+    var ng1=val('bnNPVg1',56)/100, ng2=val('bnNPVg2',29)/100, ng3=val('bnNPVg3',5)/100;
+    var ng4=val('bnNPVg4',7)/100,  ng5=val('bnNPVg5',3)/100;
+    var pg1=val('bnPVg1',73)/100,  pg2=val('bnPVg2',14)/100,  pg3=val('bnPVg3',4)/100;
+    var pg4=val('bnPVg4',7)/100,   pg5=val('bnPVg5',2)/100;
+    /* Price per crate */
+    var p1=val('bnP1',145), p2=val('bnP2',125), p3=val('bnP3',100), p4=val('bnP4',50), p5=val('bnP5',0);
+    /* Weighted price per crate = Σ(grade% × price) */
+    var wtdNPV = ng1*p1 + ng2*p2 + ng3*p3 + ng4*p4 + ng5*p5;
+    var wtdPV  = pg1*p1 + pg2*p2 + pg3*p3 + pg4*p4 + pg5*p5;
+    /* Revenue/Ha = Trees × Bunches/tree × Crates/bunch × Weighted price/crate */
+    baseRevHa     = treesHa * bunchNPV * crNPV * wtdNPV;
+    newRevHa      = treesHa * bunchPV  * crPV  * wtdPV;
+    newYld        = yld * (bunchPV/bunchNPV);
+    baseHarvestLbl= Math.round(treesHa*bunchNPV*area).toLocaleString()+' bunches';
+    newHarvestLbl = Math.round(treesHa*bunchPV*area).toLocaleString()+' bunches';
+    show('sc-base-rv-row',false); show('sc-pv-rv-row',false);
   } else {
     newYld        = yld*(1+uplift);
     baseRevHa     = yld*price;
@@ -1106,7 +1193,10 @@ function render() {
 
   /* Numbers strip */
   st('out-area', area.toLocaleString());
-  sh('out-uplift','<strong>+'+Math.round(uplift*100)+'%</strong>');
+  var displayUplift = bn
+    ? Math.round((newRevHa/baseRevHa - 1)*100)
+    : Math.round(uplift*100);
+  sh('out-uplift','<strong>+'+displayUplift+'%</strong>');
   sh('out-net-gain','<strong>'+fmtAmtS(netTotal)+'</strong>');
   sh('out-roi','<strong>1\u00a0:\u00a0'+roi.toFixed(1)+'x</strong>');
   /* "for every 1 spent" — insert currency symbol */
@@ -1115,8 +1205,14 @@ function render() {
 
   /* Comparison */
   st('out-cmp-crop',crop); st('out-cmp-crop2',crop);
-  st('out-cmp-base-yield',yld.toLocaleString()+' MT/Ha');
-  st('out-cmp-new-yield',newYld.toFixed(1)+' MT/Ha (+'+Math.round(uplift*100)+'%)');
+  if (bn) {
+    var bNPV = val('bnBunchesNPV',2.0), bPV = val('bnBunchesPV',2.2);
+    st('out-cmp-base-yield', bNPV.toFixed(1)+' bunches/tree');
+    st('out-cmp-new-yield',  bPV.toFixed(1)+' bunches/tree (+'+Math.round((bPV/bNPV-1)*100)+'%)');
+  } else {
+    st('out-cmp-base-yield',yld.toLocaleString()+' MT/Ha');
+    st('out-cmp-new-yield',newYld.toFixed(1)+' MT/Ha (+'+Math.round(uplift*100)+'%)');
+  }
   st('out-cmp-base-harvest',baseHarvestLbl);
   st('out-cmp-new-harvest',newHarvestLbl);
   st('out-cmp-base-rev',fmtAmt(baseRevTotal));
@@ -1183,6 +1279,7 @@ g('cropPreset').addEventListener('change',function(){
     else      g('scSugarPrice').value=c.p;
   }
   g('scSection').className='sc-section'+(this.value==='sugarcane'?' visible':'');
+  g('bnSection').className='sc-section'+(this.value==='bananas'?' visible':'');
   render();
 });
 
