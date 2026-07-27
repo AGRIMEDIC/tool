@@ -351,9 +351,9 @@ body{font-family:'DM Sans',sans-serif;background:#1a1a1a;color:var(--text-dark);
       <div class="field"><label id="lbl-cropName">Crop name (for document)</label><input id="cropName" type="text" value="Potatoes"></div>
       <div class="field-row">
         <div class="field"><label id="lbl-area">Planted area (Ha)</label><input id="area" type="number" value="100" min="1"></div>
-        <div class="field"><label id="lbl-yield">Current yield (MT/Ha)</label><input id="yieldHa" type="number" value="50" min="1"></div>
+        <div class="field" id="yieldField"><label id="lbl-yield">Current yield (MT/Ha)</label><input id="yieldHa" type="number" value="50" min="1"></div>
       </div>
-      <div class="field"><label id="lbl-price">Sale price per MT</label><input id="pricePerMT" type="number" value="3500" min="1"></div>
+      <div id="priceField"><div class="field"><label id="lbl-price">Sale price per MT</label><input id="pricePerMT" type="number" value="3500" min="1"></div></div>
       <div class="field"><label id="lbl-pvPrice">Plantos Verde price per kg</label><input id="pvPrice" type="number" value="265" min="1"></div>
 
       <div class="sc-section" id="scSection">
@@ -371,19 +371,29 @@ body{font-family:'DM Sans',sans-serif;background:#1a1a1a;color:var(--text-dark);
       <div class="sc-section" id="bnSection">
         <div style="height:1px;background:#2e2e2e;margin:8px 0;"></div>
         <div style="font-size:10px;color:var(--bright-green);text-transform:uppercase;letter-spacing:.1em;margin-bottom:7px;">Bananas — grade &amp; cycle inputs</div>
-        <div style="font-size:10px;color:#666;margin-bottom:8px;line-height:1.5;">Revenue = Trees/Ha &times; Bunches/tree &times; Crates/bunch &times; Weighted price/crate. PV improves both bunches per tree and grade quality.</div>
+        <div style="font-size:10px;color:#888;margin-bottom:8px;line-height:1.5;">Revenue = Trees/Ha &times; Bunches/tree &times; Crates/bunch &times; Weighted price/crate. Two PV levers: grade quality (more Class 1) and earlier harvest (more cycles/season).</div>
+
+        <!-- Harvest cycle lever -->
+        <div style="background:rgba(107,191,78,.1);border:1px solid rgba(107,191,78,.2);border-radius:6px;padding:8px 10px;margin-bottom:8px;">
+          <div style="font-size:9px;text-transform:uppercase;letter-spacing:.09em;color:var(--bright-green);font-weight:600;margin-bottom:6px;">Earlier harvest — cycle advantage</div>
+          <div class="field-row">
+            <div class="field"><label>Weeks earlier (PV)</label><input id="bnWeeksEarlier" type="number" value="5.29" step="0.1" min="0"></div>
+            <div class="field"><label>Cycle length (weeks)</label><input id="bnCycleWeeks" type="number" value="52" step="1" min="1"></div>
+          </div>
+          <div class="field"><label>Bunches/tree (without PV)</label><input id="bnBunchesNPV" type="number" value="1" step="0.1" min="0.1"></div>
+          <div id="bnAutoCalcChip" style="margin-top:6px;padding:5px 8px;background:rgba(0,0,0,.2);border-radius:4px;font-size:9px;color:var(--bright-green);">PV bunches/tree: <strong id="bnBunchPVDisplay">1.1017</strong> &nbsp;(auto: NPV + weeks÷cycle)</div>
+        </div>
+
         <div class="field-row">
           <div class="field"><label>Trees per Ha</label><input id="bnTreesHa" type="number" value="2222" min="1"></div>
-          <div class="field"><label>Crate weight (kg)</label><input id="bnCrateKg" type="number" value="18" min="1"></div>
+          <div class="field"><label>Apps per cycle</label><input id="bnAppsPerCycle" type="number" value="8" min="1"></div>
         </div>
-        <div class="field-row">
-          <div class="field"><label>Bunches/tree (without PV)</label><input id="bnBunchesNPV" type="number" value="2.0" step="0.1" min="0.1"></div>
-          <div class="field"><label>Bunches/tree (with PV)</label><input id="bnBunchesPV" type="number" value="2.2" step="0.1" min="0.1"></div>
-        </div>
-        <div class="field-row">
+        <div id="bnAppsCostChip" style="font-size:9px;color:#888;margin-top:4px;padding:4px 6px;background:rgba(107,191,78,.08);border-radius:4px;line-height:1.5;"></div>
+        <div class="field-row" style="margin-top:6px;">
           <div class="field"><label>Crates/bunch (without PV)</label><input id="bnCratesNPV" type="number" value="1.58" step="0.01" min="0.1"></div>
           <div class="field"><label>Crates/bunch (with PV)</label><input id="bnCratesPV" type="number" value="1.80" step="0.01" min="0.1"></div>
         </div>
+
         <div style="font-size:10px;color:var(--bright-green);margin:8px 0 5px;">Grade mix — WITHOUT PV (% of crates)</div>
         <div class="field-row">
           <div class="field"><label>Class 1 export %</label><input id="bnNPVg1" type="number" value="56" min="0" max="100"></div>
@@ -394,6 +404,7 @@ body{font-family:'DM Sans',sans-serif;background:#1a1a1a;color:var(--text-dark);
           <div class="field"><label>Singles %</label><input id="bnNPVg4" type="number" value="7" min="0" max="100"></div>
         </div>
         <div class="field"><label>Dumps/loss %</label><input id="bnNPVg5" type="number" value="3" min="0" max="100"></div>
+
         <div style="font-size:10px;color:var(--bright-green);margin:8px 0 5px;">Grade mix — WITH PV (% of crates)</div>
         <div class="field-row">
           <div class="field"><label>Class 1 export %</label><input id="bnPVg1" type="number" value="73" min="0" max="100"></div>
@@ -404,6 +415,7 @@ body{font-family:'DM Sans',sans-serif;background:#1a1a1a;color:var(--text-dark);
           <div class="field"><label>Singles %</label><input id="bnPVg4" type="number" value="7" min="0" max="100"></div>
         </div>
         <div class="field"><label>Dumps/loss %</label><input id="bnPVg5" type="number" value="2" min="0" max="100"></div>
+
         <div style="font-size:10px;color:var(--bright-green);margin:8px 0 5px;">Price per crate (R)</div>
         <div class="field-row">
           <div class="field"><label>Class 1 (R/crate)</label><input id="bnP1" type="number" value="145" min="0"></div>
@@ -414,7 +426,8 @@ body{font-family:'DM Sans',sans-serif;background:#1a1a1a;color:var(--text-dark);
           <div class="field"><label>Singles (R/crate)</label><input id="bnP4" type="number" value="50" min="0"></div>
         </div>
         <div class="field"><label>Dumps (R/crate)</label><input id="bnP5" type="number" value="0" min="0"></div>
-        <div style="font-size:10px;color:#555;margin-top:5px;line-height:1.5;">Defaults from Nisela harvest records. Class 1 % is the key PV lever — PV typically lifts Class 1 from ~56% to ~73% of total crates.</div>
+        <div id="bnGradeWarn" style="display:none;font-size:9px;padding:5px 8px;margin-top:6px;border-radius:4px;background:rgba(224,92,42,.12);color:#b84a00;border:1px solid rgba(224,92,42,.25);line-height:1.4;"></div>
+        <div style="font-size:9px;color:#666;margin-top:5px;line-height:1.5;">Defaults from Nisela harvest records. Class 1 % is the primary PV lever.</div>
       </div>
     </div>
 
@@ -438,12 +451,14 @@ body{font-family:'DM Sans',sans-serif;background:#1a1a1a;color:var(--text-dark);
         <span class="app-total-label" id="lbl-totalApps">Total applications</span>
         <span class="app-total-chip" id="appTotalChip">4</span>
       </div>
-      <div style="font-size:10px;color:#555;margin-top:6px;line-height:1.5;">&#9432; More applications increase both PV product cost and application cost, which directly affects net gain and ROI. Standard protocol is 3&ndash;5 per season; bananas may use up to 8 per cycle.</div>
+      <div id="appCostNote" style="font-size:9px;padding:6px 8px;border-radius:5px;margin-top:6px;line-height:1.5;border:1px solid rgba(107,191,78,.15);background:rgba(107,191,78,.08);color:#888;transition:all .2s;">
+        Updating...
+      </div>
     </div>
 
-    <div class="div-line"></div>
+    <div class="div-line" id="upliftDivLine"></div>
 
-    <div class="form-section">
+    <div class="form-section" id="upliftSection">
       <div class="fsec-title" id="fsec-uplift">Expected yield uplift</div>
       <div class="uplift-row">
         <span style="font-size:10px;color:#666;">10%</span>
@@ -616,11 +631,11 @@ body{font-family:'DM Sans',sans-serif;background:#1a1a1a;color:var(--text-dark);
           </div>
           <div class="feature-item">
             <div class="feature-icon"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14l-5-5 1.41-1.41L12 14.17l7.59-7.59L21 8l-9 9z"/></svg></div>
-            <div><div class="feature-title" id="feat4-title">Guaranteed trial</div><div class="feature-desc" id="feat4-desc">Full refund if PV-treated fields do not outperform controls at harvest. Zero risk to get started.</div></div>
+            <div><div class="feature-title" id="feat4-title">Money-back guarantee</div><div class="feature-desc" id="feat4-desc">Book a demonstration and see the results in your own fields. If treated fields don't outperform untreated fields at harvest, you get your money back.</div></div>
           </div>
         </div>
 
-        <div class="trial-note"><p id="doc-disclaimer"><strong>These figures are indicative projections</strong> based on your crop data and published yield uplift ranges. Actual results depend on season conditions, application timing, and existing soil health. Agrimedic Global recommends confirming results through a <strong>structured, measurable on-farm trial</strong> before full-scale rollout &#8212; with guaranteed ROI or full refund.</p></div>
+        <div class="trial-note"><p id="doc-disclaimer"><strong>These figures are indicative projections</strong> based on your crop data and published yield uplift ranges. Actual results depend on season conditions, application timing, and existing soil health. Agrimedic Global recommends confirming results through a <strong>structured, measurable on-farm demonstration</strong> before full-scale rollout &#8212; backed by our full money-back guarantee.</p></div>
         <div class="custom-note-block" id="out-custom-note"></div>
       </div>
 
@@ -685,9 +700,9 @@ var LANG = {
     feat2Desc:'Elevated plant vitality drives stomata regulation, cell wall fortification and induced systemic resistance — validated in SA conditions.',
     feat3Title:'100% organic',
     feat3Desc:'FiBL and ECOCERT certified. Safe for staff, soil, beneficial insects, and all export markets.',
-    feat4Title:'Guaranteed trial',
-    feat4Desc:'Full refund if PV-treated fields do not outperform controls at harvest. Zero risk to get started.',
-    disclaimer:'<strong>These figures are indicative projections</strong> based on your crop data and published yield uplift ranges. Actual results depend on season conditions, application timing, and existing soil health. Agrimedic Global recommends confirming results through a <strong>structured, measurable on-farm trial</strong> before full-scale rollout — with guaranteed ROI or full refund.',
+    feat4Title:'Money-back guarantee',
+    feat4Desc:'Book a demonstration and see the results in your own fields. If treated fields don\'t outperform untreated fields at harvest, you get your money back.',
+    disclaimer:'<strong>These figures are indicative projections</strong> based on your crop data and published yield uplift ranges. Actual results depend on season conditions, application timing, and existing soil health. Agrimedic Global recommends confirming results through a <strong>structured, measurable on-farm demonstration</strong> before full-scale rollout — backed by our full money-back guarantee.',
     crops:{custom:'Custom / Other',apples:'Apples',bananas:'Bananas',barley:'Barley',beetroot:'Beetroot',berries:'Berries',butternut:'Butternut',cabbage:'Cabbage',cannabis:'Cannabis',canola:'Canola',carrots:'Carrots',cassava:'Cassava',chillies:'Chillies',citrus:'Citrus',coffee:'Coffee',eggplant:'Egg Plant',grapes:'Grapes (table)',lettuce:'Lettuce',lucerne:'Lucerne',macadamia:'Macadamia',maize:'Maize',melon:'Melon',oranges:'Oranges',palmoil:'Palm Oil',peaches:'Peaches',peppers:'Peppers',potatoes:'Potatoes',pumpkin:'Pumpkin',rubber:'Rubber',spinach:'Spinach',sugarcane:'Sugarcane',tea:'Tea',tobacco:'Tobacco',tomatoes:'Tomatoes',vegetables:'Various Vegetables',watermelon:'Watermelon',wheat:'Wheat'}
   },
   af: {
@@ -1098,16 +1113,38 @@ function render() {
   var dN=val('droneN'), dC=val('droneC');
   var note    = g('customNote').value.trim();
   var sc      = g('cropPreset').value==='sugarcane';
+  var cropKey = g('cropPreset').value;
   var rvCur   = val('scRVcurrent',13.7)/100;
   var rvProj  = val('scRVprojected',14.5)/100;
   var sgPx    = val('scSugarPrice',6200)||6200;
   var price   = val('pricePerMT',3500)||3500;
 
-  /* App chip — just show total, no hard cap since bananas use more */
+  /* Hide yield/price/uplift for bananas */
+  var isBn = (cropKey==='bananas');
+  g('yieldField').style.display    = isBn?'none':'';
+  g('priceField').style.display    = isBn?'none':'';
+  g('upliftSection').style.display = isBn?'none':'';
+  g('upliftDivLine').style.display = isBn?'none':'';
+
+  /* App chip — show count and dynamic cost impact */
   var apps = kN+cN+dN;
   var chip = g('appTotalChip');
   chip.textContent = apps;
   chip.className = 'app-total-chip'+(apps===0?' warn':'');
+  var appCostNote = g('appCostNote');
+  if(appCostNote && !isBn){
+    if(apps===0){
+      appCostNote.style.background='rgba(224,92,42,.12)';
+      appCostNote.style.color='#b84a00';
+      appCostNote.style.borderColor='rgba(224,92,42,.3)';
+      appCostNote.innerHTML='<strong>⚠ Applications cannot be 0</strong> — enter at least 1 spray. PV cost is zero when no applications are set, making the ROI calculation meaningless.';
+    } else {
+      appCostNote.style.background='rgba(107,191,78,.08)';
+      appCostNote.style.color='#888';
+      appCostNote.style.borderColor='rgba(107,191,78,.15)';
+      appCostNote.innerHTML=apps+' applications × 3kg = <strong>'+(apps*3)+'kg PV/Ha</strong> @ '+fmtAmt(pvPrice)+'/kg = <strong>'+fmtAmt(apps*3*pvPrice)+'/Ha</strong> product cost. More applications = higher cost but compounding agronomic gains.';
+    }
+  }
 
   /* Slider displays */
   g('upliftValDisplay').textContent = Math.round(uplift*100)+'%';
@@ -1126,7 +1163,6 @@ function render() {
   var fertSavingTotal = fertSavingHa*area;
 
   /* Revenue */
-  var cropKey = g('cropPreset').value;
   var bn = cropKey === 'bananas';
   var baseRevHa, newRevHa, baseHarvestLbl, newHarvestLbl, newYld;
 
@@ -1141,27 +1177,60 @@ function render() {
     st('out-cmp-pv-rv',(rvProj*100).toFixed(1)+'% (projected)');
   } else if (bn) {
     /* Banana: Revenue = Trees/Ha × Bunches/tree × Crates/bunch × Weighted price/crate */
-    var treesHa   = val('bnTreesHa',2222)||2222;
-    var bunchNPV  = val('bnBunchesNPV',2.0)||2.0;
-    var bunchPV   = val('bnBunchesPV',2.2)||2.2;
-    var crNPV     = val('bnCratesNPV',1.58)||1.58;
-    var crPV      = val('bnCratesPV',1.80)||1.80;
+    var treesHa      = val('bnTreesHa',2222)||2222;
+    var weeksEarlier = val('bnWeeksEarlier',5.29)||5.29;
+    var cycleWeeks   = val('bnCycleWeeks',52)||52;
+    var bunchNPV     = val('bnBunchesNPV',1.0)||1.0;
+    var bunchPV_bn   = bunchNPV + (weeksEarlier/cycleWeeks); /* auto-calculated */
+    var crNPV  = val('bnCratesNPV',1.58)||1.58;
+    var crPV   = val('bnCratesPV',1.80)||1.80;
     /* Grade mix — 5 grades */
     var ng1=val('bnNPVg1',56)/100, ng2=val('bnNPVg2',29)/100, ng3=val('bnNPVg3',5)/100;
     var ng4=val('bnNPVg4',7)/100,  ng5=val('bnNPVg5',3)/100;
     var pg1=val('bnPVg1',73)/100,  pg2=val('bnPVg2',14)/100,  pg3=val('bnPVg3',4)/100;
     var pg4=val('bnPVg4',7)/100,   pg5=val('bnPVg5',2)/100;
+    /* Grade % validation */
+    var npvSum = Math.round((ng1+ng2+ng3+ng4+ng5)*100);
+    var pvSum  = Math.round((pg1+pg2+pg3+pg4+pg5)*100);
+    var gw = g('bnGradeWarn');
+    if(gw){
+      if(npvSum!==100||pvSum!==100){
+        var msgs=[];
+        if(npvSum!==100) msgs.push('NPV grades = '+npvSum+'%');
+        if(pvSum!==100)  msgs.push('PV grades = '+pvSum+'%');
+        gw.style.display=''; gw.innerHTML='⚠ Grade percentages must add to 100%. Currently: '+msgs.join(', ')+'. Adjust before sharing.';
+      } else { gw.style.display='none'; }
+    }
     /* Price per crate */
     var p1=val('bnP1',145), p2=val('bnP2',125), p3=val('bnP3',100), p4=val('bnP4',50), p5=val('bnP5',0);
-    /* Weighted price per crate = Σ(grade% × price) */
+    /* Weighted price per crate */
     var wtdNPV = ng1*p1 + ng2*p2 + ng3*p3 + ng4*p4 + ng5*p5;
     var wtdPV  = pg1*p1 + pg2*p2 + pg3*p3 + pg4*p4 + pg5*p5;
-    /* Revenue/Ha = Trees × Bunches/tree × Crates/bunch × Weighted price/crate */
-    baseRevHa     = treesHa * bunchNPV * crNPV * wtdNPV;
-    newRevHa      = treesHa * bunchPV  * crPV  * wtdPV;
-    newYld        = yld * (bunchPV/bunchNPV);
-    baseHarvestLbl= Math.round(treesHa*bunchNPV*area).toLocaleString()+' bunches';
-    newHarvestLbl = Math.round(treesHa*bunchPV*area).toLocaleString()+' bunches';
+    /* Revenue per bunch = Crates/bunch × Weighted price/crate */
+    var revBunchNPV = crNPV * wtdNPV;
+    var revBunchPV  = crPV  * wtdPV;
+    /* Bunches per Ha */
+    var bunchesHaNPV = treesHa * bunchNPV;
+    var bunchesHaPV  = treesHa * bunchPV_bn;
+    /* Revenue/Ha */
+    baseRevHa     = bunchesHaNPV * revBunchNPV;
+    newRevHa      = bunchesHaPV  * revBunchPV;
+    newYld        = bunchPV_bn;
+    baseHarvestLbl= Math.round(bunchesHaNPV*area).toLocaleString()+' bunches';
+    newHarvestLbl = Math.round(bunchesHaPV*area).toLocaleString()+' bunches';
+    /* Cost scales with total applications per season */
+    var bnAppsPC = val('bnAppsPerCycle',8)||8;
+    var appsSeason_bn = bnAppsPC * bunchPV_bn;
+    pvCostHa   = appsSeason_bn * 3 * pvPrice;
+    appCostHa  = kN*kC + cN*cC + dN*dC; /* use whatever method costs are set */
+    appCostHa  = appsSeason_bn * (appCostHa/(kN+cN+dN||1)); /* scale proportionally */
+    /* Fallback: if no app methods set, use cropspray cost */
+    if(kN+cN+dN === 0) appCostHa = appsSeason_bn * 270;
+    totCostHa  = pvCostHa + appCostHa;
+    /* Update auto-calc displays */
+    var bpvEl = g('bnBunchPVDisplay'); if(bpvEl) bpvEl.textContent = bunchPV_bn.toFixed(4);
+    var acEl  = g('bnAppsCostChip');
+    if(acEl) acEl.textContent = bnAppsPC+' apps/cycle × '+bunchPV_bn.toFixed(2)+' cycles/season = '+appsSeason_bn.toFixed(1)+' total sprays → '+Math.round(appsSeason_bn*3)+'kg PV/Ha';
     show('sc-base-rv-row',false); show('sc-pv-rv-row',false);
   } else {
     newYld        = yld*(1+uplift);
@@ -1206,9 +1275,10 @@ function render() {
   /* Comparison */
   st('out-cmp-crop',crop); st('out-cmp-crop2',crop);
   if (bn) {
-    var bNPV = val('bnBunchesNPV',2.0), bPV = val('bnBunchesPV',2.2);
+    var bNPV = val('bnBunchesNPV',1.0);
+    var bPVc = bNPV + ((val('bnWeeksEarlier',5.29)||5.29)/(val('bnCycleWeeks',52)||52));
     st('out-cmp-base-yield', bNPV.toFixed(1)+' bunches/tree');
-    st('out-cmp-new-yield',  bPV.toFixed(1)+' bunches/tree (+'+Math.round((bPV/bNPV-1)*100)+'%)');
+    st('out-cmp-new-yield',  bPVc.toFixed(2)+' bunches/tree (+'+Math.round((bPVc/bNPV-1)*100)+'%)');
   } else {
     st('out-cmp-base-yield',yld.toLocaleString()+' MT/Ha');
     st('out-cmp-new-yield',newYld.toFixed(1)+' MT/Ha (+'+Math.round(uplift*100)+'%)');
@@ -1278,8 +1348,15 @@ g('cropPreset').addEventListener('change',function(){
     if(!c.sc) g('pricePerMT').value=c.p;
     else      g('scSugarPrice').value=c.p;
   }
-  g('scSection').className='sc-section'+(this.value==='sugarcane'?' visible':'');
-  g('bnSection').className='sc-section'+(this.value==='bananas'?' visible':'');
+  var isBn = (this.value==='bananas');
+  var isSc = (this.value==='sugarcane');
+  /* Hide yield/price/uplift fields for bananas — not used in banana revenue model */
+  g('yieldField').style.display    = isBn ? 'none' : '';
+  g('priceField').style.display    = isBn ? 'none' : '';
+  g('upliftSection').style.display = isBn ? 'none' : '';
+  g('upliftDivLine').style.display = isBn ? 'none' : '';
+  g('scSection').className='sc-section'+(isSc?' visible':'');
+  g('bnSection').className='sc-section'+(isBn?' visible':'');
   render();
 });
 
