@@ -48,9 +48,14 @@ body{font-family:'DM Sans',sans-serif;background:var(--sage-pale);color:var(--te
 
 /* INPUT CARD */
 .input-card{background:var(--white);border-radius:14px;border:1px solid rgba(45,90,61,.12);padding:28px 32px;margin-bottom:20px;box-shadow:0 2px 16px rgba(45,90,61,.06);}
-.input-card-title{font-size:13px;text-transform:uppercase;letter-spacing:.1em;color:var(--mid-green);font-weight:600;margin-bottom:20px;}
-.fields-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
-.fields-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.input-card-title{font-size:15px;text-transform:uppercase;letter-spacing:.08em;color:var(--forest);font-weight:700;margin-bottom:20px;}
+/* CALC-003 Bug 4 — shared heading + divider for each field group (crop/farm,
+   application settings, fertiliser); crop-specific groups reuse .sc-extra
+   /.sc-extra-title below, bumped to the same weight for a consistent scale. */
+.form-section{margin-top:24px;padding-top:20px;border-top:1px solid var(--sage-bg);}
+.form-section-title{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--forest);font-weight:700;margin-bottom:14px;}
+.fields-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px 20px;align-items:start;}
+.fields-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px 20px;align-items:start;}
 /* CALC-003 Bug 3 — #yieldPriceFields wraps two field-blocks so bananas can
    hide them together; without this the wrapper is itself one grid item and
    its two children stack instead of occupying their own cells. Keeps the
@@ -67,7 +72,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--sage-pale);color:var(--te
 .slider-hint{font-size:10px;color:var(--text-muted);margin-top:4px;line-height:1.4;}
 .sc-extra{display:none;margin-top:16px;padding-top:16px;border-top:1px solid rgba(45,90,61,.1);}
 .sc-extra.visible{display:block;}
-.sc-extra-title{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--mid-green);margin-bottom:12px;font-weight:600;}
+.sc-extra-title{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--forest);margin-bottom:12px;font-weight:700;}
 .fert-chip{display:flex;align-items:center;justify-content:space-between;background:var(--sage-pale);border-radius:7px;padding:8px 12px;margin:8px 0;border:1px solid rgba(45,90,61,.1);}
 .fert-chip span:first-child{font-size:11px;color:var(--text-muted);}
 .fert-chip span:last-child{font-size:13px;font-weight:500;color:var(--forest);}
@@ -345,6 +350,11 @@ body{font-family:'DM Sans',sans-serif;background:var(--sage-pale);color:var(--te
         <input id="pricePerMT" type="number" value="3500" min="1" step="any" inputmode="decimal">
       </div>
       </div>
+    </div>
+
+    <div class="form-section">
+      <div class="form-section-title" id="lbl-appSettings">Application settings</div>
+      <div class="fields-grid">
       <div class="field-block">
         <label id="lbl-apps" style="font-weight:600;color:var(--forest);">⚠ Applications per season <span style="color:#b84a00;font-size:10px;">(required — affects all costs)</span></label>
         <input id="appCount" type="number" value="4" min="1" max="20" style="font-weight:600;">
@@ -366,6 +376,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--sage-pale);color:var(--te
       <div class="field-block">
         <label id="lbl-pvPrice">Plantos Verde price (per kg)</label>
         <input id="pvPrice" type="number" value="265" min="1" step="any" inputmode="decimal">
+      </div>
       </div>
     </div>
 
@@ -475,8 +486,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--sage-pale);color:var(--te
     </div>
 
     <!-- Fertiliser saving -->
-    <div style="margin-top:20px;padding-top:20px;border-top:1px solid var(--sage-bg);">
-      <div style="font-size:11px;font-weight:500;color:var(--text-muted);margin-bottom:12px;" id="lbl-fertSection">Fertiliser saving (optional)</div>
+    <div class="form-section">
+      <div class="form-section-title" id="lbl-fertSection">Fertiliser saving (optional)</div>
       <div class="fields-grid-2">
         <div class="field-block">
           <label id="lbl-fertKg">Fertiliser used (kg/Ha)</label>
@@ -707,7 +718,7 @@ var CROPS = {
 
 var LANG = {
   en:{
-    lbl_lang:'Language',lbl_curr:'Currency',lbl_cropSection:'Your crop and farm',lbl_farmName:'Your farm name (optional)',
+    lbl_lang:'Language',lbl_curr:'Currency',lbl_cropSection:'Your crop and farm',lbl_appSettings:'Application settings',lbl_farmName:'Your farm name (optional)',
     lbl_crop:'Crop',lbl_area:'Planted area (Ha)',lbl_yield:'Current yield (MT/Ha)',
     lbl_price:'Sale price per MT',lbl_pvPrice:'Plantos Verde price (per kg)',lbl_apps:'Applications per season',lbl_appMethod:'Application method',
     lbl_appCost:'Application cost per Ha',appCost_hint:'Default is a South African average — change it to your local spraying cost for an accurate result.',
@@ -736,7 +747,7 @@ var LANG = {
     crops:{custom:'Custom / Other',apples:'Apples',bananas:'Bananas',barley:'Barley',beetroot:'Beetroot',berries:'Berries',butternut:'Butternut',cabbage:'Cabbage',cannabis:'Cannabis',canola:'Canola',carrots:'Carrots',cassava:'Cassava',chillies:'Chillies',citrus:'Citrus',coffee:'Coffee',eggplant:'Egg Plant',grapes:'Grapes (table)',lettuce:'Lettuce',lucerne:'Lucerne',macadamia:'Macadamia',maize:'Maize',melon:'Melon',oranges:'Oranges',palmoil:'Palm Oil',peaches:'Peaches',peppers:'Peppers',potatoes:'Potatoes',pumpkin:'Pumpkin',rubber:'Rubber',spinach:'Spinach',sugarcane:'Sugarcane',tea:'Tea',tobacco:'Tobacco',tomatoes:'Tomatoes',vegetables:'Various Vegetables',watermelon:'Watermelon',wheat:'Wheat'}
   },
   af:{
-    lbl_lang:'Taal',lbl_curr:'Geldeenheid',lbl_cropSection:'U gewas en plaas',
+    lbl_lang:'Taal',lbl_curr:'Geldeenheid',lbl_cropSection:'U gewas en plaas',lbl_appSettings:'Toepassingsinstellings',
     lbl_farmName:'U plaasnaam (opsioneel)',
     lbl_crop:'Gewas',lbl_area:'Aangeplante oppervlak (Ha)',lbl_yield:'Huidige opbrengs (MT/Ha)',
     lbl_price:'Verkoopprys per MT',lbl_pvPrice:'Plantos Verde prys (per kg)',lbl_apps:'Toepassings per seisoen',lbl_appMethod:'Toepassingsmetode',
@@ -766,7 +777,7 @@ var LANG = {
     crops:{custom:'Aangepas / Ander',apples:'Appels',bananas:'Piesangs',barley:'Gars',beetroot:'Beet',berries:'Bessies',butternut:'Botterskorsie',cabbage:'Kool',cannabis:'Cannabis',canola:'Canola',carrots:'Wortels',cassava:'Kassava',chillies:'Chillies',citrus:'Sitrus',coffee:'Koffie',eggplant:'Eiervrug',grapes:'Druiwe (tafel)',lettuce:'Slaai',lucerne:'Lusern',macadamia:'Makadamia',maize:'Mielies',melon:'Spanspek',oranges:'Lemoene',palmoil:'Palmolie',peaches:'Perskes',peppers:'Soetrissies',potatoes:'Aartappels',pumpkin:'Pampoene',rubber:'Rubber',spinach:'Spinasie',sugarcane:'Suikerriet',tea:'Tee',tobacco:'Tabak',tomatoes:'Tamaties',vegetables:'Verskillende Groente',watermelon:'Waatlemoen',wheat:'Koring'}
   },
   fr:{
-    lbl_lang:'Langue',lbl_curr:'Devise',lbl_cropSection:'Votre culture et ferme',
+    lbl_lang:'Langue',lbl_curr:'Devise',lbl_cropSection:'Votre culture et ferme',lbl_appSettings:'Paramètres d\'application',
     lbl_farmName:'Nom de votre ferme (facultatif)',
     lbl_crop:'Culture',lbl_area:'Surface plantée (Ha)',lbl_yield:'Rendement actuel (MT/Ha)',
     lbl_price:'Prix de vente par MT',lbl_pvPrice:'Prix Plantos Verde (par kg)',lbl_apps:'Applications par saison',lbl_appMethod:'Méthode d\'application',
@@ -796,7 +807,7 @@ var LANG = {
     crops:{custom:'Personnalisé / Autre',apples:'Pommes',bananas:'Bananes',barley:'Orge',beetroot:'Betterave',berries:'Baies',butternut:'Courge butternut',cabbage:'Chou',cannabis:'Cannabis',canola:'Colza',carrots:'Carottes',cassava:'Manioc',chillies:'Piments',citrus:'Agrumes',coffee:'Café',eggplant:'Aubergine',grapes:'Raisins (table)',lettuce:'Laitue',lucerne:'Luzerne',macadamia:'Macadamia',maize:'Maïs',melon:'Melon',oranges:'Oranges',palmoil:'Huile de palme',peaches:'Pêches',peppers:'Poivrons',potatoes:'Pommes de terre',pumpkin:'Citrouille',rubber:'Caoutchouc',spinach:'Épinards',sugarcane:'Canne à sucre',tea:'Thé',tobacco:'Tabac',tomatoes:'Tomates',vegetables:'Divers légumes',watermelon:'Pastèque',wheat:'Blé'}
   },
   es:{
-    lbl_lang:'Idioma',lbl_curr:'Moneda',lbl_cropSection:'Su cultivo y finca',
+    lbl_lang:'Idioma',lbl_curr:'Moneda',lbl_cropSection:'Su cultivo y finca',lbl_appSettings:'Ajustes de aplicación',
     lbl_farmName:'Nombre de su finca (opcional)',
     lbl_crop:'Cultivo',lbl_area:'Área plantada (Ha)',lbl_yield:'Rendimiento actual (MT/Ha)',
     lbl_price:'Precio de venta por MT',lbl_pvPrice:'Precio Plantos Verde (por kg)',lbl_apps:'Aplicaciones por temporada',lbl_appMethod:'Método de aplicación',
@@ -828,7 +839,7 @@ var LANG = {
   pt:{
     lbl_lang:'Idioma',
     lbl_curr:'Moeda',
-    lbl_cropSection:'A sua cultura e fazenda',
+    lbl_cropSection:'A sua cultura e fazenda',lbl_appSettings:'Configurações de aplicação',
     lbl_farmName:'Nome da sua fazenda (opcional)',
     lbl_crop:'Cultura',
     lbl_area:'Área plantada (Ha)',
@@ -899,7 +910,7 @@ var LANG = {
   sw:{
     lbl_lang:'Lugha',
     lbl_curr:'Sarafu',
-    lbl_cropSection:'Zao lako na shamba',
+    lbl_cropSection:'Zao lako na shamba',lbl_appSettings:'Mipangilio ya kunyunyizia',
     lbl_farmName:'Jina la shamba lako (hiari)',
     lbl_crop:'Zao',
     lbl_area:'Eneo lililopandwa (Ha)',
@@ -970,7 +981,7 @@ var LANG = {
   zu:{
     lbl_lang:'Ulimi',
     lbl_curr:'Uhlobo Lwemali',
-    lbl_cropSection:'Isitshalo nepulazi lakho',
+    lbl_cropSection:'Isitshalo nepulazi lakho',lbl_appSettings:'Izilungiselelo zokufafaza',
     lbl_farmName:'Igama lepulazi lakho (okukhethwayo)',
     lbl_crop:'Isitshalo',
     lbl_area:'Indawo etshaliwe (Ha)',
@@ -1041,7 +1052,7 @@ var LANG = {
   st:{
     lbl_lang:'Puo',
     lbl_curr:'Mofuta oa chelete',
-    lbl_cropSection:'Sejalo le polasi ea hau',
+    lbl_cropSection:'Sejalo le polasi ea hau',lbl_appSettings:'Litlhophiso tsa ho fafatsa',
     lbl_farmName:'Lebitso la polasi ea hau (la boikhethelo)',
     lbl_crop:'Sejalo',
     lbl_area:'Sebaka se jetsoeng (Ha)',
@@ -1112,7 +1123,7 @@ var LANG = {
   sn:{
     lbl_lang:'Mutauro',
     lbl_curr:'Mhando yemari',
-    lbl_cropSection:'Chirimwa nepurazi rako',
+    lbl_cropSection:'Chirimwa nepurazi rako',lbl_appSettings:'Migadziro yekupfapfaidza',
     lbl_farmName:'Zita repurazi rako (kusarudza)',
     lbl_crop:'Chirimwa',
     lbl_area:'Nzvimbo yakadyarwa (Ha)',
@@ -1183,7 +1194,7 @@ var LANG = {
   ny:{
     lbl_lang:'Chinenero',
     lbl_curr:'Mtundu wa ndalama',
-    lbl_cropSection:'Mbewu ndi famu yanu',
+    lbl_cropSection:'Mbewu ndi famu yanu',lbl_appSettings:'Zokonzekera zopopera',
     lbl_farmName:'Dzina la famu yanu (zosafunikira)',
     lbl_crop:'Mbewu',
     lbl_area:'Malo obzalidwa (Ha)',
@@ -1321,7 +1332,7 @@ function applyLang(lc){
   function s(id,v){var e=g(id);if(e&&v!==undefined)e.textContent=v;}
   function h(id,v){var e=g(id);if(e&&v!==undefined)e.innerHTML=v;}
   s('lbl-lang',L.lbl_lang); s('lbl-curr',L.lbl_curr);
-  s('lbl-cropSection',L.lbl_cropSection); s('lbl-farmName',L.lbl_farmName); s('lbl_crop',L.lbl_crop);
+  s('lbl-cropSection',L.lbl_cropSection); s('lbl-appSettings',L.lbl_appSettings); s('lbl-farmName',L.lbl_farmName); s('lbl_crop',L.lbl_crop);
   s('lbl_area',L.lbl_area); s('lbl_yield',L.lbl_yield);
   s('lbl_price',L.lbl_price); s('lbl-pvPrice',L.lbl_pvPrice); s('lbl_apps',L.lbl_apps);
   s('lbl_appMethod',L.lbl_appMethod); s('lbl_scTitle',L.lbl_scTitle);
