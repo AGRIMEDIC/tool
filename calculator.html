@@ -213,6 +213,14 @@ body{font-family:'DM Sans',sans-serif;background:var(--sage-pale);color:var(--te
   .why-desc{font-size:9px!important;}
   /* Disclaimer */
   .disclaimer{padding:8px 12px!important;margin-bottom:0!important;font-size:9px!important;}
+  /* CALC-003 Bug 2/criterion 11 — #bnMetricsStrip (banana-only results strip)
+     isn't in the hide list above (it's legitimate print content, unlike the
+     input form) but at its screen padding/margin it pushed the banana
+     printout to a second page; verified via injected-style measurement
+     against A4's usable height that this alone brings it back under budget
+     with margin to spare, for all three crop models. */
+  #bnMetricsStrip{padding:8px 16px!important;margin-bottom:6px!important;}
+  #bnMetricsStrip>div:first-child{margin-bottom:6px!important;}
 }
 .app-warning{border:2px solid #e05c2a!important;background:#fff5f0!important;}
 .app-cost-chip{margin-top:8px;padding:9px 13px;border-radius:7px;font-size:12px;font-weight:500;line-height:1.5;transition:background .2s;}
