@@ -51,6 +51,11 @@ body{font-family:'DM Sans',sans-serif;background:var(--sage-pale);color:var(--te
 .input-card-title{font-size:13px;text-transform:uppercase;letter-spacing:.1em;color:var(--mid-green);font-weight:600;margin-bottom:20px;}
 .fields-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
 .fields-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+/* CALC-003 Bug 3 — #yieldPriceFields wraps two field-blocks so bananas can
+   hide them together; without this the wrapper is itself one grid item and
+   its two children stack instead of occupying their own cells. Keeps the
+   wrapper addressable by JS while its children participate in the grid. */
+#yieldPriceFields{display:contents;}
 .field-block label{display:block;font-size:11px;color:var(--text-muted);margin-bottom:5px;font-weight:500;}
 .field-block input,.field-block select{width:100%;background:var(--sage-pale);border:1px solid rgba(45,90,61,.15);border-radius:7px;color:var(--text-dark);font-family:'DM Sans',sans-serif;font-size:14px;padding:9px 12px;}
 .field-block input:focus,.field-block select:focus{outline:none;border-color:var(--mid-green);background:var(--white);}
@@ -1562,7 +1567,7 @@ g('cropPreset').addEventListener('change',function(){
     else{co.style.display='none';}
   }
   var isBn = (this.value==='bananas');
-  g('yieldPriceFields').style.display = isBn ? 'none' : '';
+  g('yieldPriceFields').style.display = isBn ? 'none' : 'contents';
   g('upliftSection').style.display    = isBn ? 'none' : '';
   g('scExtra').className='sc-extra'+(this.value==='sugarcane'?' visible':'');
   g('bnExtra').className='sc-extra'+(isBn?' visible':'');
