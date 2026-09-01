@@ -337,7 +337,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--sage-pale);color:var(--te
       </div>
       <div class="field-block">
         <label id="lbl-price">Sale price per MT</label>
-        <input id="pricePerMT" type="number" value="3500" min="1">
+        <input id="pricePerMT" type="number" value="3500" min="1" step="any" inputmode="decimal">
       </div>
       </div>
       <div class="field-block">
@@ -355,12 +355,12 @@ body{font-family:'DM Sans',sans-serif;background:var(--sage-pale);color:var(--te
       </div>
       <div class="field-block">
         <label id="lbl_appCost">Application cost per Ha</label>
-        <input id="appCostInput" type="number" value="270" min="0">
+        <input id="appCostInput" type="number" value="270" min="0" step="any" inputmode="decimal">
         <div id="appCost_hint" style="font-size:10px;color:var(--text-muted);margin-top:4px;line-height:1.4;">Default is a South African average — change it to your local spraying cost for an accurate result.</div>
       </div>
       <div class="field-block">
         <label id="lbl-pvPrice">Plantos Verde price (per kg)</label>
-        <input id="pvPrice" type="number" value="265" min="1">
+        <input id="pvPrice" type="number" value="265" min="1" step="any" inputmode="decimal">
       </div>
     </div>
 
@@ -379,7 +379,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--sage-pale);color:var(--te
       </div>
       <div class="field-block" style="margin-top:12px;">
         <label id="lbl-sgPrice">Sugar price per MT</label>
-        <input id="scSugarPrice" type="number" value="6200" min="1">
+        <input id="scSugarPrice" type="number" value="6200" min="1" step="any" inputmode="decimal">
       </div>
     </div>
 
@@ -437,14 +437,14 @@ body{font-family:'DM Sans',sans-serif;background:var(--sage-pale);color:var(--te
 
       <div style="font-size:11px;font-weight:500;color:var(--mid-green);margin:12px 0 6px;">Price per crate (R)</div>
       <div class="fields-grid-2">
-        <div class="field-block"><label>Class 1 (R/crate)</label><input id="bnP1" type="number" value="145" min="0"></div>
-        <div class="field-block"><label>Class 2 (R/crate)</label><input id="bnP2" type="number" value="125" min="0"></div>
+        <div class="field-block"><label>Class 1 (R/crate)</label><input id="bnP1" type="number" value="145" min="0" step="any" inputmode="decimal"></div>
+        <div class="field-block"><label>Class 2 (R/crate)</label><input id="bnP2" type="number" value="125" min="0" step="any" inputmode="decimal"></div>
       </div>
       <div class="fields-grid-2" style="margin-top:8px;">
-        <div class="field-block"><label>Cluster / local (R/crate)</label><input id="bnP3" type="number" value="100" min="0"></div>
-        <div class="field-block"><label>Singles (R/crate)</label><input id="bnP4" type="number" value="50" min="0"></div>
+        <div class="field-block"><label>Cluster / local (R/crate)</label><input id="bnP3" type="number" value="100" min="0" step="any" inputmode="decimal"></div>
+        <div class="field-block"><label>Singles (R/crate)</label><input id="bnP4" type="number" value="50" min="0" step="any" inputmode="decimal"></div>
       </div>
-      <div class="field-block" style="margin-top:8px;"><label>Dumps (R/crate)</label><input id="bnP5" type="number" value="0" min="0"></div>
+      <div class="field-block" style="margin-top:8px;"><label>Dumps (R/crate)</label><input id="bnP5" type="number" value="0" min="0" step="any" inputmode="decimal"></div>
       <div id="bnGradeWarn" style="display:none;font-size:11px;padding:8px 12px;margin-top:8px;border-radius:7px;background:rgba(224,92,42,.1);color:#b84a00;border:1px solid rgba(224,92,42,.25);line-height:1.4;"></div>
       <p style="font-size:10px;color:var(--text-muted);margin-top:8px;line-height:1.5;">Defaults from Nisela harvest records. Class 1 % is the primary PV lever — PV typically lifts Class 1 from ~56% to ~73%.</p>
     </div>
@@ -479,7 +479,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--sage-pale);color:var(--te
         </div>
         <div class="field-block">
           <label id="lbl-fertPrice">Fertiliser price (R/kg)</label>
-          <input id="fertPriceKg" type="number" value="0" min="0">
+          <input id="fertPriceKg" type="number" value="0" min="0" step="any" inputmode="decimal">
         </div>
       </div>
       <div class="fert-chip" style="margin-top:10px;">
@@ -1255,7 +1255,16 @@ var curLang = 'en';
 function g(id){return document.getElementById(id);}
 function st(id,v){var e=g(id);if(e)e.textContent=v;}
 function sh(id,v){var e=g(id);if(e)e.innerHTML=v;}
-function sv(id){return parseFloat(g(id).value)||0;}
+function parseMoney(raw){
+  if (raw === null || raw === undefined) return 0;
+  var s = String(raw).trim().replace(/\s/g,'');
+  // treat a lone comma as a decimal separator; strip commas used as thousands separators
+  if (/^\d{1,3}(,\d{3})+(\.\d+)?$/.test(s)) s = s.replace(/,/g,'');
+  else s = s.replace(',', '.');
+  var n = parseFloat(s);
+  return isNaN(n) ? 0 : n;
+}
+function sv(id){return parseMoney(g(id).value);}
 function sym(){var c={ZAR:'R',USD:'$',EUR:'€',GBP:'£',KES:'KSh',TZS:'TSh',UGX:'USh',MZN:'MT',ZMW:'ZK',NAD:'N$',BWP:'P',MUR:'₨',NGN:'₦',GHS:'₵',BRL:'R$',ARS:'$',AUD:'A$',CAD:'C$'};return c[curCode]||curCode;}
 function cvt(r){return r*(rates[curCode]||1);}
 function fmt(r){var v=cvt(r),s=sym();if(Math.abs(v)>=1e6)return s+'\u00a0'+(v/1e6).toFixed(2)+'M';return s+'\u00a0'+Math.round(v).toLocaleString();}
@@ -1266,7 +1275,11 @@ function fmts(r){var v=cvt(r),s=sym();if(Math.abs(v)>=1e6)return s+(v/1e6).toFix
    fromZAR() converts a ZAR constant outward for display in an input field. */
 function toZAR(v){ var r = rates[curCode] || 1; return r ? v / r : v; }
 function fromZAR(z){ return z * (rates[curCode]||1); }
-function roundMoney(v){ return v>=100 ? Math.round(v) : Math.round(v*100)/100; }
+/* 4dp, not 2dp: at typical exchange-rate magnitudes, 2dp rounding on both
+   legs of a currency round trip compounds past 0.01 for small values (e.g.
+   pvPrice ~15) — see CALC-003 verification. 4dp keeps that well under 0.01
+   while still never showing trailing zeros (JS numbers don't carry them). */
+function roundMoney(v){ return Math.round(v*10000)/10000; }
 function svM(id){ return toZAR(sv(id)); }
 
 var MONEY_INPUTS = ['pricePerMT','pvPrice','scSugarPrice','fertPriceKg','bnP1','bnP2','bnP3','bnP4','bnP5','appCostInput'];
@@ -1275,7 +1288,8 @@ function rescaleMoneyInputs(oldCode, newCode){
   if(!oldR || !newR || oldR === newR) return;
   MONEY_INPUTS.forEach(function(id){
     var el = g(id); if(!el) return;
-    var v = parseFloat(el.value); if(isNaN(v)) return;
+    if(el.value.trim()==='') return;
+    var v = parseMoney(el.value);
     el.value = roundMoney(v * (newR / oldR));
   });
 }

@@ -358,8 +358,8 @@ body{font-family:'DM Sans',sans-serif;background:#1a1a1a;color:var(--text-dark);
         <div class="field"><label id="lbl-area">Planted area (Ha)</label><input id="area" type="number" value="100" min="1"></div>
         <div class="field" id="yieldField"><label id="lbl-yield">Current yield (MT/Ha)</label><input id="yieldHa" type="number" value="50" min="1"></div>
       </div>
-      <div id="priceField"><div class="field"><label id="lbl-price">Sale price per MT</label><input id="pricePerMT" type="number" value="3500" min="1"></div></div>
-      <div class="field"><label id="lbl-pvPrice">Plantos Verde price per kg</label><input id="pvPrice" type="number" value="265" min="1"></div>
+      <div id="priceField"><div class="field"><label id="lbl-price">Sale price per MT</label><input id="pricePerMT" type="number" value="3500" min="1" step="any" inputmode="decimal"></div></div>
+      <div class="field"><label id="lbl-pvPrice">Plantos Verde price per kg</label><input id="pvPrice" type="number" value="265" min="1" step="any" inputmode="decimal"></div>
 
       <div class="sc-section" id="scSection">
         <div style="height:1px;background:#2e2e2e;margin:8px 0;"></div>
@@ -368,7 +368,7 @@ body{font-family:'DM Sans',sans-serif;background:#1a1a1a;color:var(--text-dark);
           <div class="field"><label id="lbl-rvCurrent">Current RV%</label><input id="scRVcurrent" type="number" value="13.7" step="0.1" min="0" max="25"></div>
           <div class="field"><label id="lbl-rvProjected">Projected RV% with PV</label><input id="scRVprojected" type="number" value="14.5" step="0.1" min="0" max="25"></div>
         </div>
-        <div class="field"><label id="lbl-sugarPrice">Sugar price per MT</label><input id="scSugarPrice" type="number" value="6200" min="1"></div>
+        <div class="field"><label id="lbl-sugarPrice">Sugar price per MT</label><input id="scSugarPrice" type="number" value="6200" min="1" step="any" inputmode="decimal"></div>
         <div style="font-size:10px;color:#555;margin-top:3px;line-height:1.5;" id="sc-hint">Revenue = Yield &times; RV% &times; Sugar price. PV typically lifts RV by 0.5&ndash;1.5 points.</div>
       </div>
 
@@ -423,14 +423,14 @@ body{font-family:'DM Sans',sans-serif;background:#1a1a1a;color:var(--text-dark);
 
         <div style="font-size:10px;color:var(--bright-green);margin:8px 0 5px;">Price per crate (R)</div>
         <div class="field-row">
-          <div class="field"><label>Class 1 (R/crate)</label><input id="bnP1" type="number" value="145" min="0"></div>
-          <div class="field"><label>Class 2 (R/crate)</label><input id="bnP2" type="number" value="125" min="0"></div>
+          <div class="field"><label>Class 1 (R/crate)</label><input id="bnP1" type="number" value="145" min="0" step="any" inputmode="decimal"></div>
+          <div class="field"><label>Class 2 (R/crate)</label><input id="bnP2" type="number" value="125" min="0" step="any" inputmode="decimal"></div>
         </div>
         <div class="field-row">
-          <div class="field"><label>Cluster/local (R/crate)</label><input id="bnP3" type="number" value="100" min="0"></div>
-          <div class="field"><label>Singles (R/crate)</label><input id="bnP4" type="number" value="50" min="0"></div>
+          <div class="field"><label>Cluster/local (R/crate)</label><input id="bnP3" type="number" value="100" min="0" step="any" inputmode="decimal"></div>
+          <div class="field"><label>Singles (R/crate)</label><input id="bnP4" type="number" value="50" min="0" step="any" inputmode="decimal"></div>
         </div>
-        <div class="field"><label>Dumps (R/crate)</label><input id="bnP5" type="number" value="0" min="0"></div>
+        <div class="field"><label>Dumps (R/crate)</label><input id="bnP5" type="number" value="0" min="0" step="any" inputmode="decimal"></div>
         <div id="bnGradeWarn" style="display:none;font-size:9px;padding:5px 8px;margin-top:6px;border-radius:4px;background:rgba(224,92,42,.12);color:#b84a00;border:1px solid rgba(224,92,42,.25);line-height:1.4;"></div>
         <div style="font-size:9px;color:#666;margin-top:5px;line-height:1.5;">Defaults from Nisela harvest records. Class 1 % is the primary PV lever.</div>
       </div>
@@ -442,15 +442,15 @@ body{font-family:'DM Sans',sans-serif;background:#1a1a1a;color:var(--text-dark);
       <div class="fsec-title" id="fsec-apps">Application plan</div>
       <div class="field-row">
         <div class="field"><label id="lbl-knapsackN">Knapsack apps</label><input id="knapsackN" type="number" value="0" min="0"></div>
-        <div class="field"><label id="lbl-knapsackC">Cost per Ha</label><input id="knapsackC" type="number" value="125"></div>
+        <div class="field"><label id="lbl-knapsackC">Cost per Ha</label><input id="knapsackC" type="number" value="125" step="any" inputmode="decimal"></div>
       </div>
       <div class="field-row">
         <div class="field"><label id="lbl-cropsprayN">Crop sprayer apps</label><input id="cropsprayN" type="number" value="4" min="0"></div>
-        <div class="field"><label id="lbl-cropsprayC">Cost per Ha</label><input id="cropsprayC" type="number" value="270"></div>
+        <div class="field"><label id="lbl-cropsprayC">Cost per Ha</label><input id="cropsprayC" type="number" value="270" step="any" inputmode="decimal"></div>
       </div>
       <div class="field-row">
         <div class="field"><label id="lbl-droneN">Drone apps</label><input id="droneN" type="number" value="0" min="0"></div>
-        <div class="field"><label id="lbl-droneC">Cost per Ha</label><input id="droneC" type="number" value="387"></div>
+        <div class="field"><label id="lbl-droneC">Cost per Ha</label><input id="droneC" type="number" value="387" step="any" inputmode="decimal"></div>
       </div>
       <div class="app-total-row">
         <span class="app-total-label" id="lbl-totalApps">Total applications</span>
@@ -479,7 +479,7 @@ body{font-family:'DM Sans',sans-serif;background:#1a1a1a;color:var(--text-dark);
       <div class="fsec-title" id="fsec-fert">Fertiliser saving</div>
       <div class="field-row">
         <div class="field"><label id="lbl-fertKg">Fertiliser (kg/Ha)</label><input id="fertKgHa" type="number" value="300" min="0"></div>
-        <div class="field"><label id="lbl-fertPrice">Price per kg</label><input id="fertPriceKg" type="number" value="12" min="0"></div>
+        <div class="field"><label id="lbl-fertPrice">Price per kg</label><input id="fertPriceKg" type="number" value="12" min="0" step="any" inputmode="decimal"></div>
       </div>
       <div class="info-chip">
         <span id="lbl-fertCost">Current fertiliser cost per Ha</span>
@@ -1321,7 +1321,11 @@ function fmtAmt(zarAmt) {
    fromZAR() converts a ZAR constant outward for display in an input field. */
 function toZAR(v){ var r = exchangeRates[currentCurrency] || 1; return r ? v / r : v; }
 function fromZAR(z){ return z * (exchangeRates[currentCurrency]||1); }
-function roundMoney(v){ return v>=100 ? Math.round(v) : Math.round(v*100)/100; }
+/* 4dp, not 2dp: at typical exchange-rate magnitudes, 2dp rounding on both
+   legs of a currency round trip compounds past 0.01 for small values (e.g.
+   pvPrice ~15) — see CALC-003 verification. 4dp keeps that well under 0.01
+   while still never showing trailing zeros (JS numbers don't carry them). */
+function roundMoney(v){ return Math.round(v*10000)/10000; }
 function valM(id, dflt){ return toZAR(val(id, dflt)); }
 
 var MONEY_INPUTS = ['pricePerMT','pvPrice','scSugarPrice','fertPriceKg','bnP1','bnP2','bnP3','bnP4','bnP5','knapsackC','cropsprayC','droneC'];
@@ -1330,7 +1334,8 @@ function rescaleMoneyInputs(oldCode, newCode){
   if(!oldR || !newR || oldR === newR) return;
   MONEY_INPUTS.forEach(function(id){
     var el = g(id); if(!el) return;
-    var v = parseFloat(el.value); if(isNaN(v)) return;
+    if(el.value.trim()==='') return;
+    var v = parseMoney(el.value);
     el.value = roundMoney(v * (newR / oldR));
   });
 }
@@ -1373,7 +1378,16 @@ function g(id){ return document.getElementById(id); }
 function st(id,v){ var e=g(id); if(e) e.textContent=v; }
 function sh(id,v){ var e=g(id); if(e) e.innerHTML=v; }
 function show(id,vis){ var e=g(id); if(e) e.style.display=vis?'':'none'; }
-function val(id,def){ return parseFloat(g(id).value)||def||0; }
+function parseMoney(raw){
+  if (raw === null || raw === undefined) return 0;
+  var s = String(raw).trim().replace(/\s/g,'');
+  // treat a lone comma as a decimal separator; strip commas used as thousands separators
+  if (/^\d{1,3}(,\d{3})+(\.\d+)?$/.test(s)) s = s.replace(/,/g,'');
+  else s = s.replace(',', '.');
+  var n = parseFloat(s);
+  return isNaN(n) ? 0 : n;
+}
+function val(id,def){ var n = parseMoney(g(id).value); return n || def || 0; }
 
 /* ─────────────────────────────────────────────
    APPLY LANGUAGE — updates every text node
