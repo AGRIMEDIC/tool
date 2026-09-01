@@ -166,6 +166,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--sage-pale);color:var(--te
 .share-strip{display:flex;align-items:center;justify-content:space-between;background:var(--white);border-radius:12px;border:1px solid rgba(45,90,61,.12);padding:18px 24px;margin-bottom:20px;flex-wrap:wrap;gap:12px;box-shadow:0 2px 12px rgba(45,90,61,.05);}
 .share-label{font-size:13px;font-weight:500;color:var(--text-muted);}
 .share-btns{display:flex;gap:10px;flex-wrap:wrap;}
+/* CALC-003 Bug 2 — clipboard-fallback confirmation, fades in/out */
+.share-confirm{font-size:12px;font-weight:500;color:var(--forest);opacity:0;transition:opacity .2s;pointer-events:none;}
+.share-confirm.visible{opacity:1;}
 .share-btn{display:flex;align-items:center;gap:7px;padding:9px 18px;border-radius:8px;border:1px solid;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;touch-action:manipulation;}
 .share-btn svg{width:16px;height:16px;flex-shrink:0;pointer-events:none;}
 .share-btn.whatsapp{background:#E8F5E0;color:#1a6b2a;border-color:rgba(25,107,42,.25);}
@@ -645,12 +648,13 @@ body{font-family:'DM Sans',sans-serif;background:var(--sage-pale);color:var(--te
   <!-- SHARE STRIP -->
   <div class="share-strip">
     <span class="share-label" id="lbl-share">Share your results</span>
+    <span class="share-confirm" id="shareConfirm"></span>
     <div class="share-btns">
-      <a class="share-btn whatsapp" id="btnWhatsApp" href="https://wa.me/" target="_blank" rel="noopener" style="text-decoration:none;">
+      <a class="share-btn whatsapp" id="btnWhatsApp" href="https://api.whatsapp.com/send?text=" target="_blank" rel="noopener" style="text-decoration:none;">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.118 1.528 5.845L.057 23.994l6.318-1.437C8.07 23.458 9.998 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.891 0-3.655-.52-5.162-1.424l-.37-.22-3.747.853.88-3.645-.24-.375A9.956 9.956 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
         WhatsApp
       </a>
-      <a class="share-btn email" id="btnEmail" href="mailto:info@agrimedic-global.com" style="text-decoration:none;">
+      <a class="share-btn email" id="btnEmail" href="mailto:info@agrimedic-global.com" target="_top" style="text-decoration:none;">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
         Email
       </a>
@@ -721,7 +725,7 @@ var LANG = {
     lbl_lang:'Language',lbl_curr:'Currency',lbl_cropSection:'Your crop and farm',lbl_appSettings:'Application settings',lbl_farmName:'Your farm name (optional)',
     lbl_crop:'Crop',lbl_area:'Planted area (Ha)',lbl_yield:'Current yield (MT/Ha)',
     lbl_price:'Sale price per MT',lbl_pvPrice:'Plantos Verde price (per kg)',lbl_apps:'Applications per season',lbl_appMethod:'Application method',
-    lbl_appCost:'Application cost per Ha',appCost_hint:'Default is a South African average — change it to your local spraying cost for an accurate result.',
+    lbl_appCost:'Application cost per Ha',appCost_hint:'Default is a South African average — change it to your local spraying cost for an accurate result.',shareConfirm:'Copied — paste into WhatsApp or email',
     lbl_scTitle:'Sugarcane — RV% inputs',lbl_rvCur:'Current RV%',lbl_rvProj:'Projected RV% with PV',lbl_sgPrice:'Sugar price per MT',
     lbl_uplift:'Expected yield uplift',uplift_hint:'Estimates are based on field trials across Southern Africa. A conservative starting point is 10–15%, though results vary by crop, conditions, and application timing.',
     lbl_fertSection:'Fertiliser saving (optional)',lbl_fertKg:'Fertiliser used (kg/Ha)',lbl_fertPrice:'Fertiliser price (R/kg)',
@@ -751,7 +755,7 @@ var LANG = {
     lbl_farmName:'U plaasnaam (opsioneel)',
     lbl_crop:'Gewas',lbl_area:'Aangeplante oppervlak (Ha)',lbl_yield:'Huidige opbrengs (MT/Ha)',
     lbl_price:'Verkoopprys per MT',lbl_pvPrice:'Plantos Verde prys (per kg)',lbl_apps:'Toepassings per seisoen',lbl_appMethod:'Toepassingsmetode',
-    lbl_appCost:'Toepassingskoste per Ha',appCost_hint:'Verstek is \'n Suid-Afrikaanse gemiddelde — verander dit na u plaaslike spuitkoste vir \'n akkurate resultaat.',
+    lbl_appCost:'Toepassingskoste per Ha',appCost_hint:'Verstek is \'n Suid-Afrikaanse gemiddelde — verander dit na u plaaslike spuitkoste vir \'n akkurate resultaat.',shareConfirm:'Gekopieer — plak dit in WhatsApp of e-pos',
     lbl_scTitle:'Suikerriet — RV% invoere',lbl_rvCur:'Huidige RV%',lbl_rvProj:'Geprojekteerde RV% met PV',lbl_sgPrice:'Suikerprys per MT',
     lbl_uplift:'Verwagte opbrengsverhoging',uplift_hint:'Skattings is gebaseer op veldproewe regoor Suider-Afrika. \'n Konserwatiewe beginpunt is 10–15%, maar resultate wissel na gelang van gewas, toestande en toepassingstyd.',
     lbl_fertSection:'Kunsmisbesparing (opsioneel)',lbl_fertKg:'Kunsmis gebruik (kg/Ha)',lbl_fertPrice:'Kunsmis prys (R/kg)',
@@ -781,7 +785,7 @@ var LANG = {
     lbl_farmName:'Nom de votre ferme (facultatif)',
     lbl_crop:'Culture',lbl_area:'Surface plantée (Ha)',lbl_yield:'Rendement actuel (MT/Ha)',
     lbl_price:'Prix de vente par MT',lbl_pvPrice:'Prix Plantos Verde (par kg)',lbl_apps:'Applications par saison',lbl_appMethod:'Méthode d\'application',
-    lbl_appCost:'Coût d\'application par Ha',appCost_hint:'La valeur par défaut est une moyenne sud-africaine — modifiez-la selon votre coût de pulvérisation local pour un résultat exact.',
+    lbl_appCost:'Coût d\'application par Ha',appCost_hint:'La valeur par défaut est une moyenne sud-africaine — modifiez-la selon votre coût de pulvérisation local pour un résultat exact.',shareConfirm:'Copié — collez-le dans WhatsApp ou un e-mail',
     lbl_scTitle:'Canne à sucre — données RV%',lbl_rvCur:'RV% actuel',lbl_rvProj:'RV% projeté avec PV',lbl_sgPrice:'Prix du sucre par MT',
     lbl_uplift:'Hausse de rendement prévue',uplift_hint:'Les estimations sont basées sur des essais terrain à travers l\'Afrique australe. Un point de départ conservateur est 10–15%, bien que les résultats varient selon la culture, les conditions et le calendrier d\'application.',
     lbl_fertSection:'Économies sur engrais (facultatif)',lbl_fertKg:'Engrais utilisé (kg/Ha)',lbl_fertPrice:'Prix engrais (R/kg)',
@@ -811,7 +815,7 @@ var LANG = {
     lbl_farmName:'Nombre de su finca (opcional)',
     lbl_crop:'Cultivo',lbl_area:'Área plantada (Ha)',lbl_yield:'Rendimiento actual (MT/Ha)',
     lbl_price:'Precio de venta por MT',lbl_pvPrice:'Precio Plantos Verde (por kg)',lbl_apps:'Aplicaciones por temporada',lbl_appMethod:'Método de aplicación',
-    lbl_appCost:'Costo de aplicación por Ha',appCost_hint:'El valor predeterminado es un promedio sudafricano — cámbielo por su costo local de fumigación para un resultado preciso.',
+    lbl_appCost:'Costo de aplicación por Ha',appCost_hint:'El valor predeterminado es un promedio sudafricano — cámbielo por su costo local de fumigación para un resultado preciso.',shareConfirm:'Copiado — péguelo en WhatsApp o correo electrónico',
     lbl_scTitle:'Caña de azúcar — datos RV%',lbl_rvCur:'RV% actual',lbl_rvProj:'RV% proyectado con PV',lbl_sgPrice:'Precio del azúcar por MT',
     lbl_uplift:'Aumento de rendimiento esperado',uplift_hint:'Las estimaciones se basan en ensayos de campo realizados en toda África Austral. Un punto de partida conservador es 10–15%, aunque los resultados varían según el cultivo, las condiciones y el momento de aplicación.',
     lbl_fertSection:'Ahorro en fertilizantes (opcional)',lbl_fertKg:'Fertilizante usado (kg/Ha)',lbl_fertPrice:'Precio fertilizante (R/kg)',
@@ -848,7 +852,7 @@ var LANG = {
     lbl_pvPrice:'Preço Plantos Verde por kg',
     lbl_apps:'Aplicações por época',
     lbl_appMethod:'Método de aplicação',
-    lbl_appCost:'Custo de aplicação por Ha',appCost_hint:'O valor padrão é uma média sul-africana — altere-o para o seu custo local de pulverização para um resultado exato.',
+    lbl_appCost:'Custo de aplicação por Ha',appCost_hint:'O valor padrão é uma média sul-africana — altere-o para o seu custo local de pulverização para um resultado exato.',shareConfirm:'Copiado — cole no WhatsApp ou e-mail',
     lbl_scTitle:'Cana-de-açúcar — entradas RV%',
     lbl_rvCur:'RV% actual',
     lbl_rvProj:'RV% projectado com PV',
@@ -919,7 +923,7 @@ var LANG = {
     lbl_pvPrice:'Bei ya Plantos Verde kwa kg',
     lbl_apps:'Matumizi kwa msimu',
     lbl_appMethod:'Njia ya kutumia',
-    lbl_appCost:'Gharama ya matumizi kwa Ha',appCost_hint:'Chaguo-msingi ni wastani wa Afrika Kusini — libadilishe kulingana na gharama yako ya kunyunyizia ya eneo lako kwa matokeo sahihi.',
+    lbl_appCost:'Gharama ya matumizi kwa Ha',appCost_hint:'Chaguo-msingi ni wastani wa Afrika Kusini — libadilishe kulingana na gharama yako ya kunyunyizia ya eneo lako kwa matokeo sahihi.',shareConfirm:'Imenakiliwa — bandika kwenye WhatsApp au barua pepe',
     lbl_scTitle:'Miwa — maingizo ya RV%',
     lbl_rvCur:'RV% ya sasa',
     lbl_rvProj:'RV% inayotarajiwa na PV',
@@ -990,7 +994,7 @@ var LANG = {
     lbl_pvPrice:'Intengo ye-Plantos Verde ngekg',
     lbl_apps:'Ukufafaza ngesizini',
     lbl_appMethod:'Indlela yokufafaza',
-    lbl_appCost:'Izindleko zokufafaza nge-Ha',appCost_hint:'Okuzenzakalelayo yisilinganiso saseNingizimu Afrika — sishintshe ube nezindleko zakho zendawo zokufafaza ukuze uthole umphumela oqondile.',
+    lbl_appCost:'Izindleko zokufafaza nge-Ha',appCost_hint:'Okuzenzakalelayo yisilinganiso saseNingizimu Afrika — sishintshe ube nezindleko zakho zendawo zokufafaza ukuze uthole umphumela oqondile.',shareConfirm:'Kukopishiwe — namathisela ku-WhatsApp noma i-imeyili',
     lbl_scTitle:'Umoba — okufakiwe kwe-RV%',
     lbl_rvCur:'I-RV% yamanje',
     lbl_rvProj:'I-RV% ebikezelwe ne-PV',
@@ -1061,7 +1065,7 @@ var LANG = {
     lbl_pvPrice:'Theko ea Plantos Verde ka kg',
     lbl_apps:'Ho fafatsa ka nako ea selemo',
     lbl_appMethod:'Mokhoa oa ho fafatsa',
-    lbl_appCost:'Litšenyehelo tsa ho fafatsa ka Ha',appCost_hint:'Boalo ke karolelano ea Afrika Boroa — e fetole ho ea litšenyehelong tsa hau tsa sebaka sa ho fafatsa bakeng sa sephetho se nepahetseng.',
+    lbl_appCost:'Litšenyehelo tsa ho fafatsa ka Ha',appCost_hint:'Boalo ke karolelano ea Afrika Boroa — e fetole ho ea litšenyehelong tsa hau tsa sebaka sa ho fafatsa bakeng sa sephetho se nepahetseng.',shareConfirm:'E kopiloe — e kgomaretse ho WhatsApp kapa imeile',
     lbl_scTitle:'Lehlaka la tšoekere — likenyo tsa RV%',
     lbl_rvCur:'RV% ea hajoale',
     lbl_rvProj:'RV% e hakanngoeng le PV',
@@ -1132,7 +1136,7 @@ var LANG = {
     lbl_pvPrice:'Mutengo wePlantos Verde pakg',
     lbl_apps:'Kupfapfaidza pamwaka',
     lbl_appMethod:'Nzira yekupfapfaidza',
-    lbl_appCost:'Mutengo wekupfapfaidza paHa',appCost_hint:'Chaizvoizvo ndeye chiyero cheSouth Africa — chinja kuenda kumutengo wekupfapfaidza wekwako kuti uwane mhedzisiro yakarurama.',
+    lbl_appCost:'Mutengo wekupfapfaidza paHa',appCost_hint:'Chaizvoizvo ndeye chiyero cheSouth Africa — chinja kuenda kumutengo wekupfapfaidza wekwako kuti uwane mhedzisiro yakarurama.',shareConfirm:'Zvakopiwa — namatidza muWhatsApp kana email',
     lbl_scTitle:'Ipwa — zvinopinda zveRV%',
     lbl_rvCur:'RV% yazvino',
     lbl_rvProj:'RV% inofungidzirwa nePV',
@@ -1203,7 +1207,7 @@ var LANG = {
     lbl_pvPrice:'Mtengo wa Plantos Verde pa kg',
     lbl_apps:'Kupopera pa nyengo',
     lbl_appMethod:'Njira yopopera',
-    lbl_appCost:'Mtengo wopopera pa Ha',appCost_hint:'Zosasinthidwa ndi chiyerekezo cha ku South Africa — sinthani kukhala mtengo wanu wapafupi wopopera kuti mupeze zotsatira zolondola.',
+    lbl_appCost:'Mtengo wopopera pa Ha',appCost_hint:'Zosasinthidwa ndi chiyerekezo cha ku South Africa — sinthani kukhala mtengo wanu wapafupi wopopera kuti mupeze zotsatira zolondola.',shareConfirm:'Yakopedwa — mateni mu WhatsApp kapena imelo',
     lbl_scTitle:'Nzimbe — zomwe zikuloŵetsedwa za RV%',
     lbl_rvCur:'RV% ya pano',
     lbl_rvProj:'RV% yoyembekezeredwa ndi PV',
@@ -1566,6 +1570,16 @@ g('currencySelect').addEventListener('change',function(){
   updateRateNote();
   render();
 });
+/* CALC-003 Bug 2 — extracted so the print-restore flow (?print=1) can
+   reproduce a crop's show/hide state without re-running the CROPS
+   default-value overwrite above it, which would clobber restored figures. */
+function applyCropVisibility(cropValue){
+  var isBn = (cropValue==='bananas');
+  g('yieldPriceFields').style.display = isBn ? 'none' : 'contents';
+  g('upliftSection').style.display    = isBn ? 'none' : '';
+  g('scExtra').className='sc-extra'+(cropValue==='sugarcane'?' visible':'');
+  g('bnExtra').className='sc-extra'+(isBn?' visible':'');
+}
 g('cropPreset').addEventListener('change',function(){
   var c=CROPS[this.value];
   if(c){
@@ -1577,11 +1591,7 @@ g('cropPreset').addEventListener('change',function(){
     if(c.trial){co.style.display='';ct.textContent=c.trial;}
     else{co.style.display='none';}
   }
-  var isBn = (this.value==='bananas');
-  g('yieldPriceFields').style.display = isBn ? 'none' : 'contents';
-  g('upliftSection').style.display    = isBn ? 'none' : '';
-  g('scExtra').className='sc-extra'+(this.value==='sugarcane'?' visible':'');
-  g('bnExtra').className='sc-extra'+(isBn?' visible':'');
+  applyCropVisibility(this.value);
   render();
 });
 
@@ -1610,11 +1620,19 @@ function buildShareText(){
 /* Keep share hrefs live — anchors are never popup-blocked.
    Wrapped in try/catch and also called directly on click, so a throw
    earlier in render() can never leave these pointing at placeholder hrefs. */
+/* CALC-003 Bug 2 \u2014 calculator.html is embedded cross-origin in an iframe on
+   agrimedic-global.com with no sandbox attribute (so sandboxing isn't the
+   blocker) and no special allow grants. Share functionality must not
+   depend on escaping the frame: navigator.share (native OS share sheet,
+   immune to popup/frame-navigation restrictions) is the primary path;
+   clipboard copy is the guaranteed fallback everywhere else. */
+var inFrame = (function(){ try { return window.self !== window.top; } catch(e) { return true; } })();
+
 function updateShareLinks(){
   try {
     var txt=buildShareText();
     var wa=g('btnWhatsApp');
-    if(wa) wa.href='https://wa.me/?text='+encodeURIComponent(txt);
+    if(wa) wa.href='https://api.whatsapp.com/send?text='+encodeURIComponent(txt);
     var eb=g('btnEmail');
     if(eb){
       var farm=g('farmName').value.trim()||'my farm';
@@ -1624,11 +1642,109 @@ function updateShareLinks(){
   } catch(err) { /* leave whatever href is already there rather than crash */ }
 }
 
-var waBtn=g('btnWhatsApp'); if(waBtn) waBtn.addEventListener('click',updateShareLinks);
-var ebBtn=g('btnEmail'); if(ebBtn) ebBtn.addEventListener('click',updateShareLinks);
+/* Cross-origin iframes (no allow="clipboard-write" grant, which this embed
+   doesn't have and shouldn't need to) can have navigator.clipboard silently
+   reject. document.execCommand('copy') via a temporary textarea is legacy
+   but works from a direct user-gesture handler regardless of Permissions
+   Policy, so it's the backstop \u2014 not the primary path. */
+function legacyCopy(text){
+  try {
+    var ta=document.createElement('textarea');
+    ta.value=text; ta.style.position='fixed'; ta.style.left='-9999px'; ta.style.top='0';
+    document.body.appendChild(ta); ta.focus(); ta.select();
+    var ok=document.execCommand('copy');
+    document.body.removeChild(ta);
+    return ok;
+  } catch(e){ return false; }
+}
+function copyToClipboard(text){
+  /* Try the legacy synchronous path FIRST, not as a promise-rejection
+     fallback. execCommand('copy') must run inside the original synchronous
+     call stack of the click handler to reliably count as user-activated;
+     by the time an async clipboard.writeText() rejection reaches a .catch(),
+     that activation window has typically expired and execCommand can
+     silently no-op — a well-documented Clipboard API gotcha independent of
+     any single browser's specifics. */
+  var legacyOk = legacyCopy(text);
+  if (legacyOk) return Promise.resolve(true);
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    return navigator.clipboard.writeText(text).then(function(){ return true; })
+      .catch(function(){ return false; });
+  }
+  return Promise.resolve(false);
+}
+function showShareConfirm(ok){
+  if(!ok) return;
+  var el=g('shareConfirm'); if(!el) return;
+  var L=LANG[curLang]||LANG.en;
+  el.textContent = L.shareConfirm || 'Copied \u2014 paste into WhatsApp or email';
+  el.classList.add('visible');
+  clearTimeout(showShareConfirm._t);
+  showShareConfirm._t=setTimeout(function(){ el.classList.remove('visible'); }, 2500);
+}
+
+var waBtn=g('btnWhatsApp');
+if(waBtn) waBtn.addEventListener('click',function(e){
+  e.preventDefault();
+  updateShareLinks();
+  var txt=buildShareText();
+  if (navigator.share) {
+    navigator.share({ title:'Plantos Verde ROI', text:txt }).catch(function(){});
+    return;
+  }
+  copyToClipboard(txt).then(showShareConfirm);
+  try { window.open(waBtn.href, '_blank', 'noopener'); } catch(err) {}
+});
+
+var ebBtn=g('btnEmail');
+if(ebBtn) ebBtn.addEventListener('click',function(){
+  updateShareLinks();
+  /* Don't preventDefault \u2014 let the mailto: attempt proceed normally
+     (target="_top" on the anchor itself); clipboard is a safety net for
+     when it's blocked, not a replacement for it. */
+  copyToClipboard(buildShareText()).then(showShareConfirm);
+});
+
+/* CALC-003 Bug 2 \u2014 window.print() from inside a cross-origin iframe either
+   prints the parent page or silently does nothing. When framed, open the
+   calculator standalone in a new tab carrying the current inputs and let
+   that page print itself once loaded (see restoreFromPrintParams() below). */
+var PRINT_FIELDS=['farmName','cropPreset','area','yieldHa','pricePerMT','appCount','appMethod','appCostInput','pvPrice',
+  'scRVcurrent','scRVprojected','scSugarPrice',
+  'bnWeeksEarlier','bnCycleWeeks','bnBunchesNPV','bnCratesNPV','bnCratesPV','bnTreesHa','bnAppsPerCycle',
+  'bnNPVg1','bnNPVg2','bnNPVg3','bnNPVg4','bnNPVg5','bnPVg1','bnPVg2','bnPVg3','bnPVg4','bnPVg5',
+  'bnP1','bnP2','bnP3','bnP4','bnP5',
+  'fertKgHa','fertPriceKg','fertSlider','upliftSlider',
+  'currencySelect','langSelect'];
+function buildPrintUrl(){
+  var parts=['print=1'];
+  PRINT_FIELDS.forEach(function(id){
+    var el=g(id); if(!el) return;
+    parts.push(encodeURIComponent(id)+'='+encodeURIComponent(el.value));
+  });
+  return location.href.split('?')[0]+'?'+parts.join('&');
+}
+function restoreFromPrintParams(){
+  var qs;
+  try { qs=new URLSearchParams(location.search); } catch(e){ return false; }
+  if(qs.get('print')!=='1') return false;
+  PRINT_FIELDS.forEach(function(id){
+    if(!qs.has(id)) return;
+    var el=g(id); if(!el) return;
+    el.value=qs.get(id);
+  });
+  curCode = qs.get('currencySelect') || 'ZAR';
+  applyLang(qs.get('langSelect') || 'en');
+  applyCropVisibility(g('cropPreset').value);
+  return true;
+}
 
 var pdfBtn=g('btnPDF');
-if(pdfBtn) pdfBtn.addEventListener('click',function(e){e.preventDefault();window.print();});
+if(pdfBtn) pdfBtn.addEventListener('click',function(e){
+  e.preventDefault();
+  if (inFrame) { try { window.open(buildPrintUrl(), '_blank', 'noopener'); } catch(err){} }
+  else { window.print(); }
+});
 
 var inputs=document.querySelectorAll('input,select');
 for(var i=0;i<inputs.length;i++){
@@ -1637,13 +1753,17 @@ for(var i=0;i<inputs.length;i++){
 }
 
 fetchRates();
-applyLang('en');
-/* Set potato defaults on load */
-g('fertKgHa').value=300;
-g('fertPriceKg').value=12;
-var initCrop=CROPS['potatoes'];
-if(initCrop&&initCrop.trial){g('trialCallout').style.display='';g('trialCalloutText').textContent=initCrop.trial;}
+var isPrintMode = restoreFromPrintParams();
+if(!isPrintMode){
+  applyLang('en');
+  /* Set potato defaults on load */
+  g('fertKgHa').value=300;
+  g('fertPriceKg').value=12;
+  var initCrop=CROPS['potatoes'];
+  if(initCrop&&initCrop.trial){g('trialCallout').style.display='';g('trialCalloutText').textContent=initCrop.trial;}
+}
 render();
+if(isPrintMode){ setTimeout(function(){ window.print(); }, 50); }
 }());
 </script>
 <script>
