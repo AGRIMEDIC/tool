@@ -1246,6 +1246,25 @@ function cvt(r){return r*(rates[curCode]||1);}
 function fmt(r){var v=cvt(r),s=sym();if(Math.abs(v)>=1e6)return s+'\u00a0'+(v/1e6).toFixed(2)+'M';return s+'\u00a0'+Math.round(v).toLocaleString();}
 function fmts(r){var v=cvt(r),s=sym();if(Math.abs(v)>=1e6)return s+(v/1e6).toFixed(1)+'M';if(Math.abs(v)>=1e3)return s+(v/1e3).toFixed(0)+'K';return s+Math.round(v);}
 
+/* CALC-002 Bug 1 — money the user types is in the selected display currency;
+   all internal maths is in ZAR. toZAR() converts a read value inward,
+   fromZAR() converts a ZAR constant outward for display in an input field. */
+function toZAR(v){ var r = rates[curCode] || 1; return r ? v / r : v; }
+function fromZAR(z){ return z * (rates[curCode]||1); }
+function roundMoney(v){ return v>=100 ? Math.round(v) : Math.round(v*100)/100; }
+function svM(id){ return toZAR(sv(id)); }
+
+var MONEY_INPUTS = ['pricePerMT','pvPrice','scSugarPrice','fertPriceKg','bnP1','bnP2','bnP3','bnP4','bnP5'];
+function rescaleMoneyInputs(oldCode, newCode){
+  var oldR = rates[oldCode]||1, newR = rates[newCode]||1;
+  if(!oldR || !newR || oldR === newR) return;
+  MONEY_INPUTS.forEach(function(id){
+    var el = g(id); if(!el) return;
+    var v = parseFloat(el.value); if(isNaN(v)) return;
+    el.value = roundMoney(v * (newR / oldR));
+  });
+}
+
 function fetchRates(){
   fetch('https://api.exchangerate-api.com/v4/latest/ZAR')
     .then(function(r){return r.json();})
@@ -1315,18 +1334,18 @@ function render(){
   var fn    = g('out-farmName'); if(fn) fn.textContent = farm ? farm : '';
   var area  = sv('area')||1;
   var yld   = sv('yieldHa')||1;
-  var price = sv('pricePerMT')||1;
+  var price = svM('pricePerMT')||1;
   var apps  = parseInt(g('appCount').value)||4;
   var method= g('appMethod').value;
   var uplift= sv('upliftSlider')/100;
   var fertKg= sv('fertKgHa');
-  var fertPx= sv('fertPriceKg');
+  var fertPx= svM('fertPriceKg');
   var fertRed=sv('fertSlider')/100;
   var sc    = g('cropPreset').value==='sugarcane';
   var bn    = g('cropPreset').value==='bananas';
   var rvCur = sv('scRVcurrent')/100||0.137;
   var rvProj= sv('scRVprojected')/100||0.145;
-  var sgPx  = sv('scSugarPrice')||6200;
+  var sgPx  = svM('scSugarPrice')||6200;
 
   /* Hide yield/price/uplift for bananas — not used in banana revenue model */
   var ypf = g('yieldPriceFields');
@@ -1347,7 +1366,7 @@ function render(){
   g('lbl-forEvery').textContent= L.lbl_forEvery.replace('1',sym()+'1');
   g('lbl-roiSub').textContent  = L.lbl_roiSub.replace('1',sym()+'1');
 
-  var pvPrice = sv('pvPrice')||265;
+  var pvPrice = svM('pvPrice')||265;
   var fertCostHa = fertKg*fertPx;
   g('fertCostOut').textContent = fmt(fertCostHa)+'/Ha';
   g('fertSavOut').textContent  = fmt(fertCostHa*fertRed)+'/Ha';
@@ -1405,7 +1424,7 @@ function render(){
         gw.style.display='';gw.innerHTML='⚠ Grade percentages must add to 100%. Currently: '+msgs.join(', ')+'. Adjust before sharing.';
       } else {gw.style.display='none';}
     }
-    var p1=sv('bnP1'),p2=sv('bnP2'),p3=sv('bnP3'),p4=sv('bnP4'),p5=sv('bnP5');
+    var p1=svM('bnP1'),p2=svM('bnP2'),p3=svM('bnP3'),p4=svM('bnP4'),p5=svM('bnP5');
     var wtdNPV=ng1*p1+ng2*p2+ng3*p3+ng4*p4+ng5*p5;
     var wtdPV =pg1*p1+pg2*p2+pg3*p3+pg4*p4+pg5*p5;
     var revBunchNPV = crNPV * wtdNPV; /* R/bunch */
@@ -1494,13 +1513,20 @@ function render(){
 
 /* Event wiring */
 g('langSelect').addEventListener('change',function(){applyLang(this.value);render();});
-g('currencySelect').addEventListener('change',function(){curCode=this.value;updateRateNote();render();});
+g('currencySelect').addEventListener('change',function(){
+  var oldCode=curCode;
+  curCode=this.value;
+  rescaleMoneyInputs(oldCode,curCode);
+  updateRateNote();
+  render();
+});
 g('cropPreset').addEventListener('change',function(){
   var c=CROPS[this.value];
   if(c){
     g('yieldHa').value=c.y;
-    g('pricePerMT').value=c.p;
-    if(c.fk){g('fertKgHa').value=c.fk;g('fertPriceKg').value=c.fp;}
+    if(!c.sc) g('pricePerMT').value=roundMoney(fromZAR(c.p));
+    else      g('scSugarPrice').value=roundMoney(fromZAR(c.p));
+    if(c.fk){g('fertKgHa').value=c.fk;g('fertPriceKg').value=roundMoney(fromZAR(c.fp));}
     var co=g('trialCallout'),ct=g('trialCalloutText');
     if(c.trial){co.style.display='';ct.textContent=c.trial;}
     else{co.style.display='none';}

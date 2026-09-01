@@ -1315,6 +1315,25 @@ function fmtAmt(zarAmt) {
   if (Math.abs(v) >= 1e6) return s + '\u00a0' + (v / 1e6).toFixed(2) + 'M';
   return s + '\u00a0' + Math.round(v).toLocaleString();
 }
+
+/* CALC-002 Bug 1 — money the user types is in the selected display currency;
+   all internal maths is in ZAR. toZAR() converts a read value inward,
+   fromZAR() converts a ZAR constant outward for display in an input field. */
+function toZAR(v){ var r = exchangeRates[currentCurrency] || 1; return r ? v / r : v; }
+function fromZAR(z){ return z * (exchangeRates[currentCurrency]||1); }
+function roundMoney(v){ return v>=100 ? Math.round(v) : Math.round(v*100)/100; }
+function valM(id, dflt){ return toZAR(val(id, dflt)); }
+
+var MONEY_INPUTS = ['pricePerMT','pvPrice','scSugarPrice','fertPriceKg','bnP1','bnP2','bnP3','bnP4','bnP5','knapsackC','cropsprayC','droneC'];
+function rescaleMoneyInputs(oldCode, newCode){
+  var oldR = exchangeRates[oldCode]||1, newR = exchangeRates[newCode]||1;
+  if(!oldR || !newR || oldR === newR) return;
+  MONEY_INPUTS.forEach(function(id){
+    var el = g(id); if(!el) return;
+    var v = parseFloat(el.value); if(isNaN(v)) return;
+    el.value = roundMoney(v * (newR / oldR));
+  });
+}
 function fmtAmtS(zarAmt) {
   var v = toDisplay(zarAmt);
   var s = sym();
@@ -1432,21 +1451,21 @@ function render() {
   var crop    = g('cropName').value.trim()      || 'Crop';
   var area    = val('area',1)||1;
   var yld     = val('yieldHa',1)||1;
-  var pvPrice = val('pvPrice',265)||265;
+  var pvPrice = valM('pvPrice',265)||265;
   var uplift  = val('upliftSlider',15)/100;
   var fertKg  = val('fertKgHa',0);
-  var fertPx  = val('fertPriceKg',0);
+  var fertPx  = valM('fertPriceKg',0);
   var fertRed = val('fertSlider',0)/100;
-  var kN=val('knapsackN'), kC=val('knapsackC');
-  var cN=val('cropsprayN'), cC=val('cropsprayC');
-  var dN=val('droneN'), dC=val('droneC');
+  var kN=val('knapsackN'), kC=valM('knapsackC');
+  var cN=val('cropsprayN'), cC=valM('cropsprayC');
+  var dN=val('droneN'), dC=valM('droneC');
   var note    = g('customNote').value.trim();
   var sc      = g('cropPreset').value==='sugarcane';
   var cropKey = g('cropPreset').value;
   var rvCur   = val('scRVcurrent',13.7)/100;
   var rvProj  = val('scRVprojected',14.5)/100;
-  var sgPx    = val('scSugarPrice',6200)||6200;
-  var price   = val('pricePerMT',3500)||3500;
+  var sgPx    = valM('scSugarPrice',6200)||6200;
+  var price   = valM('pricePerMT',3500)||3500;
 
   /* Hide yield/price/uplift for bananas */
   var isBn = (cropKey==='bananas');
@@ -1531,7 +1550,7 @@ function render() {
       } else { gw.style.display='none'; }
     }
     /* Price per crate */
-    var p1=val('bnP1',145), p2=val('bnP2',125), p3=val('bnP3',100), p4=val('bnP4',50), p5=val('bnP5',0);
+    var p1=valM('bnP1',145), p2=valM('bnP2',125), p3=valM('bnP3',100), p4=valM('bnP4',50), p5=valM('bnP5',0);
     /* Weighted price per crate */
     var wtdNPV = ng1*p1 + ng2*p2 + ng3*p3 + ng4*p4 + ng5*p5;
     var wtdPV  = pg1*p1 + pg2*p2 + pg3*p3 + pg4*p4 + pg5*p5;
@@ -1662,7 +1681,9 @@ g('langSelect').addEventListener('change',function(){
 });
 
 g('currencySelect').addEventListener('change',function(){
+  var oldCode=currentCurrency;
   currentCurrency=this.value;
+  rescaleMoneyInputs(oldCode,currentCurrency);
   updateRateDisplay();
   render();
 });
@@ -1672,8 +1693,8 @@ g('cropPreset').addEventListener('change',function(){
   if(c){
     g('cropName').value=c.name;
     g('yieldHa').value=c.y;
-    if(!c.sc) g('pricePerMT').value=c.p;
-    else      g('scSugarPrice').value=c.p;
+    if(!c.sc) g('pricePerMT').value=roundMoney(fromZAR(c.p));
+    else      g('scSugarPrice').value=roundMoney(fromZAR(c.p));
   }
   var isBn = (this.value==='bananas');
   var isSc = (this.value==='sugarcane');
