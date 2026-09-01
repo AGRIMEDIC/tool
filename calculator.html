@@ -156,8 +156,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--sage-pale);color:var(--te
 .share-strip{display:flex;align-items:center;justify-content:space-between;background:var(--white);border-radius:12px;border:1px solid rgba(45,90,61,.12);padding:18px 24px;margin-bottom:20px;flex-wrap:wrap;gap:12px;box-shadow:0 2px 12px rgba(45,90,61,.05);}
 .share-label{font-size:13px;font-weight:500;color:var(--text-muted);}
 .share-btns{display:flex;gap:10px;flex-wrap:wrap;}
-.share-btn{display:flex;align-items:center;gap:7px;padding:9px 18px;border-radius:8px;border:1px solid;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;}
-.share-btn svg{width:16px;height:16px;flex-shrink:0;}
+.share-btn{display:flex;align-items:center;gap:7px;padding:9px 18px;border-radius:8px;border:1px solid;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;touch-action:manipulation;}
+.share-btn svg{width:16px;height:16px;flex-shrink:0;pointer-events:none;}
 .share-btn.whatsapp{background:#E8F5E0;color:#1a6b2a;border-color:rgba(25,107,42,.25);}
 .share-btn.whatsapp:hover{background:#d2eecc;}
 .share-btn.email{background:var(--sage-pale);color:var(--forest);border-color:rgba(45,90,61,.2);text-decoration:none;}
@@ -1550,18 +1550,25 @@ function buildShareText(){
   return name+' ('+area+' Ha): projected ROI 1:'+roi+', net gain '+net+' with Plantos Verde\u00ae. Calculate your own: www.agrimedic-global.com';
 }
 
-/* Keep share hrefs live — anchors are never popup-blocked */
+/* Keep share hrefs live — anchors are never popup-blocked.
+   Wrapped in try/catch and also called directly on click, so a throw
+   earlier in render() can never leave these pointing at placeholder hrefs. */
 function updateShareLinks(){
-  var txt=buildShareText();
-  var wa=g('btnWhatsApp');
-  if(wa) wa.href='https://wa.me/?text='+encodeURIComponent(txt);
-  var eb=g('btnEmail');
-  if(eb){
-    var farm=g('farmName').value.trim()||'my farm';
-    eb.href='mailto:?subject='+encodeURIComponent('Plantos Verde ROI \u2014 '+farm)+
-            '&body='+encodeURIComponent(txt+'\n\nGenerated using the Plantos Verde ROI Calculator.');
-  }
+  try {
+    var txt=buildShareText();
+    var wa=g('btnWhatsApp');
+    if(wa) wa.href='https://wa.me/?text='+encodeURIComponent(txt);
+    var eb=g('btnEmail');
+    if(eb){
+      var farm=g('farmName').value.trim()||'my farm';
+      eb.href='mailto:?subject='+encodeURIComponent('Plantos Verde ROI \u2014 '+farm)+
+              '&body='+encodeURIComponent(txt+'\n\nGenerated using the Plantos Verde ROI Calculator.');
+    }
+  } catch(err) { /* leave whatever href is already there rather than crash */ }
 }
+
+var waBtn=g('btnWhatsApp'); if(waBtn) waBtn.addEventListener('click',updateShareLinks);
+var ebBtn=g('btnEmail'); if(ebBtn) ebBtn.addEventListener('click',updateShareLinks);
 
 var pdfBtn=g('btnPDF');
 if(pdfBtn) pdfBtn.addEventListener('click',function(e){e.preventDefault();window.print();});
