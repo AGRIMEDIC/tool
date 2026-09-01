@@ -354,6 +354,11 @@ body{font-family:'DM Sans',sans-serif;background:var(--sage-pale);color:var(--te
         </select>
       </div>
       <div class="field-block">
+        <label id="lbl_appCost">Application cost per Ha</label>
+        <input id="appCostInput" type="number" value="270" min="0">
+        <div id="appCost_hint" style="font-size:10px;color:var(--text-muted);margin-top:4px;line-height:1.4;">Default is a South African average — change it to your local spraying cost for an accurate result.</div>
+      </div>
+      <div class="field-block">
         <label id="lbl-pvPrice">Plantos Verde price (per kg)</label>
         <input id="pvPrice" type="number" value="265" min="1">
       </div>
@@ -700,6 +705,7 @@ var LANG = {
     lbl_lang:'Language',lbl_curr:'Currency',lbl_cropSection:'Your crop and farm',lbl_farmName:'Your farm name (optional)',
     lbl_crop:'Crop',lbl_area:'Planted area (Ha)',lbl_yield:'Current yield (MT/Ha)',
     lbl_price:'Sale price per MT',lbl_pvPrice:'Plantos Verde price (per kg)',lbl_apps:'Applications per season',lbl_appMethod:'Application method',
+    lbl_appCost:'Application cost per Ha',appCost_hint:'Default is a South African average — change it to your local spraying cost for an accurate result.',
     lbl_scTitle:'Sugarcane — RV% inputs',lbl_rvCur:'Current RV%',lbl_rvProj:'Projected RV% with PV',lbl_sgPrice:'Sugar price per MT',
     lbl_uplift:'Expected yield uplift',uplift_hint:'Estimates are based on field trials across Southern Africa. A conservative starting point is 10–15%, though results vary by crop, conditions, and application timing.',
     lbl_fertSection:'Fertiliser saving (optional)',lbl_fertKg:'Fertiliser used (kg/Ha)',lbl_fertPrice:'Fertiliser price (R/kg)',
@@ -729,6 +735,7 @@ var LANG = {
     lbl_farmName:'U plaasnaam (opsioneel)',
     lbl_crop:'Gewas',lbl_area:'Aangeplante oppervlak (Ha)',lbl_yield:'Huidige opbrengs (MT/Ha)',
     lbl_price:'Verkoopprys per MT',lbl_pvPrice:'Plantos Verde prys (per kg)',lbl_apps:'Toepassings per seisoen',lbl_appMethod:'Toepassingsmetode',
+    lbl_appCost:'Toepassingskoste per Ha',appCost_hint:'Verstek is \'n Suid-Afrikaanse gemiddelde — verander dit na u plaaslike spuitkoste vir \'n akkurate resultaat.',
     lbl_scTitle:'Suikerriet — RV% invoere',lbl_rvCur:'Huidige RV%',lbl_rvProj:'Geprojekteerde RV% met PV',lbl_sgPrice:'Suikerprys per MT',
     lbl_uplift:'Verwagte opbrengsverhoging',uplift_hint:'Skattings is gebaseer op veldproewe regoor Suider-Afrika. \'n Konserwatiewe beginpunt is 10–15%, maar resultate wissel na gelang van gewas, toestande en toepassingstyd.',
     lbl_fertSection:'Kunsmisbesparing (opsioneel)',lbl_fertKg:'Kunsmis gebruik (kg/Ha)',lbl_fertPrice:'Kunsmis prys (R/kg)',
@@ -758,6 +765,7 @@ var LANG = {
     lbl_farmName:'Nom de votre ferme (facultatif)',
     lbl_crop:'Culture',lbl_area:'Surface plantée (Ha)',lbl_yield:'Rendement actuel (MT/Ha)',
     lbl_price:'Prix de vente par MT',lbl_pvPrice:'Prix Plantos Verde (par kg)',lbl_apps:'Applications par saison',lbl_appMethod:'Méthode d\'application',
+    lbl_appCost:'Coût d\'application par Ha',appCost_hint:'La valeur par défaut est une moyenne sud-africaine — modifiez-la selon votre coût de pulvérisation local pour un résultat exact.',
     lbl_scTitle:'Canne à sucre — données RV%',lbl_rvCur:'RV% actuel',lbl_rvProj:'RV% projeté avec PV',lbl_sgPrice:'Prix du sucre par MT',
     lbl_uplift:'Hausse de rendement prévue',uplift_hint:'Les estimations sont basées sur des essais terrain à travers l\'Afrique australe. Un point de départ conservateur est 10–15%, bien que les résultats varient selon la culture, les conditions et le calendrier d\'application.',
     lbl_fertSection:'Économies sur engrais (facultatif)',lbl_fertKg:'Engrais utilisé (kg/Ha)',lbl_fertPrice:'Prix engrais (R/kg)',
@@ -787,6 +795,7 @@ var LANG = {
     lbl_farmName:'Nombre de su finca (opcional)',
     lbl_crop:'Cultivo',lbl_area:'Área plantada (Ha)',lbl_yield:'Rendimiento actual (MT/Ha)',
     lbl_price:'Precio de venta por MT',lbl_pvPrice:'Precio Plantos Verde (por kg)',lbl_apps:'Aplicaciones por temporada',lbl_appMethod:'Método de aplicación',
+    lbl_appCost:'Costo de aplicación por Ha',appCost_hint:'El valor predeterminado es un promedio sudafricano — cámbielo por su costo local de fumigación para un resultado preciso.',
     lbl_scTitle:'Caña de azúcar — datos RV%',lbl_rvCur:'RV% actual',lbl_rvProj:'RV% proyectado con PV',lbl_sgPrice:'Precio del azúcar por MT',
     lbl_uplift:'Aumento de rendimiento esperado',uplift_hint:'Las estimaciones se basan en ensayos de campo realizados en toda África Austral. Un punto de partida conservador es 10–15%, aunque los resultados varían según el cultivo, las condiciones y el momento de aplicación.',
     lbl_fertSection:'Ahorro en fertilizantes (opcional)',lbl_fertKg:'Fertilizante usado (kg/Ha)',lbl_fertPrice:'Precio fertilizante (R/kg)',
@@ -823,6 +832,7 @@ var LANG = {
     lbl_pvPrice:'Preço Plantos Verde por kg',
     lbl_apps:'Aplicações por época',
     lbl_appMethod:'Método de aplicação',
+    lbl_appCost:'Custo de aplicação por Ha',appCost_hint:'O valor padrão é uma média sul-africana — altere-o para o seu custo local de pulverização para um resultado exato.',
     lbl_scTitle:'Cana-de-açúcar — entradas RV%',
     lbl_rvCur:'RV% actual',
     lbl_rvProj:'RV% projectado com PV',
@@ -893,6 +903,7 @@ var LANG = {
     lbl_pvPrice:'Bei ya Plantos Verde kwa kg',
     lbl_apps:'Matumizi kwa msimu',
     lbl_appMethod:'Njia ya kutumia',
+    lbl_appCost:'Gharama ya matumizi kwa Ha',appCost_hint:'Chaguo-msingi ni wastani wa Afrika Kusini — libadilishe kulingana na gharama yako ya kunyunyizia ya eneo lako kwa matokeo sahihi.',
     lbl_scTitle:'Miwa — maingizo ya RV%',
     lbl_rvCur:'RV% ya sasa',
     lbl_rvProj:'RV% inayotarajiwa na PV',
@@ -963,6 +974,7 @@ var LANG = {
     lbl_pvPrice:'Intengo ye-Plantos Verde ngekg',
     lbl_apps:'Ukufafaza ngesizini',
     lbl_appMethod:'Indlela yokufafaza',
+    lbl_appCost:'Izindleko zokufafaza nge-Ha',appCost_hint:'Okuzenzakalelayo yisilinganiso saseNingizimu Afrika — sishintshe ube nezindleko zakho zendawo zokufafaza ukuze uthole umphumela oqondile.',
     lbl_scTitle:'Umoba — okufakiwe kwe-RV%',
     lbl_rvCur:'I-RV% yamanje',
     lbl_rvProj:'I-RV% ebikezelwe ne-PV',
@@ -1033,6 +1045,7 @@ var LANG = {
     lbl_pvPrice:'Theko ea Plantos Verde ka kg',
     lbl_apps:'Ho fafatsa ka nako ea selemo',
     lbl_appMethod:'Mokhoa oa ho fafatsa',
+    lbl_appCost:'Litšenyehelo tsa ho fafatsa ka Ha',appCost_hint:'Boalo ke karolelano ea Afrika Boroa — e fetole ho ea litšenyehelong tsa hau tsa sebaka sa ho fafatsa bakeng sa sephetho se nepahetseng.',
     lbl_scTitle:'Lehlaka la tšoekere — likenyo tsa RV%',
     lbl_rvCur:'RV% ea hajoale',
     lbl_rvProj:'RV% e hakanngoeng le PV',
@@ -1103,6 +1116,7 @@ var LANG = {
     lbl_pvPrice:'Mutengo wePlantos Verde pakg',
     lbl_apps:'Kupfapfaidza pamwaka',
     lbl_appMethod:'Nzira yekupfapfaidza',
+    lbl_appCost:'Mutengo wekupfapfaidza paHa',appCost_hint:'Chaizvoizvo ndeye chiyero cheSouth Africa — chinja kuenda kumutengo wekupfapfaidza wekwako kuti uwane mhedzisiro yakarurama.',
     lbl_scTitle:'Ipwa — zvinopinda zveRV%',
     lbl_rvCur:'RV% yazvino',
     lbl_rvProj:'RV% inofungidzirwa nePV',
@@ -1173,6 +1187,7 @@ var LANG = {
     lbl_pvPrice:'Mtengo wa Plantos Verde pa kg',
     lbl_apps:'Kupopera pa nyengo',
     lbl_appMethod:'Njira yopopera',
+    lbl_appCost:'Mtengo wopopera pa Ha',appCost_hint:'Zosasinthidwa ndi chiyerekezo cha ku South Africa — sinthani kukhala mtengo wanu wapafupi wopopera kuti mupeze zotsatira zolondola.',
     lbl_scTitle:'Nzimbe — zomwe zikuloŵetsedwa za RV%',
     lbl_rvCur:'RV% ya pano',
     lbl_rvProj:'RV% yoyembekezeredwa ndi PV',
@@ -1254,7 +1269,7 @@ function fromZAR(z){ return z * (rates[curCode]||1); }
 function roundMoney(v){ return v>=100 ? Math.round(v) : Math.round(v*100)/100; }
 function svM(id){ return toZAR(sv(id)); }
 
-var MONEY_INPUTS = ['pricePerMT','pvPrice','scSugarPrice','fertPriceKg','bnP1','bnP2','bnP3','bnP4','bnP5'];
+var MONEY_INPUTS = ['pricePerMT','pvPrice','scSugarPrice','fertPriceKg','bnP1','bnP2','bnP3','bnP4','bnP5','appCostInput'];
 function rescaleMoneyInputs(oldCode, newCode){
   var oldR = rates[oldCode]||1, newR = rates[newCode]||1;
   if(!oldR || !newR || oldR === newR) return;
@@ -1312,6 +1327,7 @@ function applyLang(lc){
   s('lbl_fertSaving',L.lbl_fertSaving); s('lbl_pvTotal',L.lbl_pvTotal);
   s('lbl_netTotal',L.lbl_netTotal); s('lbl_netHa',L.lbl_netHa);
   s('lbl_whyPV',L.lbl_whyPV);
+  s('lbl_appCost',L.lbl_appCost); h('appCost_hint',L.appCost_hint);
   s('feat1-title',L.feat1Title); s('feat2-title',L.feat2Title);
   s('feat3-title',L.feat3Title); s('feat4-title',L.feat4Title);
   h('feat1-desc',L.feat1Desc); h('feat2-desc',L.feat2Desc);
@@ -1394,7 +1410,7 @@ function render(){
 
   if(sc){
     pvCostHa  = apps * 3 * pvPrice;
-    appCostHa = apps * APP_COSTS[method];
+    appCostHa = apps * svM('appCostInput');
     totCostHa = pvCostHa + appCostHa;
     newYld    = yld*(1+uplift);
     baseRevHa = yld*rvCur*sgPx;
@@ -1437,7 +1453,7 @@ function render(){
     var bnAppsPC = sv('bnAppsPerCycle')||8;
     var appsSeason = bnAppsPC * bunchPV_calc;
     pvCostHa  = appsSeason * 3 * pvPrice;
-    appCostHa = appsSeason * APP_COSTS[method];
+    appCostHa = appsSeason * svM('appCostInput');
     totCostHa = pvCostHa + appCostHa;
     newYld    = bunchPV_calc;
     baseHarv  = Math.round(bunchesHaNPV*area).toLocaleString()+' bunches';
@@ -1455,7 +1471,7 @@ function render(){
 
   } else {
     pvCostHa  = apps * 3 * pvPrice;
-    appCostHa = apps * APP_COSTS[method];
+    appCostHa = apps * svM('appCostInput');
     totCostHa = pvCostHa + appCostHa;
     newYld    = yld*(1+uplift);
     baseRevHa = yld*price;
@@ -1538,6 +1554,17 @@ g('cropPreset').addEventListener('change',function(){
   g('bnExtra').className='sc-extra'+(isBn?' visible':'');
   render();
 });
+
+/* CALC-002 Bug 3 — app cost defaults to the method's SA-average cost,
+   converted to the current display currency, unless the user has typed
+   their own figure. */
+var appCostOverridden = false;
+g('appMethod').addEventListener('change',function(){
+  if(!appCostOverridden){
+    g('appCostInput').value = roundMoney(fromZAR(APP_COSTS[this.value]));
+  }
+});
+g('appCostInput').addEventListener('input',function(){ appCostOverridden = true; });
 
 function buildShareText(){
   var farm=g('farmName').value.trim();
