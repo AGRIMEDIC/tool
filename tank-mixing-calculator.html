@@ -1,0 +1,1157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plantos Verde® — Tank Mixing Calculator</title>
+<style>
+:root{
+  --green:#0A3D1F; --gold:#B8860B; --cream:#FBF7EE; --tint:#F4F1E5;
+  --rule:#DCD5C8; --ink:#1E1E1E; --muted:#5C5C5C;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--tint);color:var(--ink);
+  font-family:Calibri,"Carlito","Segoe UI",system-ui,"Noto Sans Arabic","Noto Sans Devanagari","Noto Sans SC",sans-serif;
+  font-size:16px;line-height:1.5}
+h1,h2,h3,.num{font-family:Cambria,"Caladea",Georgia,serif}
+.wrap{max-width:960px;margin:0 auto;padding:0 20px 56px}
+
+.logoband{background:#fff;border-bottom:3px solid var(--gold)}
+.logoband-inner{direction:ltr;max-width:960px;margin:0 auto;padding:16px 20px;
+  display:flex;align-items:center;justify-content:space-between;gap:16px}
+.logoband-inner.solo{justify-content:center;padding-top:18px;padding-bottom:18px}
+.logoband-inner img.ad{height:82px;width:auto}
+.logoband-inner img.ag{height:56px;width:auto}
+.logoband-inner img.pv{height:37px;width:auto}
+
+.hero{background:var(--green);color:#EDE6D8;padding:26px 0 24px;margin-bottom:26px}
+.hero-in{max-width:960px;margin:0 auto;padding:0 20px}
+.hero h1{margin:0 0 6px;font-size:30px;color:#fff;letter-spacing:.2px}
+.hero p.sub{margin:0;color:#DFD6C4;font-size:16px}
+.notice{margin:16px 0 0;padding:10px 14px;border:1px solid var(--gold);
+  border-radius:4px;color:#EDE6D8;font-size:13.5px}
+
+.panel{background:#fff;border:1px solid var(--rule);border-radius:6px;
+  padding:20px;margin-bottom:20px}
+.panel h2{margin:0 0 16px;font-size:19px;color:var(--green);
+  padding-bottom:8px;border-bottom:2px solid var(--gold)}
+
+.row{display:flex;flex-wrap:wrap;gap:20px;align-items:flex-end}
+.fieldset{margin-bottom:18px}
+.leg{font-size:12px;letter-spacing:.9px;text-transform:uppercase;
+  color:var(--muted);margin-bottom:7px}
+.seg{display:inline-flex;border:1px solid var(--green);border-radius:4px;overflow:hidden}
+.seg button{appearance:none;border:0;background:#fff;color:var(--green);
+  font:inherit;font-size:15px;padding:9px 18px;cursor:pointer}
+.seg button+button{border-inline-start:1px solid var(--green)}
+.seg button[aria-pressed="true"]{background:var(--green);color:#fff}
+
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.f label{display:block;font-size:13.5px;color:var(--muted);margin-bottom:5px}
+.inp{display:flex;align-items:stretch;border:1px solid var(--rule);border-radius:4px;
+  background:#fff;overflow:hidden}
+.inp input{flex:1;min-width:0;border:0;padding:11px 12px;font:inherit;font-size:17px;
+  color:var(--ink);background:transparent;outline:none}
+.inp input:focus{background:var(--tint)}
+.unit{background:var(--tint);color:var(--muted);font-size:13.5px;
+  display:flex;align-items:center;padding:0 12px;border-inline-start:1px solid var(--rule);
+  white-space:nowrap}
+select{font:inherit;font-size:15px;padding:8px 10px;border:1px solid var(--rule);
+  border-radius:4px;background:#fff;color:var(--ink)}
+
+.warn{display:none;margin-bottom:20px;padding:13px 16px;border-radius:5px;
+  border:1px solid var(--gold);border-inline-start:5px solid var(--gold);
+  background:var(--tint);color:var(--ink);font-size:14.5px}
+.warn.on{display:block}
+
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:20px}
+.stat{background:var(--green);color:#EDE6D8;border-radius:6px;padding:18px 16px;text-align:center}
+.stat .num{display:block;font-size:33px;color:#fff;line-height:1.12}
+.stat .num small{font-size:16px;color:#DFD6C4}
+.stat .cap{display:block;font-size:12.5px;color:#BFB7A6;margin-top:6px;
+  text-transform:uppercase;letter-spacing:.7px}
+.stat .note{display:block;font-size:12.5px;color:#DFD6C4;margin-top:7px;
+  padding-top:7px;border-top:1px solid rgba(223,214,196,.35)}
+.stat .note b{display:block;font-weight:normal}
+.stat .note b+b{margin-top:3px}
+.stat .note b:nth-child(3){margin-top:6px;color:#BFB7A6}
+.stat .note:empty{display:none}
+
+table{width:100%;border-collapse:collapse;font-size:15px}
+th,td{padding:10px 12px;font-weight:normal;border-bottom:1px solid var(--rule);text-align:start}
+thead th{background:var(--green);color:#fff;font-family:Cambria,Georgia,serif;
+  font-weight:normal;font-size:15px}
+tbody tr:nth-child(even) th,tbody tr:nth-child(even) td{background:var(--tint)}
+td.v{text-align:end;font-family:Cambria,Georgia,serif;white-space:nowrap}
+tfoot td{font-size:13px;color:var(--muted);border-bottom:0;padding-top:12px}
+
+.opts{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.opt h3{margin:0 0 4px;font-size:16.5px;color:var(--green)}
+.opt p.d{margin:0 0 12px;font-size:13.5px;color:var(--muted);min-height:38px}
+.opt dl{margin:0;font-size:14.5px}
+.opt dl div{display:flex;justify-content:space-between;gap:12px;
+  padding:7px 0;border-bottom:1px solid var(--rule)}
+.opt dt{color:var(--muted)}
+.opt dd{margin:0;font-family:Cambria,Georgia,serif;white-space:nowrap}
+.exact{padding:12px 14px;background:var(--tint);border:1px solid var(--rule);
+  border-radius:5px;font-size:14.5px}
+
+.method{margin-top:18px;font-size:14px;color:var(--muted);
+  padding-inline-start:14px;border-inline-start:3px solid var(--gold)}
+.actions{margin-top:8px;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.btn.alt{background:#fff;color:var(--green)}
+.toast{display:none;font-size:14px;color:var(--green);padding:9px 14px;
+  background:var(--tint);border:1px solid var(--gold);border-radius:4px}
+.toast.on{display:block}
+.btn{appearance:none;border:1px solid var(--green);background:var(--green);color:#fff;
+  font:inherit;font-size:15px;padding:10px 20px;border-radius:4px;cursor:pointer}
+footer{margin-top:22px;padding-top:14px;border-top:1px solid var(--rule);
+  font-size:13px;color:var(--muted)}
+.frow{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.contact{margin-top:7px;font-size:13px;color:var(--muted)}
+.contact a{color:var(--green);text-decoration:none;border-bottom:1px solid var(--rule)}
+.contact a:hover{border-bottom-color:var(--gold)}
+.contact .sep{color:var(--rule);margin:0 9px}
+.bottomband{margin-top:26px;padding:14px 0 0;border-top:1px solid var(--rule);
+  display:flex;align-items:center;justify-content:center;gap:26px}
+.bottomband img.ag{height:34px;width:auto}
+.bottomband img.pv{height:22px;width:auto}
+.prep{display:none}
+
+@media (max-width:720px){
+  .grid,.stats,.opts{grid-template-columns:1fr}
+  .hero h1{font-size:25px}
+  .stat .num{font-size:29px}
+  .logoband-inner img.ad{height:60px}
+  .logoband-inner img.ag{height:44px}
+  .logoband-inner img.pv{height:29px}
+  .bottomband{gap:18px}
+  .bottomband img.ag{height:28px}
+  .bottomband img.pv{height:19px}
+  .contact .sep{margin:0 6px}
+}
+
+@media print{
+  @page{size:A4 portrait;margin:13mm}
+  body{background:#fff;color:#1E1E1E;font-size:11pt}
+  .wrap{max-width:none;padding:0}
+  .logoband{border-bottom:1.5pt solid #B8860B}
+  .logoband-inner{padding:0 0 8pt}
+  .logoband-inner.solo{padding:0 0 7pt}
+  .logoband-inner img.ad{height:62px}
+  .logoband-inner img.ag{height:40px}
+  .logoband-inner img.pv{height:26px}
+  .hero{background:none;color:#0A3D1F;padding:6pt 0 4pt;margin-bottom:7pt}
+  .hero-in{padding:0}
+  .hero h1{color:#0A3D1F;font-size:17pt}
+  .hero p.sub{color:#5C5C5C;font-size:10.5pt}
+  .notice,.controls,.inputs,.actions,.warn{display:none !important}
+  .panel{border:0;padding:0;margin-bottom:6pt;break-inside:avoid}
+  .panel h2{margin:0 0 5pt}
+  .panel h2{font-size:13pt;color:#0A3D1F;border-bottom:1.2pt solid #B8860B}
+  .stats{grid-template-columns:repeat(3,1fr) !important;gap:8pt;margin-bottom:7pt}
+  .stat{background:none;border:1pt solid #0A3D1F;color:#1E1E1E;padding:6pt 5pt}
+  .stat .num{color:#0A3D1F;font-size:17pt}
+  .stat .num small{color:#5C5C5C;font-size:11pt}
+  .stat .cap{color:#5C5C5C;font-size:8pt}
+  .stat .note{color:#1E1E1E;font-size:7.5pt;margin-top:3pt;padding-top:3pt;
+    border-top:.5pt solid #DCD5C8}
+  .stat .note b+b{margin-top:1pt}
+  .stat .note b:nth-child(3){margin-top:2.5pt;color:#5C5C5C}
+  thead th{background:none;color:#0A3D1F;border-bottom:1.2pt solid #0A3D1F}
+  tbody tr:nth-child(even) th,tbody tr:nth-child(even) td{background:none}
+  th,td{padding:2.1pt 6pt;border-bottom:.5pt solid #DCD5C8}
+  .method{margin-top:4pt;font-size:9pt}
+  tfoot td{padding-top:6pt;font-size:8.5pt}
+  .opts{grid-template-columns:repeat(2,1fr) !important;gap:14pt}
+  .opt dl{font-size:10pt}
+  .opt dl div{padding:2.2pt 0}
+  .opt p.d{font-size:9.5pt;margin-bottom:8pt}
+  footer{margin-top:5pt;padding-top:4pt;font-size:8.5pt}
+  .contact{font-size:8.5pt;margin-top:4pt}
+  .contact a{color:#0A3D1F;border-bottom:0}
+  .bottomband{margin-top:4pt;padding-top:3pt;gap:16pt;break-inside:avoid}
+  footer{display:flex;align-items:baseline;justify-content:space-between;gap:10pt;flex-wrap:wrap}
+  .frow{display:contents}
+  .frow span:first-child{order:1}
+  .contact{margin-top:0;order:2}
+  .prep{order:3}
+  .bottomband img.ag{height:26px}
+  .bottomband img.pv{height:17px}
+  .opt{break-inside:avoid}
+  .opt p.d{display:none}
+  .opt h3{font-size:11pt;margin-bottom:6pt}
+  .exact{background:none;border:.8pt solid #DCD5C8}
+  .prep{display:block}
+  footer{border-top:.8pt solid #DCD5C8}
+}
+/* ---- product row editor ---- */
+.prow{display:grid;gap:8px;margin-bottom:10px;align-items:center;
+  grid-template-columns:minmax(0,2.2fr) minmax(0,1.9fr) minmax(0,.9fr) minmax(0,.8fr) auto}
+.prow input,.prow select{font:inherit;font-size:15px;padding:9px 10px;
+  border:1px solid var(--rule);border-radius:4px;background:#fff;color:var(--ink);
+  min-width:0;width:100%}
+.prow input:focus,.prow select:focus{background:var(--tint);outline:none}
+.rowbtns{display:flex;gap:4px}
+.mini{appearance:none;border:1px solid var(--rule);background:#fff;color:var(--green);
+  font:inherit;font-size:14px;line-height:1;width:30px;height:34px;border-radius:4px;cursor:pointer}
+.mini:disabled{opacity:.3;cursor:default}
+.mini.rm{color:#8A2A12}
+.btn.small{font-size:14px;padding:8px 14px}
+
+/* ---- products result table ---- */
+.ptab th.v,.ptab td.v{text-align:end}
+.ptab thead th{white-space:nowrap}
+.ptab tbody th{font-weight:normal}
+.ptab .sub{display:block;font-size:12.5px;color:var(--muted);margin-top:2px}
+.panel h2 .hsub{float:right;font-family:Calibri,"Carlito","Segoe UI",system-ui,sans-serif;
+  font-size:14px;color:var(--muted);font-weight:normal}
+.ptab tbody td:last-child{font-weight:bold}
+.caveat p{margin:0 0 6px}
+.caveat p:last-child{margin-bottom:0}
+.caveat p.sep{color:var(--green)}
+
+@media (max-width:720px){
+  .prow{grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+    padding:12px;border:1px solid var(--rule);border-radius:5px;background:var(--tint)}
+  .prow .pname{grid-column:1 / -1}
+  .prow .pbasis{grid-column:1 / -1}
+  .rowbtns{grid-column:1 / -1;justify-content:flex-end}
+  .ptab thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+  .ptab,.ptab tbody,.ptab tr,.ptab th,.ptab td{display:block;width:auto}
+  .ptab tbody tr{border:1px solid var(--rule);border-radius:5px;padding:10px 12px;margin-bottom:10px}
+  .ptab tbody tr:nth-child(even) th,.ptab tbody tr:nth-child(even) td{background:none}
+  .ptab tbody tr:nth-child(even){background:var(--tint)}
+  .ptab tbody th{padding:0 0 8px;border-bottom:1px solid var(--rule);font-size:15px}
+  .ptab tbody td{padding:6px 0 0;border:0;text-align:start;font-size:15px;
+    display:flex;justify-content:space-between;gap:12px}
+  .ptab tbody td::before{content:attr(data-label);color:var(--muted);font-size:13.5px;
+    font-family:Calibri,"Carlito","Segoe UI",system-ui,sans-serif}
+  .ptab tbody td:last-child{font-weight:bold}
+  .panel h2 .hsub{float:none;display:block;margin-top:3px}
+}
+
+@media print{
+  .prow,#prodEditor,#btnAdd{display:none !important}
+  .ptab thead th{background:none;color:#0A3D1F;border-bottom:1.2pt solid #0A3D1F}
+  .ptab .sub{font-size:8.5pt}
+  .panel h2 .hsub{font-size:9pt;color:#5C5C5C}
+  .caveat{font-size:8.5pt;margin-top:4pt}
+  .caveat p.sep{color:#0A3D1F}
+  .ptab .sub{display:inline;margin-inline-start:7px}
+  #prodPanel{break-inside:avoid}
+}
+
+/* ---- snapshot mode: what the exported PDF sees ---- */
+.snapmode .controls,.snapmode .inputs,.snapmode #prodEditor,
+.snapmode .actions,.snapmode .notice,.snapmode .warn{display:none !important}
+.snapmode .hero{padding-bottom:18px}
+
+</style>
+</head>
+<body>
+
+<header class="logoband">
+  <div class="logoband-inner" id="bandPV">
+    <img class="ag" src="data:image/png;base64,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" alt="Agrimedic Global">
+    <img class="pv" src="data:image/png;base64,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" alt="Plantos Verde">
+  </div>
+  <div class="logoband-inner solo" id="bandAD" style="display:none">
+    <img class="ad" src="data:image/png;base64,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" alt="Agri Delta Drones">
+  </div>
+</header>
+
+<div class="hero">
+  <div class="hero-in">
+    <h1 id="t-title">Tank Mixing Calculator</h1>
+    <p class="sub" id="t-sub"></p>
+    <p class="notice" id="t-notice"></p>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="panel controls">
+    <div class="row">
+      <div class="fieldset">
+        <div class="leg" id="t-lang">Language</div>
+        <select id="lang"><option value="en">English</option>
+<option value="fr">Français</option>
+<option value="es">Español</option>
+<option value="pt">Português</option>
+<option value="de">Deutsch</option>
+<option value="it">Italiano</option>
+<option value="pl">Polski</option>
+<option value="ru">Русский</option>
+<option value="uk">Українська</option>
+<option value="ar">العربية</option>
+<option value="zh">中文</option>
+<option value="hi">हिन्दी</option>
+<option value="sw">Kiswahili</option>
+<option value="af">Afrikaans</option>
+<option value="zu">isiZulu</option>
+<option value="xh">isiXhosa</option>
+<option value="ss">siSwati</option></select>
+      </div>
+      <div class="fieldset">
+        <div class="leg" id="t-mode">Mode</div>
+        <div class="seg" id="segMode">
+          <button type="button" data-v="pv" aria-pressed="true" id="t-modePV">Plantos Verde® only</button>
+          <button type="button" data-v="mix" aria-pressed="false" id="t-modeMix">Tank mix</button>
+        </div>
+      </div>
+      <div class="fieldset">
+        <div class="leg" id="t-equip">Equipment</div>
+        <div class="seg" id="segEquip">
+          <button type="button" data-v="drone" aria-pressed="true" id="t-drone">Drone</button>
+          <button type="button" data-v="boom" aria-pressed="false" id="t-boom">Boom sprayer</button>
+        </div>
+      </div>
+      <div class="fieldset" id="fsDir">
+        <div class="leg" id="t-calcby">Calculate from</div>
+        <div class="seg" id="segDir">
+          <button type="button" data-v="area" aria-pressed="true" id="t-byarea">Area to cover</button>
+          <button type="button" data-v="stock" aria-pressed="false" id="t-bystock">Product on hand</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel inputs">
+    <div class="grid">
+      <div class="f" id="fArea">
+        <label id="t-areaLbl" for="area"></label>
+        <div class="inp"><input id="area" type="number" min="0" step="any" value="100" inputmode="decimal"><span class="unit" id="u-area">ha</span></div>
+      </div>
+      <div class="f" id="fStock" style="display:none">
+        <label id="t-stockLbl" for="stock"></label>
+        <div class="inp"><input id="stock" type="number" min="0" step="any" value="300" inputmode="decimal"><span class="unit" id="u-stock">kg</span></div>
+      </div>
+      <div class="f">
+        <label id="t-tankLbl" for="tank"></label>
+        <div class="inp"><input id="tank" type="number" min="0" step="any" value="50" inputmode="decimal"><span class="unit" id="u-tank">L</span></div>
+      </div>
+      <div class="f">
+        <label id="t-waterLbl" for="water"></label>
+        <div class="inp"><input id="water" type="number" min="0" step="any" value="30" inputmode="decimal"><span class="unit" id="u-water">L/ha</span></div>
+      </div>
+      <div class="f" id="fPV">
+        <label id="t-pvLbl" for="pv"></label>
+        <div class="inp"><input id="pv" type="number" min="0" step="any" value="3" inputmode="decimal"><span class="unit" id="u-pv">kg/ha</span></div>
+      </div>
+      <div class="f" id="fMinW" style="display:none">
+        <label id="t-minW" for="minw"></label>
+        <div class="inp"><input id="minw" type="number" min="0" step="any" value="30" inputmode="decimal"><span class="unit" id="u-minw">L/ha</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel" id="prodEditor" style="display:none">
+    <h2 id="t-products">Products in the tank</h2>
+    <div id="rowsWrap"></div>
+    <button class="btn alt small" id="btnAdd" type="button">Add product</button>
+  </div>
+
+  <div class="warn" id="warn"></div>
+
+  <div class="stats" id="stats">
+    <div class="stat"><span class="num" id="s1">-</span><span class="cap" id="c1"></span><span class="note" id="s1note"></span></div>
+    <div class="stat"><span class="num" id="s2">-</span><span class="cap" id="c2"></span><span class="note" id="s2note"></span></div>
+    <div class="stat"><span class="num" id="s3">-</span><span class="cap" id="c3"></span></div>
+  </div>
+
+  <div class="panel" id="prodPanel" style="display:none">
+    <h2 id="t-products2">Products in the tank</h2>
+    <table class="ptab">
+      <thead><tr>
+        <th id="h-prod">Product</th>
+        <th class="v" id="h-perha">Rate per ha</th>
+        <th class="v" id="h-pertank">Per full tank</th>
+        <th class="v" id="h-total">Whole job</th>
+      </tr></thead>
+      <tbody id="prodBody"></tbody>
+    </table>
+  </div>
+
+  <div class="panel">
+    <h2 id="t-bd">Mix breakdown</h2>
+    <table>
+      <tbody id="bdBody"></tbody>
+      <tfoot><tr><td colspan="2" id="t-bdConcF"></td></tr></tfoot>
+    </table>
+    <p class="method" id="methodNote"><span id="t-howto"></span></p>
+    <div class="method caveat" id="caveats" style="display:none">
+      <p class="sep" id="t-pvSep"></p>
+      <p id="t-lblLabel"></p>
+      <p id="t-lblCompat"></p>
+    </div>
+  </div>
+
+  <div class="panel" id="optPanel">
+    <div id="optWrap"></div>
+  </div>
+
+  <div class="actions">
+    <button class="btn" id="btnPrint" type="button">Print / Save as PDF</button>
+    <button class="btn alt" id="btnFwd" type="button">Forward</button>
+    <span class="toast" id="toast"></span>
+  </div>
+
+  <div class="bottomband" id="bottomBand" style="display:none">
+    <img class="ag" src="data:image/png;base64,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" alt="Agrimedic Global">
+    <img class="pv" src="data:image/png;base64,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" alt="Plantos Verde">
+  </div>
+
+  <footer>
+    <div class="frow">
+      <span id="t-foot"></span>
+      <span class="prep" id="prep"></span>
+    </div>
+    <div class="contact" id="contact"></div>
+  </footer>
+</div>
+
+<script>
+/* ------------------------------------------------------------------
+   PDF export without a PDF library.
+
+   Text is rasterised, not typeset, so there is no font embedding and
+   no text shaping to get wrong - which is the only way Arabic, Hindi
+   and Chinese can come out right in a file this size. The trade-off
+   is that the PDF text is not selectable.
+   ------------------------------------------------------------------ */
+
+function bytes(str){
+  var a = new Uint8Array(str.length);
+  for(var i = 0; i < str.length; i++) a[i] = str.charCodeAt(i) & 0xFF;
+  return a;
+}
+function b64bytes(b64){
+  var bin = atob(b64), a = new Uint8Array(bin.length);
+  for(var i = 0; i < bin.length; i++) a[i] = bin.charCodeAt(i);
+  return a;
+}
+function joinBytes(parts){
+  var n = 0, i;
+  for(i = 0; i < parts.length; i++) n += parts[i].length;
+  var out = new Uint8Array(n), o = 0;
+  for(i = 0; i < parts.length; i++){ out.set(parts[i], o); o += parts[i].length; }
+  return out;
+}
+
+/* one-page PDF holding a single JPEG, sized to fit A4 with margins */
+function jpegToPdf(jpeg, iw, ih){
+  var PW = 595.28, PH = 841.89, M = 22;
+  var sc = Math.min((PW - 2*M) / iw, (PH - 2*M) / ih);
+  var w = iw * sc, h = ih * sc;
+  var x = (PW - w) / 2, y = PH - M - h;
+
+  var parts = [], offsets = [], pos = 0;
+  function push(chunk){ parts.push(chunk); pos += chunk.length; }
+  function obj(num, body, stream){
+    offsets[num] = pos;
+    push(bytes(num + " 0 obj\n" + body + "\n"));
+    if(stream){
+      push(bytes("stream\n"));
+      push(stream);
+      push(bytes("\nendstream\n"));
+    }
+    push(bytes("endobj\n"));
+  }
+
+  push(bytes("%PDF-1.4\n%\xE2\xE3\xCF\xD3\n"));
+  obj(1, "<< /Type /Catalog /Pages 2 0 R >>");
+  obj(2, "<< /Type /Pages /Kids [3 0 R] /Count 1 >>");
+  obj(3, "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 " + PW.toFixed(2) + " " + PH.toFixed(2) +
+         "] /Resources << /XObject << /Im0 4 0 R >> >> /Contents 5 0 R >>");
+  obj(4, "<< /Type /XObject /Subtype /Image /Width " + iw + " /Height " + ih +
+         " /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length " +
+         jpeg.length + " >>", jpeg);
+  var content = "q " + w.toFixed(2) + " 0 0 " + h.toFixed(2) + " " +
+                x.toFixed(2) + " " + y.toFixed(2) + " cm /Im0 Do Q";
+  obj(5, "<< /Length " + content.length + " >>", bytes(content));
+
+  var xref = pos;
+  var s = "xref\n0 6\n0000000000 65535 f \n";
+  for(var i = 1; i <= 5; i++){
+    s += ("0000000000" + offsets[i]).slice(-10) + " 00000 n \n";
+  }
+  s += "trailer\n<< /Size 6 /Root 1 0 R >>\nstartxref\n" + xref + "\n%%EOF\n";
+  push(bytes(s));
+  return new Blob([joinBytes(parts)], {type: "application/pdf"});
+}
+
+/* render the sheet (minus the interactive chrome) to a JPEG data URL */
+function snapshot(){
+  return new Promise(function(resolve, reject){
+    var W = 900, SCALE = 2;
+    document.body.classList.add("snapmode");
+
+    var styleText = "";
+    Array.prototype.forEach.call(document.querySelectorAll("style"), function(s){
+      styleText += s.textContent;
+    });
+
+    var clone = document.body.cloneNode(true);
+    Array.prototype.forEach.call(clone.querySelectorAll("script,noscript"), function(n){
+      n.parentNode.removeChild(n);
+    });
+    /* selects and inputs do not rasterise reliably - they are hidden in snapmode anyway */
+
+    var pageBg = getComputedStyle(document.body).backgroundColor || "#FFFFFF";
+    var holder = document.createElement("div");
+    /* the class must sit on the CLONE, not on body - the serialised SVG is rooted
+       at this div, so a class on body would not apply inside it */
+    holder.className = "snapmode";
+    holder.style.cssText = "position:absolute;left:-10000px;top:0;width:" + W +
+                           "px;background:" + pageBg + ";";
+    holder.innerHTML = '<style>' + styleText + '</style>' + clone.innerHTML;
+    document.body.appendChild(holder);
+    var H = Math.ceil(holder.getBoundingClientRect().height) + 24;
+
+    /* drop the off-screen offset or the whole sheet renders at -10000px and comes out blank */
+    holder.setAttribute("style", "width:" + W + "px;background:" + pageBg + ";padding-bottom:12px;");
+
+    var xhtml = new XMLSerializer().serializeToString(holder);
+    /* most engines already namespace it - adding a second xmlns breaks the XML parse */
+    if(xhtml.indexOf('xmlns="http://www.w3.org/1999/xhtml"') === -1){
+      xhtml = xhtml.replace(/^<div/, '<div xmlns="http://www.w3.org/1999/xhtml"');
+    }
+    document.body.removeChild(holder);
+    document.body.classList.remove("snapmode");
+
+    var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="' + W + '" height="' + H + '">' +
+              '<foreignObject width="100%" height="100%">' + xhtml + '</foreignObject></svg>';
+
+    var img = new Image();
+    img.onload = function(){
+      try{
+        var cv = document.createElement("canvas");
+        cv.width = W * SCALE; cv.height = H * SCALE;
+        var cx = cv.getContext("2d");
+        var bg = getComputedStyle(document.body).backgroundColor || "#FFFFFF";
+        cx.fillStyle = bg;
+        cx.fillRect(0, 0, cv.width, cv.height);
+        cx.drawImage(img, 0, 0, cv.width, cv.height);
+
+        /* Measured height can overshoot the real content, and the overshoot differs
+           between machines. Trust the pixels instead: walk up from the bottom to the
+           last row that is not flat background, then crop there. */
+        /* sample the LAST row for the background - the first row is the white
+           logo band, and using that leaves every cream row looking like content */
+        var probe = cx.getImageData(0, cv.height - 1, cv.width, 1).data;
+        var br = probe[0], bgg = probe[1], bb = probe[2];
+        function rowHasInk(y){
+          var d = cx.getImageData(0, y, cv.width, 1).data;
+          for(var i = 0; i < d.length; i += 16){
+            if(Math.abs(d[i]-br) > 8 || Math.abs(d[i+1]-bgg) > 8 || Math.abs(d[i+2]-bb) > 8) return true;
+          }
+          return false;
+        }
+        var last = cv.height - 1, step = 8;
+        while(last > 0 && !rowHasInk(last)) last -= step;
+        for(var k = 0; k < step && last < cv.height - 1 && !rowHasInk(last); k++) last++;
+        var cropH = Math.min(cv.height, last + 18 * SCALE);
+
+        var out = cv;
+        if(cropH < cv.height - 4){
+          out = document.createElement("canvas");
+          out.width = cv.width; out.height = cropH;
+          var ox = out.getContext("2d");
+          ox.fillStyle = bg; ox.fillRect(0, 0, out.width, out.height);
+          ox.drawImage(cv, 0, 0);
+        }
+
+        var url = out.toDataURL("image/jpeg", 0.88);
+        if(url.indexOf("data:image/jpeg") !== 0) return reject(new Error("jpeg encode failed"));
+        resolve({b64: url.split(",")[1], w: out.width, h: out.height});
+      }catch(e){ reject(e); }
+    };
+    img.onerror = function(){ reject(new Error("svg rasterise failed")); };
+    img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
+  });
+}
+
+function pdfFilename(){
+  var t = T();
+  var who = (mode === "pv") ? "Plantos_Verde" : "Agri_Delta";
+  var d = new Date().toISOString().slice(0, 10);
+  return who + "_Tank_Mix_" + d + ".pdf";
+}
+
+function buildPdfBlob(){
+  return snapshot().then(function(shot){
+    return jpegToPdf(b64bytes(shot.b64), shot.w, shot.h);
+  });
+}
+
+var STR = {"en": {"title": "Tank Mixing Calculator", "sub": "Plantos Verde® — mixing ratios for drone and boom sprayer application", "notice": "This is an interactive tool. Open this file in a web browser — it will not work as a PDF.", "lang": "Language", "equip": "Equipment", "drone": "Drone", "boom": "Boom sprayer", "calcby": "Calculate from", "byarea": "Area to cover", "bystock": "Product on hand", "areaLbl": "Area to be covered", "stockLbl": "Plantos Verde® available", "tankLbl": "Mixing tank size", "waterLbl": "Water application rate", "pvLbl": "Plantos Verde® rate", "ha": "ha", "kg": "kg", "L": "L", "LHa": "L/ha", "kgHa": "kg/ha", "gL": "g/L", "warnMin": "Minimum water rate for drone application is {n} L/ha. Below this the mix is too concentrated to spray reliably.", "warnVal": "Enter a value greater than zero in every field.", "stTanks": "Tanks required", "stPerTank": "Plantos Verde® per full tank", "stConc": "Mix concentration", "bd": "Mix breakdown", "bdArea": "Area covered", "bdWater": "Total water required", "bdPV": "Total Plantos Verde® required", "bdHaTank": "Area covered per full tank", "bdFull": "Full tanks", "bdConcF": "Concentration = Plantos Verde® kg/ha ÷ water L/ha", "optA": "Option A — dose the last tank pro-rata", "optAd": "Mix a part tank for the remaining area. Exact product use, nothing left over.", "optB": "Option B — mix full tanks throughout", "optBd": "Every tank mixed identically. Simpler in the field; the surplus covers extra area.", "lastW": "Water in last tank", "lastP": "Plantos Verde® in last tank", "tanksTot": "Total tanks", "surplus": "Surplus mix", "extra": "Extra area it will cover", "pvTot": "Plantos Verde® used", "exact": "The area divides into full tanks exactly — both options are identical.", "howto": "Method: part-fill the tank with water, add the Plantos Verde® with the agitator running, then top up to volume and keep agitating during application.", "prep": "Prepared", "print": "Print / Save as PDF", "each": "each", "foot": "Agrimedic Global (Pty) Ltd — International Distributor for Plantos Verde®", "fwd": "Forward", "copied": "Mix sheet copied — paste it into WhatsApp, email or a message.", "mode": "Mode", "modePV": "Plantos Verde® only", "modeMix": "Other products", "products": "Products in the tank", "prodName": "Product", "dose": "Dose", "basis": "Basis", "bPerHa": "per ha", "bPerL": "per litre of water", "bPct": "% of spray volume", "bRatio": "dilution 1:N", "addRow": "Add product", "remove": "Remove", "minW": "Minimum water rate", "perTankHdr": "Per full tank", "wholeJob": "Whole job", "perHaCol": "Rate per ha", "lblLabel": "The product label governs. Where this sheet and the label differ, follow the label.", "lblCompat": "Tank-mix compatibility and mixing order are the user's responsibility. Jar-test before mixing at scale.", "emptyRows": "Add at least one product.", "ml": "ml", "g": "g", "pvSep": "Plantos Verde® is applied on its own and is not tank-mixed with these products. Switch to Plantos Verde® mode to calculate it.", "subOther": "Mixing ratios for drone and boom sprayer application", "working": "Preparing PDF...", "pdfSaved": "PDF saved to your downloads.", "pdfFail": "Could not build the PDF here - sending as text instead."}, "fr": {"title": "Calculateur de mélange en cuve", "sub": "Plantos Verde® — dosages pour application par drone et pulvérisateur à rampe", "notice": "Ceci est un outil interactif. Ouvrez ce fichier dans un navigateur web — il ne fonctionnera pas en PDF.", "lang": "Langue", "equip": "Matériel", "drone": "Drone", "boom": "Pulvérisateur à rampe", "calcby": "Calculer à partir de", "byarea": "Surface à traiter", "bystock": "Produit disponible", "areaLbl": "Surface à traiter", "stockLbl": "Plantos Verde® disponible", "tankLbl": "Capacité de la cuve", "waterLbl": "Volume d'eau à l'hectare", "pvLbl": "Dose de Plantos Verde®", "ha": "ha", "kg": "kg", "L": "L", "LHa": "L/ha", "kgHa": "kg/ha", "gL": "g/L", "warnMin": "Le volume d'eau minimal pour l'application par drone est de {n} L/ha. En dessous, la bouillie est trop concentrée pour être pulvérisée de façon fiable.", "warnVal": "Saisissez une valeur supérieure à zéro dans chaque champ.", "stTanks": "Cuves nécessaires", "stPerTank": "Plantos Verde® par cuve pleine", "stConc": "Concentration de la bouillie", "bd": "Détail du mélange", "bdArea": "Surface couverte", "bdWater": "Eau totale nécessaire", "bdPV": "Plantos Verde® total nécessaire", "bdHaTank": "Surface couverte par cuve pleine", "bdFull": "Cuves pleines", "bdConcF": "Concentration = Plantos Verde® kg/ha ÷ eau L/ha", "optA": "Option A — doser la dernière cuve au prorata", "optAd": "Préparer une cuve partielle pour la surface restante. Dosage exact, aucun reste.", "optB": "Option B — ne préparer que des cuves pleines", "optBd": "Toutes les cuves identiques. Plus simple au champ ; l'excédent couvre une surface supplémentaire.", "lastW": "Eau dans la dernière cuve", "lastP": "Plantos Verde® dans la dernière cuve", "tanksTot": "Total des cuves", "surplus": "Excédent de bouillie", "extra": "Surface supplémentaire couverte", "pvTot": "Plantos Verde® utilisé", "exact": "La surface se divise exactement en cuves pleines — les deux options sont identiques.", "howto": "Méthode : remplir la cuve d'eau à moitié, ajouter le Plantos Verde® avec l'agitateur en marche, compléter au volume et maintenir l'agitation pendant l'application.", "prep": "Établi le", "print": "Imprimer / Enregistrer en PDF", "each": "chacune", "foot": "Agrimedic Global (Pty) Ltd — Distributeur international de Plantos Verde®", "fwd": "Transférer", "copied": "Fiche de mélange copiée — collez-la dans WhatsApp, un e-mail ou un message.", "mode": "Mode", "modePV": "Plantos Verde® seul", "modeMix": "Autres produits", "products": "Produits dans la cuve", "prodName": "Produit", "dose": "Dose", "basis": "Base", "bPerHa": "par ha", "bPerL": "par litre d'eau", "bPct": "% du volume de bouillie", "bRatio": "dilution 1:N", "addRow": "Ajouter un produit", "remove": "Retirer", "minW": "Volume d'eau minimal", "perTankHdr": "Par cuve pleine", "wholeJob": "Chantier complet", "perHaCol": "Dose par ha", "lblLabel": "L'étiquette du produit fait foi. En cas de divergence avec cette fiche, suivez l'étiquette.", "lblCompat": "La compatibilité du mélange et l'ordre d'incorporation relèvent de la responsabilité de l'utilisateur. Faites un test en bocal avant de mélanger en grand.", "emptyRows": "Ajoutez au moins un produit.", "ml": "ml", "g": "g", "pvSep": "Plantos Verde® s'applique seul et n'est pas mélangé en cuve avec ces produits. Passez au mode Plantos Verde® pour le calculer.", "subOther": "Dosages pour application par drone et pulvérisateur à rampe", "working": "Préparation du PDF...", "pdfSaved": "PDF enregistré dans vos téléchargements.", "pdfFail": "Impossible de créer le PDF ici - envoi en texte."}, "es": {"title": "Calculadora de mezcla en tanque", "sub": "Plantos Verde® — dosis de mezcla para aplicación con dron y pulverizador de barras", "notice": "Esta es una herramienta interactiva. Abra este archivo en un navegador web — no funcionará como PDF.", "lang": "Idioma", "equip": "Equipo", "drone": "Dron", "boom": "Pulverizador de barras", "calcby": "Calcular a partir de", "byarea": "Superficie a cubrir", "bystock": "Producto disponible", "areaLbl": "Superficie a cubrir", "stockLbl": "Plantos Verde® disponible", "tankLbl": "Capacidad del tanque", "waterLbl": "Volumen de agua por hectárea", "pvLbl": "Dosis de Plantos Verde®", "ha": "ha", "kg": "kg", "L": "L", "LHa": "L/ha", "kgHa": "kg/ha", "gL": "g/L", "warnMin": "El volumen mínimo de agua para aplicación con dron es de {n} L/ha. Por debajo, el caldo queda demasiado concentrado para pulverizarse de forma fiable.", "warnVal": "Introduzca un valor mayor que cero en todos los campos.", "stTanks": "Tanques necesarios", "stPerTank": "Plantos Verde® por tanque lleno", "stConc": "Concentración del caldo", "bd": "Desglose de la mezcla", "bdArea": "Superficie cubierta", "bdWater": "Agua total necesaria", "bdPV": "Plantos Verde® total necesario", "bdHaTank": "Superficie cubierta por tanque lleno", "bdFull": "Tanques llenos", "bdConcF": "Concentración = Plantos Verde® kg/ha ÷ agua L/ha", "optA": "Opción A — dosificar el último tanque a prorrata", "optAd": "Preparar un tanque parcial para la superficie restante. Uso exacto, sin sobrantes.", "optB": "Opción B — preparar solo tanques llenos", "optBd": "Todos los tanques iguales. Más sencillo en campo; el excedente cubre superficie adicional.", "lastW": "Agua en el último tanque", "lastP": "Plantos Verde® en el último tanque", "tanksTot": "Tanques totales", "surplus": "Caldo excedente", "extra": "Superficie adicional que cubrirá", "pvTot": "Plantos Verde® utilizado", "exact": "La superficie se divide en tanques llenos exactamente — ambas opciones son idénticas.", "howto": "Método: llene el tanque parcialmente con agua, añada el Plantos Verde® con el agitador en marcha, complete el volumen y mantenga la agitación durante la aplicación.", "prep": "Preparado el", "print": "Imprimir / Guardar como PDF", "each": "cada uno", "foot": "Agrimedic Global (Pty) Ltd — Distribuidor internacional de Plantos Verde®", "fwd": "Reenviar", "copied": "Hoja de mezcla copiada — péguela en WhatsApp, un correo o un mensaje.", "mode": "Modo", "modePV": "Solo Plantos Verde®", "modeMix": "Otros productos", "products": "Productos en el tanque", "prodName": "Producto", "dose": "Dosis", "basis": "Base", "bPerHa": "por ha", "bPerL": "por litro de agua", "bPct": "% del volumen de caldo", "bRatio": "dilución 1:N", "addRow": "Añadir producto", "remove": "Quitar", "minW": "Volumen mínimo de agua", "perTankHdr": "Por tanque lleno", "wholeJob": "Trabajo completo", "perHaCol": "Dosis por ha", "lblLabel": "La etiqueta del producto prevalece. Si esta hoja y la etiqueta difieren, siga la etiqueta.", "lblCompat": "La compatibilidad de la mezcla y el orden de incorporación son responsabilidad del usuario. Haga una prueba de frasco antes de mezclar a escala.", "emptyRows": "Añada al menos un producto.", "ml": "ml", "g": "g", "pvSep": "Plantos Verde® se aplica solo y no se mezcla en tanque con estos productos. Cambie al modo Plantos Verde® para calcularlo.", "subOther": "Dosis de mezcla para aplicación con dron y pulverizador de barras", "working": "Preparando el PDF...", "pdfSaved": "PDF guardado en sus descargas.", "pdfFail": "No se pudo crear el PDF aquí - se envía como texto."}, "pt": {"title": "Calculadora de mistura em tanque", "sub": "Plantos Verde® — doses de mistura para aplicação com drone e pulverizador de barras", "notice": "Esta é uma ferramenta interativa. Abra este ficheiro num navegador web — não funcionará como PDF.", "lang": "Idioma", "equip": "Equipamento", "drone": "Drone", "boom": "Pulverizador de barras", "calcby": "Calcular a partir de", "byarea": "Área a cobrir", "bystock": "Produto disponível", "areaLbl": "Área a cobrir", "stockLbl": "Plantos Verde® disponível", "tankLbl": "Capacidade do tanque", "waterLbl": "Volume de água por hectare", "pvLbl": "Dose de Plantos Verde®", "ha": "ha", "kg": "kg", "L": "L", "LHa": "L/ha", "kgHa": "kg/ha", "gL": "g/L", "warnMin": "O volume mínimo de água para aplicação com drone é de {n} L/ha. Abaixo disso a calda fica demasiado concentrada para pulverizar de forma fiável.", "warnVal": "Introduza um valor superior a zero em todos os campos.", "stTanks": "Tanques necessários", "stPerTank": "Plantos Verde® por tanque cheio", "stConc": "Concentração da calda", "bd": "Detalhe da mistura", "bdArea": "Área coberta", "bdWater": "Água total necessária", "bdPV": "Plantos Verde® total necessário", "bdHaTank": "Área coberta por tanque cheio", "bdFull": "Tanques cheios", "bdConcF": "Concentração = Plantos Verde® kg/ha ÷ água L/ha", "optA": "Opção A — dosear o último tanque proporcionalmente", "optAd": "Preparar um tanque parcial para a área restante. Uso exato, sem sobras.", "optB": "Opção B — preparar apenas tanques cheios", "optBd": "Todos os tanques iguais. Mais simples no campo; o excedente cobre área adicional.", "lastW": "Água no último tanque", "lastP": "Plantos Verde® no último tanque", "tanksTot": "Total de tanques", "surplus": "Calda excedente", "extra": "Área adicional que irá cobrir", "pvTot": "Plantos Verde® utilizado", "exact": "A área divide-se exatamente em tanques cheios — ambas as opções são idênticas.", "howto": "Método: encha o tanque parcialmente com água, adicione o Plantos Verde® com o agitador em funcionamento, complete o volume e mantenha a agitação durante a aplicação.", "prep": "Preparado em", "print": "Imprimir / Guardar como PDF", "each": "cada", "foot": "Agrimedic Global (Pty) Ltd — Distribuidor internacional de Plantos Verde®", "fwd": "Encaminhar", "copied": "Ficha de mistura copiada — cole-a no WhatsApp, num e-mail ou numa mensagem.", "mode": "Modo", "modePV": "Apenas Plantos Verde®", "modeMix": "Outros produtos", "products": "Produtos no tanque", "prodName": "Produto", "dose": "Dose", "basis": "Base", "bPerHa": "por ha", "bPerL": "por litro de água", "bPct": "% do volume de calda", "bRatio": "diluição 1:N", "addRow": "Adicionar produto", "remove": "Remover", "minW": "Volume mínimo de água", "perTankHdr": "Por tanque cheio", "wholeJob": "Trabalho completo", "perHaCol": "Dose por ha", "lblLabel": "O rótulo do produto prevalece. Se esta ficha e o rótulo divergirem, siga o rótulo.", "lblCompat": "A compatibilidade da mistura e a ordem de incorporação são da responsabilidade do utilizador. Faça um teste em frasco antes de misturar em escala.", "emptyRows": "Adicione pelo menos um produto.", "ml": "ml", "g": "g", "pvSep": "Plantos Verde® aplica-se isoladamente e não se mistura em tanque com estes produtos. Mude para o modo Plantos Verde® para o calcular.", "subOther": "Doses de mistura para aplicação com drone e pulverizador de barras", "working": "A preparar o PDF...", "pdfSaved": "PDF guardado nas suas transferências.", "pdfFail": "Não foi possível criar o PDF aqui - a enviar como texto."}, "de": {"title": "Tankmisch-Rechner", "sub": "Plantos Verde® — Mischungsverhältnisse für Drohnen- und Feldspritzenanwendung", "notice": "Dies ist ein interaktives Werkzeug. Öffnen Sie diese Datei in einem Webbrowser — als PDF funktioniert sie nicht.", "lang": "Sprache", "equip": "Gerät", "drone": "Drohne", "boom": "Feldspritze", "calcby": "Berechnen nach", "byarea": "Zu behandelnde Fläche", "bystock": "Vorhandenes Produkt", "areaLbl": "Zu behandelnde Fläche", "stockLbl": "Verfügbares Plantos Verde®", "tankLbl": "Tankgröße", "waterLbl": "Wasseraufwandmenge", "pvLbl": "Plantos Verde® Aufwandmenge", "ha": "ha", "kg": "kg", "L": "L", "LHa": "L/ha", "kgHa": "kg/ha", "gL": "g/L", "warnMin": "Die Mindestwassermenge für die Drohnenanwendung beträgt {n} L/ha. Darunter ist die Brühe zu konzentriert, um zuverlässig ausgebracht zu werden.", "warnVal": "Geben Sie in jedem Feld einen Wert größer als null ein.", "stTanks": "Benötigte Tankfüllungen", "stPerTank": "Plantos Verde® je volle Tankfüllung", "stConc": "Brühekonzentration", "bd": "Mischungsaufstellung", "bdArea": "Behandelte Fläche", "bdWater": "Gesamtwasserbedarf", "bdPV": "Gesamtbedarf Plantos Verde®", "bdHaTank": "Fläche je volle Tankfüllung", "bdFull": "Volle Tankfüllungen", "bdConcF": "Konzentration = Plantos Verde® kg/ha ÷ Wasser L/ha", "optA": "Option A — letzte Tankfüllung anteilig dosieren", "optAd": "Eine Teilfüllung für die Restfläche ansetzen. Exakter Produkteinsatz, kein Rest.", "optB": "Option B — durchgehend volle Tankfüllungen ansetzen", "optBd": "Jede Füllung gleich angesetzt. Einfacher im Feld; der Überschuss deckt zusätzliche Fläche ab.", "lastW": "Wasser in der letzten Füllung", "lastP": "Plantos Verde® in der letzten Füllung", "tanksTot": "Tankfüllungen gesamt", "surplus": "Überschüssige Brühe", "extra": "Zusätzlich abgedeckte Fläche", "pvTot": "Eingesetztes Plantos Verde®", "exact": "Die Fläche geht genau in vollen Tankfüllungen auf — beide Optionen sind identisch.", "howto": "Vorgehen: Tank teilweise mit Wasser füllen, Plantos Verde® bei laufendem Rührwerk zugeben, auf Volumen auffüllen und während der Ausbringung weiter rühren.", "prep": "Erstellt am", "print": "Drucken / Als PDF speichern", "each": "je", "foot": "Agrimedic Global (Pty) Ltd — Internationaler Distributor für Plantos Verde®", "fwd": "Weiterleiten", "copied": "Mischblatt kopiert — fügen Sie es in WhatsApp, eine E-Mail oder eine Nachricht ein.", "mode": "Modus", "modePV": "Nur Plantos Verde®", "modeMix": "Andere Produkte", "products": "Produkte im Tank", "prodName": "Produkt", "dose": "Dosierung", "basis": "Basis", "bPerHa": "je ha", "bPerL": "je Liter Wasser", "bPct": "% der Brühemenge", "bRatio": "Verdünnung 1:N", "addRow": "Produkt hinzufügen", "remove": "Entfernen", "minW": "Mindestwassermenge", "perTankHdr": "Je volle Tankfüllung", "wholeJob": "Gesamte Maßnahme", "perHaCol": "Aufwandmenge je ha", "lblLabel": "Das Produktetikett ist maßgeblich. Weicht dieses Blatt davon ab, gilt das Etikett.", "lblCompat": "Mischbarkeit und Einrührreihenfolge liegen in der Verantwortung des Anwenders. Vor dem Ansetzen im Großen einen Glastest durchführen.", "emptyRows": "Fügen Sie mindestens ein Produkt hinzu.", "ml": "ml", "g": "g", "pvSep": "Plantos Verde® wird separat ausgebracht und nicht mit diesen Produkten im Tank gemischt. Wechseln Sie dafür in den Plantos Verde®-Modus.", "subOther": "Mischungsverhältnisse für Drohnen- und Feldspritzenanwendung", "working": "PDF wird erstellt...", "pdfSaved": "PDF in Ihren Downloads gespeichert.", "pdfFail": "PDF konnte hier nicht erstellt werden - wird als Text gesendet."}, "it": {"title": "Calcolatore di miscela in serbatoio", "sub": "Plantos Verde® — dosi di miscela per applicazione con drone e barra irroratrice", "notice": "Questo è uno strumento interattivo. Aprire il file in un browser web — non funzionerà come PDF.", "lang": "Lingua", "equip": "Attrezzatura", "drone": "Drone", "boom": "Barra irroratrice", "calcby": "Calcolare da", "byarea": "Superficie da trattare", "bystock": "Prodotto disponibile", "areaLbl": "Superficie da trattare", "stockLbl": "Plantos Verde® disponibile", "tankLbl": "Capacità del serbatoio", "waterLbl": "Volume d'acqua per ettaro", "pvLbl": "Dose di Plantos Verde®", "ha": "ha", "kg": "kg", "L": "L", "LHa": "L/ha", "kgHa": "kg/ha", "gL": "g/L", "warnMin": "Il volume minimo d'acqua per l'applicazione con drone è di {n} L/ha. Al di sotto la miscela è troppo concentrata per essere irrorata in modo affidabile.", "warnVal": "Inserire un valore maggiore di zero in ogni campo.", "stTanks": "Serbatoi necessari", "stPerTank": "Plantos Verde® per serbatoio pieno", "stConc": "Concentrazione della miscela", "bd": "Dettaglio della miscela", "bdArea": "Superficie trattata", "bdWater": "Acqua totale necessaria", "bdPV": "Plantos Verde® totale necessario", "bdHaTank": "Superficie trattata per serbatoio pieno", "bdFull": "Serbatoi pieni", "bdConcF": "Concentrazione = Plantos Verde® kg/ha ÷ acqua L/ha", "optA": "Opzione A — dosare l'ultimo serbatoio in proporzione", "optAd": "Preparare un serbatoio parziale per la superficie residua. Impiego esatto, nessun avanzo.", "optB": "Opzione B — preparare solo serbatoi pieni", "optBd": "Tutti i serbatoi uguali. Più semplice in campo; l'eccedenza copre superficie aggiuntiva.", "lastW": "Acqua nell'ultimo serbatoio", "lastP": "Plantos Verde® nell'ultimo serbatoio", "tanksTot": "Serbatoi totali", "surplus": "Miscela in eccedenza", "extra": "Superficie aggiuntiva coperta", "pvTot": "Plantos Verde® impiegato", "exact": "La superficie si divide esattamente in serbatoi pieni — le due opzioni coincidono.", "howto": "Metodo: riempire parzialmente il serbatoio con acqua, aggiungere il Plantos Verde® con l'agitatore in funzione, portare a volume e mantenere l'agitazione durante l'applicazione.", "prep": "Preparato il", "print": "Stampa / Salva come PDF", "each": "ciascuno", "foot": "Agrimedic Global (Pty) Ltd — Distributore internazionale di Plantos Verde®", "fwd": "Inoltra", "copied": "Scheda di miscela copiata — incollala su WhatsApp, in un'e-mail o in un messaggio.", "mode": "Modalità", "modePV": "Solo Plantos Verde®", "modeMix": "Altri prodotti", "products": "Prodotti nel serbatoio", "prodName": "Prodotto", "dose": "Dose", "basis": "Base", "bPerHa": "per ha", "bPerL": "per litro d'acqua", "bPct": "% del volume di miscela", "bRatio": "diluizione 1:N", "addRow": "Aggiungi prodotto", "remove": "Rimuovi", "minW": "Volume minimo d'acqua", "perTankHdr": "Per serbatoio pieno", "wholeJob": "Intero intervento", "perHaCol": "Dose per ha", "lblLabel": "L'etichetta del prodotto prevale. Se questa scheda e l'etichetta divergono, seguire l'etichetta.", "lblCompat": "La compatibilità della miscela e l'ordine di immissione sono responsabilità dell'utilizzatore. Eseguire una prova in barattolo prima di miscelare su larga scala.", "emptyRows": "Aggiungi almeno un prodotto.", "ml": "ml", "g": "g", "pvSep": "Plantos Verde® si applica da solo e non va miscelato in serbatoio con questi prodotti. Passare alla modalità Plantos Verde® per calcolarlo.", "subOther": "Dosi di miscela per applicazione con drone e barra irroratrice", "working": "Preparazione del PDF...", "pdfSaved": "PDF salvato nei download.", "pdfFail": "Impossibile creare il PDF qui - invio come testo."}, "pl": {"title": "Kalkulator mieszania w zbiorniku", "sub": "Plantos Verde® — proporcje mieszania dla dronów i opryskiwaczy polowych", "notice": "To jest narzędzie interaktywne. Otwórz ten plik w przeglądarce internetowej — jako PDF nie zadziała.", "lang": "Język", "equip": "Sprzęt", "drone": "Dron", "boom": "Opryskiwacz polowy", "calcby": "Oblicz na podstawie", "byarea": "Powierzchnia do zabiegu", "bystock": "Dostępny produkt", "areaLbl": "Powierzchnia do zabiegu", "stockLbl": "Dostępny Plantos Verde®", "tankLbl": "Pojemność zbiornika", "waterLbl": "Dawka wody na hektar", "pvLbl": "Dawka Plantos Verde®", "ha": "ha", "kg": "kg", "L": "L", "LHa": "L/ha", "kgHa": "kg/ha", "gL": "g/L", "warnMin": "Minimalna dawka wody przy zabiegu dronem to {n} L/ha. Poniżej tej wartości ciecz jest zbyt stężona, aby opryskiwać niezawodnie.", "warnVal": "Wprowadź wartość większą od zera w każdym polu.", "stTanks": "Wymagane zbiorniki", "stPerTank": "Plantos Verde® na pełny zbiornik", "stConc": "Stężenie cieczy", "bd": "Zestawienie mieszaniny", "bdArea": "Powierzchnia objęta zabiegiem", "bdWater": "Całkowita ilość wody", "bdPV": "Całkowita ilość Plantos Verde®", "bdHaTank": "Powierzchnia na pełny zbiornik", "bdFull": "Pełne zbiorniki", "bdConcF": "Stężenie = Plantos Verde® kg/ha ÷ woda L/ha", "optA": "Wariant A — ostatni zbiornik dozowany proporcjonalnie", "optAd": "Przygotuj częściowy zbiornik na pozostałą powierzchnię. Dokładne zużycie, bez resztek.", "optB": "Wariant B — wyłącznie pełne zbiorniki", "optBd": "Każdy zbiornik przygotowany tak samo. Prościej w polu; nadmiar pokryje dodatkową powierzchnię.", "lastW": "Woda w ostatnim zbiorniku", "lastP": "Plantos Verde® w ostatnim zbiorniku", "tanksTot": "Zbiorniki łącznie", "surplus": "Nadmiar cieczy", "extra": "Dodatkowa powierzchnia do pokrycia", "pvTot": "Zużyty Plantos Verde®", "exact": "Powierzchnia dzieli się dokładnie na pełne zbiorniki — oba warianty są identyczne.", "howto": "Sposób: napełnij zbiornik częściowo wodą, dodaj Plantos Verde® przy pracującym mieszadle, uzupełnij do objętości i mieszaj przez cały czas zabiegu.", "prep": "Sporządzono", "print": "Drukuj / Zapisz jako PDF", "each": "każdy", "foot": "Agrimedic Global (Pty) Ltd — Międzynarodowy dystrybutor Plantos Verde®", "fwd": "Przekaż dalej", "copied": "Karta mieszania skopiowana — wklej ją do WhatsApp, e-maila lub wiadomości.", "mode": "Tryb", "modePV": "Tylko Plantos Verde®", "modeMix": "Inne produkty", "products": "Produkty w zbiorniku", "prodName": "Produkt", "dose": "Dawka", "basis": "Podstawa", "bPerHa": "na ha", "bPerL": "na litr wody", "bPct": "% objętości cieczy", "bRatio": "rozcieńczenie 1:N", "addRow": "Dodaj produkt", "remove": "Usuń", "minW": "Minimalna dawka wody", "perTankHdr": "Na pełny zbiornik", "wholeJob": "Cały zabieg", "perHaCol": "Dawka na ha", "lblLabel": "Etykieta produktu jest nadrzędna. W razie rozbieżności z tą kartą należy stosować się do etykiety.", "lblCompat": "Zgodność mieszaniny i kolejność dodawania są odpowiedzialnością użytkownika. Przed sporządzeniem w pełnej skali wykonać test słoikowy.", "emptyRows": "Dodaj co najmniej jeden produkt.", "ml": "ml", "g": "g", "pvSep": "Plantos Verde® stosuje się osobno i nie miesza się go w zbiorniku z tymi produktami. Przełącz na tryb Plantos Verde®, aby go obliczyć.", "subOther": "Proporcje mieszania dla dronów i opryskiwaczy polowych", "working": "Przygotowywanie PDF...", "pdfSaved": "PDF zapisany w pobranych.", "pdfFail": "Nie udało się utworzyć PDF - wysyłanie jako tekst."}, "ru": {"title": "Калькулятор рабочего раствора", "sub": "Plantos Verde® — расчёт нормы смешивания для дронов и штанговых опрыскивателей", "notice": "Это интерактивный инструмент. Откройте файл в веб-браузере — в виде PDF он не работает.", "lang": "Язык", "equip": "Техника", "drone": "Дрон", "boom": "Штанговый опрыскиватель", "calcby": "Расчёт по", "byarea": "Обрабатываемая площадь", "bystock": "Имеющийся продукт", "areaLbl": "Обрабатываемая площадь", "stockLbl": "Имеющийся Plantos Verde®", "tankLbl": "Объём бака", "waterLbl": "Норма расхода воды", "pvLbl": "Норма расхода Plantos Verde®", "ha": "га", "kg": "кг", "L": "л", "LHa": "л/га", "kgHa": "кг/га", "gL": "г/л", "warnMin": "Минимальная норма расхода воды при обработке дроном — {n} л/га. Ниже этого значения раствор слишком концентрированный для надёжного распыления.", "warnVal": "Введите значение больше нуля во всех полях.", "stTanks": "Требуется заправок", "stPerTank": "Plantos Verde® на полный бак", "stConc": "Концентрация раствора", "bd": "Расчёт раствора", "bdArea": "Обработанная площадь", "bdWater": "Всего требуется воды", "bdPV": "Всего требуется Plantos Verde®", "bdHaTank": "Площадь на один полный бак", "bdFull": "Полных баков", "bdConcF": "Концентрация = Plantos Verde® кг/га ÷ вода л/га", "optA": "Вариант A — последний бак дозируется пропорционально", "optAd": "Приготовить неполный бак на оставшуюся площадь. Точный расход, без остатка.", "optB": "Вариант B — только полные баки", "optBd": "Все баки готовятся одинаково. Проще в поле; излишек покроет дополнительную площадь.", "lastW": "Вода в последнем баке", "lastP": "Plantos Verde® в последнем баке", "tanksTot": "Всего баков", "surplus": "Излишек раствора", "extra": "Дополнительно покрываемая площадь", "pvTot": "Израсходовано Plantos Verde®", "exact": "Площадь делится на полные баки без остатка — оба варианта совпадают.", "howto": "Порядок: наполните бак водой наполовину, добавьте Plantos Verde® при работающей мешалке, доведите до объёма и перемешивайте в течение всей обработки.", "prep": "Подготовлено", "print": "Печать / Сохранить в PDF", "each": "каждый", "foot": "Agrimedic Global (Pty) Ltd — международный дистрибьютор Plantos Verde®", "fwd": "Переслать", "copied": "Карта раствора скопирована — вставьте её в WhatsApp, письмо или сообщение.", "mode": "Режим", "modePV": "Только Plantos Verde®", "modeMix": "Другие продукты", "products": "Продукты в баке", "prodName": "Продукт", "dose": "Доза", "basis": "Основа", "bPerHa": "на га", "bPerL": "на литр воды", "bPct": "% от объёма раствора", "bRatio": "разведение 1:N", "addRow": "Добавить продукт", "remove": "Удалить", "minW": "Минимальная норма воды", "perTankHdr": "На полный бак", "wholeJob": "Вся обработка", "perHaCol": "Норма на га", "lblLabel": "Этикетка продукта имеет приоритет. При расхождении с этой картой следуйте этикетке.", "lblCompat": "Совместимость баковой смеси и порядок смешивания — ответственность пользователя. Перед приготовлением в полном объёме проведите пробу в банке.", "emptyRows": "Добавьте хотя бы один продукт.", "ml": "мл", "g": "г", "pvSep": "Plantos Verde® применяется отдельно и не смешивается в баке с этими продуктами. Для расчёта переключитесь в режим Plantos Verde®.", "subOther": "Расчёт нормы смешивания для дронов и штанговых опрыскивателей", "working": "Подготовка PDF...", "pdfSaved": "PDF сохранён в загрузках.", "pdfFail": "Не удалось создать PDF - отправляется текстом."}, "uk": {"title": "Калькулятор робочого розчину", "sub": "Plantos Verde® — розрахунок норми змішування для дронів і штангових обприскувачів", "notice": "Це інтерактивний інструмент. Відкрийте файл у веббраузері — у вигляді PDF він не працює.", "lang": "Мова", "equip": "Техніка", "drone": "Дрон", "boom": "Штанговий обприскувач", "calcby": "Розрахунок за", "byarea": "Площа обробки", "bystock": "Наявний продукт", "areaLbl": "Площа обробки", "stockLbl": "Наявний Plantos Verde®", "tankLbl": "Об'єм бака", "waterLbl": "Норма витрати води", "pvLbl": "Норма витрати Plantos Verde®", "ha": "га", "kg": "кг", "L": "л", "LHa": "л/га", "kgHa": "кг/га", "gL": "г/л", "warnMin": "Мінімальна норма витрати води при обробці дроном — {n} л/га. Нижче цього значення розчин надто концентрований для надійного розпилення.", "warnVal": "Введіть значення більше нуля в усіх полях.", "stTanks": "Потрібно заправок", "stPerTank": "Plantos Verde® на повний бак", "stConc": "Концентрація розчину", "bd": "Розрахунок розчину", "bdArea": "Оброблена площа", "bdWater": "Усього потрібно води", "bdPV": "Усього потрібно Plantos Verde®", "bdHaTank": "Площа на один повний бак", "bdFull": "Повних баків", "bdConcF": "Концентрація = Plantos Verde® кг/га ÷ вода л/га", "optA": "Варіант A — останній бак дозується пропорційно", "optAd": "Приготувати неповний бак на решту площі. Точна витрата, без залишку.", "optB": "Варіант B — лише повні баки", "optBd": "Усі баки готуються однаково. Простіше в полі; надлишок покриє додаткову площу.", "lastW": "Вода в останньому баку", "lastP": "Plantos Verde® в останньому баку", "tanksTot": "Усього баків", "surplus": "Надлишок розчину", "extra": "Додатково покрита площа", "pvTot": "Витрачено Plantos Verde®", "exact": "Площа ділиться на повні баки без залишку — обидва варіанти збігаються.", "howto": "Порядок: наповніть бак водою наполовину, додайте Plantos Verde® за працюючої мішалки, доведіть до об'єму та перемішуйте протягом усієї обробки.", "prep": "Підготовлено", "print": "Друк / Зберегти як PDF", "each": "кожен", "foot": "Agrimedic Global (Pty) Ltd — міжнародний дистриб'ютор Plantos Verde®", "fwd": "Переслати", "copied": "Карту розчину скопійовано — вставте її в WhatsApp, лист або повідомлення.", "mode": "Режим", "modePV": "Лише Plantos Verde®", "modeMix": "Інші продукти", "products": "Продукти в баку", "prodName": "Продукт", "dose": "Доза", "basis": "Основа", "bPerHa": "на га", "bPerL": "на літр води", "bPct": "% від об'єму розчину", "bRatio": "розведення 1:N", "addRow": "Додати продукт", "remove": "Видалити", "minW": "Мінімальна норма води", "perTankHdr": "На повний бак", "wholeJob": "Уся обробка", "perHaCol": "Норма на га", "lblLabel": "Етикетка продукту має пріоритет. У разі розбіжності з цією картою дотримуйтесь етикетки.", "lblCompat": "Сумісність бакової суміші та порядок змішування — відповідальність користувача. Перед приготуванням у повному обсязі проведіть пробу в банці.", "emptyRows": "Додайте щонайменше один продукт.", "ml": "мл", "g": "г", "pvSep": "Plantos Verde® застосовується окремо і не змішується в баку з цими продуктами. Для розрахунку перемкніться в режим Plantos Verde®.", "subOther": "Розрахунок норми змішування для дронів і штангових обприскувачів", "working": "Підготовка PDF...", "pdfSaved": "PDF збережено в завантаженнях.", "pdfFail": "Не вдалося створити PDF - надсилається текстом."}, "ar": {"title": "حاسبة خلط الخزان", "sub": "‏Plantos Verde® — نسب الخلط للرش بالطائرات المسيّرة ورشاشات الذراع", "notice": "هذه أداة تفاعلية. افتح هذا الملف في متصفح ويب — لن يعمل كملف PDF.", "lang": "اللغة", "equip": "المعدات", "drone": "طائرة مسيّرة", "boom": "رشاش ذراعي", "calcby": "الحساب حسب", "byarea": "المساحة المراد رشها", "bystock": "الكمية المتوفرة", "areaLbl": "المساحة المراد رشها", "stockLbl": "‏Plantos Verde® المتوفر", "tankLbl": "سعة خزان الخلط", "waterLbl": "معدل الماء للهكتار", "pvLbl": "معدل Plantos Verde®", "ha": "هكتار", "kg": "كجم", "L": "لتر", "LHa": "لتر/هكتار", "kgHa": "كجم/هكتار", "gL": "جم/لتر", "warnMin": "الحد الأدنى لمعدل الماء عند الرش بالطائرة المسيّرة هو {n} لتر/هكتار. وأقل من ذلك يصبح المحلول شديد التركيز ولا يمكن رشه بشكل موثوق.", "warnVal": "أدخل قيمة أكبر من صفر في كل حقل.", "stTanks": "عدد الخزانات المطلوبة", "stPerTank": "‏Plantos Verde® لكل خزان ممتلئ", "stConc": "تركيز المحلول", "bd": "تفصيل الخلطة", "bdArea": "المساحة المغطاة", "bdWater": "إجمالي الماء المطلوب", "bdPV": "إجمالي Plantos Verde® المطلوب", "bdHaTank": "المساحة لكل خزان ممتلئ", "bdFull": "خزانات ممتلئة", "bdConcF": "التركيز = Plantos Verde® كجم/هكتار ÷ الماء لتر/هكتار", "optA": "الخيار أ — جرعة الخزان الأخير بالتناسب", "optAd": "تحضير خزان جزئي للمساحة المتبقية. استخدام دقيق دون فائض.", "optB": "الخيار ب — تحضير خزانات ممتلئة فقط", "optBd": "كل الخزانات بنفس الخلطة. أبسط في الحقل؛ والفائض يغطي مساحة إضافية.", "lastW": "الماء في الخزان الأخير", "lastP": "‏Plantos Verde® في الخزان الأخير", "tanksTot": "إجمالي الخزانات", "surplus": "فائض المحلول", "extra": "المساحة الإضافية التي سيغطيها", "pvTot": "‏Plantos Verde® المستخدم", "exact": "تنقسم المساحة إلى خزانات ممتلئة تمامًا — الخياران متطابقان.", "howto": "الطريقة: املأ الخزان جزئيًا بالماء، أضف Plantos Verde® والمقلّب يعمل، ثم أكمل الحجم واستمر في التقليب أثناء الرش.", "prep": "أُعدّ في", "print": "طباعة / حفظ بصيغة PDF", "each": "لكل واحد", "foot": "Agrimedic Global (Pty) Ltd — الموزع الدولي لـ Plantos Verde®", "fwd": "إعادة توجيه", "copied": "تم نسخ ورقة الخلط — الصقها في واتساب أو بريد إلكتروني أو رسالة.", "mode": "الوضع", "modePV": "‏Plantos Verde® فقط", "modeMix": "منتجات أخرى", "products": "المنتجات في الخزان", "prodName": "المنتج", "dose": "الجرعة", "basis": "الأساس", "bPerHa": "لكل هكتار", "bPerL": "لكل لتر ماء", "bPct": "٪ من حجم المحلول", "bRatio": "تخفيف 1:N", "addRow": "إضافة منتج", "remove": "إزالة", "minW": "الحد الأدنى لمعدل الماء", "perTankHdr": "لكل خزان ممتلئ", "wholeJob": "العملية كاملة", "perHaCol": "المعدل لكل هكتار", "lblLabel": "بطاقة المنتج هي المرجع. وعند اختلاف هذه الورقة عن البطاقة، اتبع البطاقة.", "lblCompat": "توافق الخلطة وترتيب الإضافة مسؤولية المستخدم. أجرِ اختبارًا في وعاء قبل الخلط بكميات كبيرة.", "emptyRows": "أضف منتجًا واحدًا على الأقل.", "ml": "مل", "g": "جم", "pvSep": "يُطبَّق Plantos Verde® بمفرده ولا يُخلط في الخزان مع هذه المنتجات. انتقل إلى وضع Plantos Verde® لحسابه.", "subOther": "نسب الخلط للرش بالطائرات المسيّرة ورشاشات الذراع", "working": "جارٍ تجهيز ملف PDF...", "pdfSaved": "تم حفظ ملف PDF في التنزيلات.", "pdfFail": "تعذّر إنشاء ملف PDF هنا - سيُرسل كنص."}, "zh": {"title": "药箱配比计算器", "sub": "Plantos Verde® — 无人机与喷杆喷雾机施药配比", "notice": "这是一个交互式工具。请在网页浏览器中打开本文件——以 PDF 形式无法使用。", "lang": "语言", "equip": "施药设备", "drone": "无人机", "boom": "喷杆喷雾机", "calcby": "计算依据", "byarea": "待施药面积", "bystock": "现有产品量", "areaLbl": "待施药面积", "stockLbl": "现有 Plantos Verde®", "tankLbl": "药箱容量", "waterLbl": "每公顷用水量", "pvLbl": "Plantos Verde® 用量", "ha": "公顷", "kg": "公斤", "L": "升", "LHa": "升/公顷", "kgHa": "公斤/公顷", "gL": "克/升", "warnMin": "无人机施药的最低用水量为 {n} 升/公顷。低于此值药液过浓，无法可靠喷施。", "warnVal": "每个栏位都必须填入大于零的数值。", "stTanks": "所需箱数", "stPerTank": "每满箱 Plantos Verde® 用量", "stConc": "药液浓度", "bd": "配比明细", "bdArea": "施药面积", "bdWater": "总需水量", "bdPV": "Plantos Verde® 总需求量", "bdHaTank": "每满箱可施面积", "bdFull": "满箱数", "bdConcF": "浓度 = Plantos Verde® 公斤/公顷 ÷ 用水量 升/公顷", "optA": "方案 A — 最后一箱按比例配药", "optAd": "为剩余面积配一箱不满的药液。用量精确，无剩余。", "optB": "方案 B — 全部按满箱配制", "optBd": "每箱配比相同，田间操作更简单；多出的药液可多施一部分面积。", "lastW": "最后一箱水量", "lastP": "最后一箱 Plantos Verde® 用量", "tanksTot": "总箱数", "surplus": "多余药液", "extra": "可额外施药面积", "pvTot": "Plantos Verde® 用量合计", "exact": "面积正好分成整箱——两种方案结果相同。", "howto": "操作方法：药箱先加入部分水，在搅拌器运转的情况下加入 Plantos Verde®，再加水至规定容量，施药全程保持搅拌。", "prep": "制表日期", "print": "打印 / 另存为 PDF", "each": "每箱", "foot": "Agrimedic Global (Pty) Ltd — Plantos Verde® 国际经销商", "fwd": "转发", "copied": "配比表已复制 — 可粘贴到 WhatsApp、电子邮件或短信中。", "mode": "模式", "modePV": "仅 Plantos Verde®", "modeMix": "其他产品", "products": "药箱内产品", "prodName": "产品", "dose": "用量", "basis": "计量方式", "bPerHa": "每公顷", "bPerL": "每升水", "bPct": "占药液体积百分比", "bRatio": "稀释 1:N", "addRow": "添加产品", "remove": "移除", "minW": "最低用水量", "perTankHdr": "每满箱", "wholeJob": "整个作业", "perHaCol": "每公顷用量", "lblLabel": "以产品标签为准。本表与标签不一致时，请遵照标签。", "lblCompat": "混配相容性与投料顺序由使用者负责。大量配制前请先做小样试验。", "emptyRows": "请至少添加一个产品。", "ml": "毫升", "g": "克", "pvSep": "Plantos Verde® 需单独施用，不与上述产品混配于同一药箱。请切换到 Plantos Verde® 模式计算。", "subOther": "无人机与喷杆喷雾机施药配比", "working": "正在生成 PDF...", "pdfSaved": "PDF 已保存到下载文件夹。", "pdfFail": "此设备无法生成 PDF — 改为以文字发送。"}, "hi": {"title": "टैंक मिश्रण कैलकुलेटर", "sub": "Plantos Verde® — ड्रोन और बूम स्प्रेयर छिड़काव के लिए मिश्रण अनुपात", "notice": "यह एक इंटरैक्टिव टूल है। इस फ़ाइल को वेब ब्राउज़र में खोलें — PDF के रूप में यह काम नहीं करेगी।", "lang": "भाषा", "equip": "उपकरण", "drone": "ड्रोन", "boom": "बूम स्प्रेयर", "calcby": "गणना का आधार", "byarea": "छिड़काव क्षेत्र", "bystock": "उपलब्ध उत्पाद", "areaLbl": "छिड़काव किया जाने वाला क्षेत्र", "stockLbl": "उपलब्ध Plantos Verde®", "tankLbl": "मिश्रण टैंक की क्षमता", "waterLbl": "प्रति हेक्टेयर पानी की मात्रा", "pvLbl": "Plantos Verde® की मात्रा", "ha": "हेक्टेयर", "kg": "किग्रा", "L": "ली", "LHa": "ली/हेक्टेयर", "kgHa": "किग्रा/हेक्टेयर", "gL": "ग्राम/ली", "warnMin": "ड्रोन छिड़काव के लिए न्यूनतम पानी की मात्रा {n} ली/हेक्टेयर है। इससे कम पर घोल इतना गाढ़ा हो जाता है कि भरोसेमंद छिड़काव नहीं हो पाता।", "warnVal": "हर खाने में शून्य से बड़ा मान भरें।", "stTanks": "आवश्यक टैंक", "stPerTank": "प्रति भरे टैंक Plantos Verde®", "stConc": "घोल की सांद्रता", "bd": "मिश्रण विवरण", "bdArea": "कवर किया गया क्षेत्र", "bdWater": "कुल आवश्यक पानी", "bdPV": "कुल आवश्यक Plantos Verde®", "bdHaTank": "प्रति भरे टैंक कवर क्षेत्र", "bdFull": "भरे टैंक", "bdConcF": "सांद्रता = Plantos Verde® किग्रा/हेक्टेयर ÷ पानी ली/हेक्टेयर", "optA": "विकल्प A — अंतिम टैंक में अनुपात के अनुसार मात्रा", "optAd": "शेष क्षेत्र के लिए आंशिक टैंक बनाएं। सटीक उपयोग, कुछ भी बचा नहीं।", "optB": "विकल्प B — हर टैंक पूरा भरकर मिलाएं", "optBd": "हर टैंक एक जैसा। खेत में आसान; अतिरिक्त घोल से कुछ और क्षेत्र कवर हो जाएगा।", "lastW": "अंतिम टैंक में पानी", "lastP": "अंतिम टैंक में Plantos Verde®", "tanksTot": "कुल टैंक", "surplus": "अतिरिक्त घोल", "extra": "अतिरिक्त कवर होने वाला क्षेत्र", "pvTot": "प्रयुक्त Plantos Verde®", "exact": "क्षेत्र पूरे टैंकों में ठीक-ठीक बंट जाता है — दोनों विकल्प समान हैं।", "howto": "विधि: टैंक में पहले कुछ पानी भरें, एजिटेटर चालू रखते हुए Plantos Verde® डालें, फिर पूरा पानी भरें और छिड़काव के दौरान लगातार हिलाते रहें।", "prep": "तैयार किया गया", "print": "प्रिंट करें / PDF सहेजें", "each": "प्रत्येक", "foot": "Agrimedic Global (Pty) Ltd — Plantos Verde® का अंतरराष्ट्रीय वितरक", "fwd": "आगे भेजें", "copied": "मिश्रण शीट कॉपी हो गई — इसे WhatsApp, ईमेल या संदेश में पेस्ट करें।", "mode": "मोड", "modePV": "केवल Plantos Verde®", "modeMix": "अन्य उत्पाद", "products": "टैंक में उत्पाद", "prodName": "उत्पाद", "dose": "मात्रा", "basis": "आधार", "bPerHa": "प्रति हेक्टेयर", "bPerL": "प्रति लीटर पानी", "bPct": "घोल आयतन का %", "bRatio": "तनुकरण 1:N", "addRow": "उत्पाद जोड़ें", "remove": "हटाएँ", "minW": "न्यूनतम पानी की मात्रा", "perTankHdr": "प्रति भरे टैंक", "wholeJob": "पूरा कार्य", "perHaCol": "प्रति हेक्टेयर मात्रा", "lblLabel": "उत्पाद का लेबल मान्य है। इस शीट और लेबल में अंतर हो तो लेबल का पालन करें।", "lblCompat": "मिश्रण की अनुकूलता और मिलाने का क्रम उपयोगकर्ता की ज़िम्मेदारी है। बड़ी मात्रा में मिलाने से पहले जार परीक्षण करें।", "emptyRows": "कम से कम एक उत्पाद जोड़ें।", "ml": "मिली", "g": "ग्राम", "pvSep": "Plantos Verde® अलग से छिड़का जाता है और इन उत्पादों के साथ एक ही टैंक में नहीं मिलाया जाता। इसकी गणना के लिए Plantos Verde® मोड पर जाएँ।", "subOther": "ड्रोन और बूम स्प्रेयर छिड़काव के लिए मिश्रण अनुपात", "working": "PDF तैयार हो रहा है...", "pdfSaved": "PDF आपके डाउनलोड में सहेजा गया।", "pdfFail": "यहाँ PDF नहीं बन सका - टेक्स्ट के रूप में भेजा जा रहा है।"}, "sw": {"title": "Kikokotoo cha Mchanganyiko wa Tangi", "sub": "Plantos Verde® — viwango vya kuchanganya kwa ndege zisizo na rubani na kinyunyizio cha boom", "notice": "Hiki ni kifaa cha mwingiliano. Fungua faili hii katika kivinjari cha wavuti — haitafanya kazi kama PDF.", "lang": "Lugha", "equip": "Kifaa", "drone": "Ndege isiyo na rubani", "boom": "Kinyunyizio cha boom", "calcby": "Kokotoa kwa", "byarea": "Eneo la kunyunyizia", "bystock": "Bidhaa iliyopo", "areaLbl": "Eneo la kunyunyizia", "stockLbl": "Plantos Verde® iliyopo", "tankLbl": "Ukubwa wa tangi", "waterLbl": "Kiwango cha maji kwa hekta", "pvLbl": "Kiwango cha Plantos Verde®", "ha": "ha", "kg": "kg", "L": "L", "LHa": "L/ha", "kgHa": "kg/ha", "gL": "g/L", "warnMin": "Kiwango cha chini cha maji kwa unyunyiziaji wa ndege isiyo na rubani ni lita {n} kwa hekta. Chini ya hapo mchanganyiko unakuwa mzito mno kunyunyizwa kwa uhakika.", "warnVal": "Weka thamani kubwa kuliko sifuri katika kila sehemu.", "stTanks": "Matangi yanayohitajika", "stPerTank": "Plantos Verde® kwa tangi lililojaa", "stConc": "Ukolezi wa mchanganyiko", "bd": "Mchanganuo wa mchanganyiko", "bdArea": "Eneo lililofunikwa", "bdWater": "Jumla ya maji yanayohitajika", "bdPV": "Jumla ya Plantos Verde® inayohitajika", "bdHaTank": "Eneo kwa kila tangi lililojaa", "bdFull": "Matangi yaliyojaa", "bdConcF": "Ukolezi = Plantos Verde® kg/ha ÷ maji L/ha", "optA": "Chaguo A — tangi la mwisho lipimwe kwa uwiano", "optAd": "Changanya tangi pungufu kwa eneo lililobaki. Matumizi kamili, hakuna kinachobaki.", "optB": "Chaguo B — changanya matangi yaliyojaa yote", "optBd": "Kila tangi linachanganywa sawa. Rahisi shambani; ziada hufunika eneo la nyongeza.", "lastW": "Maji katika tangi la mwisho", "lastP": "Plantos Verde® katika tangi la mwisho", "tanksTot": "Jumla ya matangi", "surplus": "Mchanganyiko wa ziada", "extra": "Eneo la ziada litakalofunikwa", "pvTot": "Plantos Verde® iliyotumika", "exact": "Eneo linagawanyika sawasawa katika matangi yaliyojaa — chaguo zote mbili ni sawa.", "howto": "Njia: jaza tangi maji kiasi, weka Plantos Verde® huku kichochezi kikifanya kazi, kisha ongeza maji hadi kiwango na endelea kuchochea wakati wa kunyunyizia.", "prep": "Imeandaliwa", "print": "Chapisha / Hifadhi kama PDF", "each": "kila moja", "foot": "Agrimedic Global (Pty) Ltd — Msambazaji wa Kimataifa wa Plantos Verde®", "fwd": "Sambaza", "copied": "Karatasi ya mchanganyiko imenakiliwa — ibandike kwenye WhatsApp, barua pepe au ujumbe.", "mode": "Hali", "modePV": "Plantos Verde® pekee", "modeMix": "Bidhaa nyingine", "products": "Bidhaa ndani ya tangi", "prodName": "Bidhaa", "dose": "Kipimo", "basis": "Msingi", "bPerHa": "kwa ha", "bPerL": "kwa lita ya maji", "bPct": "% ya ujazo wa mchanganyiko", "bRatio": "upunguzaji 1:N", "addRow": "Ongeza bidhaa", "remove": "Ondoa", "minW": "Kiwango cha chini cha maji", "perTankHdr": "Kwa tangi lililojaa", "wholeJob": "Kazi nzima", "perHaCol": "Kipimo kwa ha", "lblLabel": "Lebo ya bidhaa ndiyo ya kufuata. Karatasi hii ikitofautiana na lebo, fuata lebo.", "lblCompat": "Uwiano wa mchanganyiko na mpangilio wa kuchanganya ni jukumu la mtumiaji. Fanya jaribio la chupa kabla ya kuchanganya kwa wingi.", "emptyRows": "Ongeza angalau bidhaa moja.", "ml": "ml", "g": "g", "pvSep": "Plantos Verde® hunyunyiziwa peke yake na haichanganywi kwenye tangi moja na bidhaa hizi. Badilisha kwenda hali ya Plantos Verde® kuikokotoa.", "subOther": "Viwango vya kuchanganya kwa ndege zisizo na rubani na kinyunyizio cha boom", "working": "Inaandaa PDF...", "pdfSaved": "PDF imehifadhiwa kwenye vipakuliwa vyako.", "pdfFail": "Imeshindwa kutengeneza PDF hapa - inatumwa kama maandishi."}, "af": {"title": "Tenkmengrekenaar", "sub": "Plantos Verde® — mengverhoudings vir hommeltuig- en balkspuittoediening", "notice": "Dit is 'n interaktiewe hulpmiddel. Maak hierdie lêer in 'n webblaaier oop — dit sal nie as PDF werk nie.", "lang": "Taal", "equip": "Toerusting", "drone": "Hommeltuig", "boom": "Balkspuit", "calcby": "Bereken vanaf", "byarea": "Oppervlakte om te dek", "bystock": "Produk op hande", "areaLbl": "Oppervlakte om te dek", "stockLbl": "Plantos Verde® beskikbaar", "tankLbl": "Mengtenk se grootte", "waterLbl": "Watertoedieningstempo", "pvLbl": "Plantos Verde®-tempo", "ha": "ha", "kg": "kg", "L": "L", "LHa": "L/ha", "kgHa": "kg/ha", "gL": "g/L", "warnMin": "Die minimum watertempo vir hommeltuigtoediening is {n} L/ha. Daaronder is die mengsel te gekonsentreerd om betroubaar te spuit.", "warnVal": "Voer 'n waarde groter as nul in elke veld in.", "stTanks": "Tenks benodig", "stPerTank": "Plantos Verde® per vol tenk", "stConc": "Mengselkonsentrasie", "bd": "Mengsel-uiteensetting", "bdArea": "Oppervlakte gedek", "bdWater": "Totale water benodig", "bdPV": "Totale Plantos Verde® benodig", "bdHaTank": "Oppervlakte per vol tenk", "bdFull": "Vol tenks", "bdConcF": "Konsentrasie = Plantos Verde® kg/ha ÷ water L/ha", "optA": "Opsie A — doseer die laaste tenk pro rata", "optAd": "Meng 'n gedeeltelike tenk vir die oorblywende oppervlakte. Presiese gebruik, niks oor nie.", "optB": "Opsie B — meng deurgaans vol tenks", "optBd": "Elke tenk eenders gemeng. Eenvoudiger in die land; die oorskot dek ekstra oppervlakte.", "lastW": "Water in laaste tenk", "lastP": "Plantos Verde® in laaste tenk", "tanksTot": "Totale tenks", "surplus": "Oorskotmengsel", "extra": "Ekstra oppervlakte wat dit sal dek", "pvTot": "Plantos Verde® gebruik", "exact": "Die oppervlakte deel presies in vol tenks — albei opsies is identies.", "howto": "Metode: vul die tenk gedeeltelik met water, voeg die Plantos Verde® by terwyl die roerder loop, vul dan aan tot volume en hou aan roer tydens toediening.", "prep": "Opgestel", "print": "Druk / Stoor as PDF", "each": "elk", "foot": "Agrimedic Global (Pty) Ltd — Internasionale Verspreider vir Plantos Verde®", "fwd": "Aanstuur", "copied": "Mengblad gekopieer — plak dit in WhatsApp, 'n e-pos of 'n boodskap.", "mode": "Modus", "modePV": "Slegs Plantos Verde®", "modeMix": "Ander produkte", "products": "Produkte in die tenk", "prodName": "Produk", "dose": "Dosis", "basis": "Basis", "bPerHa": "per ha", "bPerL": "per liter water", "bPct": "% van spuitvolume", "bRatio": "verdunning 1:N", "addRow": "Voeg produk by", "remove": "Verwyder", "minW": "Minimum watertempo", "perTankHdr": "Per vol tenk", "wholeJob": "Hele werk", "perHaCol": "Dosis per ha", "lblLabel": "Die produketiket geld. Waar hierdie blad en die etiket verskil, volg die etiket.", "lblCompat": "Mengbaarheid en mengvolgorde is die gebruiker se verantwoordelikheid. Doen 'n flestoets voordat u grootskaals meng.", "emptyRows": "Voeg ten minste een produk by.", "ml": "ml", "g": "g", "pvSep": "Plantos Verde® word op sy eie toegedien en word nie saam met hierdie produkte in die tenk gemeng nie. Skakel oor na Plantos Verde®-modus daarvoor.", "subOther": "Mengverhoudings vir hommeltuig- en balkspuittoediening", "working": "PDF word voorberei...", "pdfSaved": "PDF in u aflaaie gestoor.", "pdfFail": "Kon nie die PDF hier skep nie - stuur as teks."}, "zu": {"title": "Isibali Sokuxuba Kwethangi", "sub": "Plantos Verde® — izilinganiso zokuxuba kwe-drone nesifutho se-boom", "notice": "Leli ithuluzi elisebenzisanayo. Vula leli fayela kusiphequluli sewebhu — ngeke lisebenze njenge-PDF.", "lang": "Ulimi", "equip": "Imishini", "drone": "I-drone", "boom": "Isifutho se-boom", "calcby": "Bala usebenzisa", "byarea": "Indawo ozoyifutha", "bystock": "Umkhiqizo okhona", "areaLbl": "Indawo ozoyifutha", "stockLbl": "I-Plantos Verde® ekhona", "tankLbl": "Ubungako bethangi", "waterLbl": "Amanzi ngehektha", "pvLbl": "Isilinganiso se-Plantos Verde®", "ha": "ha", "kg": "kg", "L": "L", "LHa": "L/ha", "kgHa": "kg/ha", "gL": "g/L", "warnMin": "Amanzi amancane adingekayo lapho kufuthwa nge-drone angu-{n} L/ha. Ngaphansi kwalokho ingxube iba yishubile kakhulu ukuthi ifuthwe ngokwethembeka.", "warnVal": "Faka inani elingaphezu kukazero kuzo zonke izikhala.", "stTanks": "Amathangi adingekayo", "stPerTank": "I-Plantos Verde® ethangini eligcwele", "stConc": "Ukujiya kwengxube", "bd": "Ukuhlaziywa kwengxube", "bdArea": "Indawo efuthiwe", "bdWater": "Isamba samanzi adingekayo", "bdPV": "Isamba se-Plantos Verde® esidingekayo", "bdHaTank": "Indawo ngethangi eligcwele", "bdFull": "Amathangi agcwele", "bdConcF": "Ukujiya = Plantos Verde® kg/ha ÷ amanzi L/ha", "optA": "Inketho A — ithangi lokugcina lilinganiswe ngesilinganiso", "optAd": "Xuba ithangi elingagcwele lendawo esele. Ukusetshenziswa okuqondile, akusali lutho.", "optB": "Inketho B — xuba amathangi agcwele wonke", "optBd": "Wonke amathangi axutshwa ngendlela efanayo. Kulula ensimini; okusalayo kufutha indawo eyengeziwe.", "lastW": "Amanzi ethangini lokugcina", "lastP": "I-Plantos Verde® ethangini lokugcina", "tanksTot": "Isamba samathangi", "surplus": "Ingxube eseleyo", "extra": "Indawo eyengeziwe ezofuthwa", "pvTot": "I-Plantos Verde® esetshenzisiwe", "exact": "Indawo ihlukaniswa ngokuphelele ngamathangi agcwele — zombili izinketho ziyafana.", "howto": "Indlela: gcwalisa ithangi ngamanzi ingxenye, faka i-Plantos Verde® kuvulwe isizamazamisi, bese ugcwalisa uze ufinyelele isilinganiso futhi uqhubeke uzamazamisa ngesikhathi ufutha.", "prep": "Kulungiswe", "print": "Phrinta / Londoloza njenge-PDF", "each": "ngalinye", "foot": "Agrimedic Global (Pty) Ltd — Umsabalalisi Wamazwe Ngamazwe we-Plantos Verde®", "fwd": "Dlulisela", "copied": "Ishidi lengxube likopishiwe — linamathisele ku-WhatsApp, i-imeyili noma umyalezo.", "mode": "Imodi", "modePV": "I-Plantos Verde® kuphela", "modeMix": "Eminye imikhiqizo", "products": "Imikhiqizo ethangini", "prodName": "Umkhiqizo", "dose": "Isilinganiso", "basis": "Isisekelo", "bPerHa": "nge-ha", "bPerL": "nge-litha lamanzi", "bPct": "% yevolumu yengxube", "bRatio": "ukuncibilikisa 1:N", "addRow": "Engeza umkhiqizo", "remove": "Susa", "minW": "Amanzi amancane adingekayo", "perTankHdr": "Ngethangi eligcwele", "wholeJob": "Umsebenzi wonke", "perHaCol": "Isilinganiso nge-ha", "lblLabel": "Ilebula lomkhiqizo yilo elibusayo. Uma leli shidi nelebula kungafani, landela ilebula.", "lblCompat": "Ukuhambisana kwengxube nokulandelana kokuxuba kungumthwalo womsebenzisi. Yenza uvivinyo lwebhodlela ngaphambi kokuxuba ngobuningi.", "emptyRows": "Engeza okungenani umkhiqizo owodwa.", "ml": "ml", "g": "g", "pvSep": "I-Plantos Verde® ifuthwa yodwa futhi ayixutshwa ethangini elilodwa nale mikhiqizo. Shintshela kumodi ye-Plantos Verde® ukuze uyibale.", "subOther": "Izilinganiso zokuxuba kwe-drone nesifutho se-boom", "working": "Ilungiselela i-PDF...", "pdfSaved": "I-PDF ilondolozwe kokulandiwe kwakho.", "pdfFail": "Ayikwazanga ukwakha i-PDF lapha - ithunyelwa njengombhalo."}, "xh": {"title": "Isibali Soxubo Lwetanki", "sub": "Plantos Verde® — imilinganiselo yoxubo kwi-drone nakwisitshizi se-boom", "notice": "Esi sisixhobo esisebenzisanayo. Vula le fayile kwisikhangeli sewebhu — ayisayi kusebenza njenge-PDF.", "lang": "Ulwimi", "equip": "Izixhobo", "drone": "I-drone", "boom": "Isitshizi se-boom", "calcby": "Bala usebenzisa", "byarea": "Umhlaba ozakutshizwa", "bystock": "Imveliso ekhoyo", "areaLbl": "Umhlaba ozakutshizwa", "stockLbl": "I-Plantos Verde® ekhoyo", "tankLbl": "Ubungakanani betanki", "waterLbl": "Amanzi ngehektare", "pvLbl": "Umlinganiselo we-Plantos Verde®", "ha": "ha", "kg": "kg", "L": "L", "LHa": "L/ha", "kgHa": "kg/ha", "gL": "g/L", "warnMin": "Amanzi asezantsi afunekayo xa kutshizwa nge-drone ngama-{n} L/ha. Ngaphantsi koko umxube uba mxinwa kakhulu ukuba utshizwe ngokuthembekileyo.", "warnVal": "Faka ixabiso elingaphezu kweqanda kuzo zonke iindawo.", "stTanks": "Iitanki ezifunekayo", "stPerTank": "I-Plantos Verde® ngetanki elizeleyo", "stConc": "Ukuxinana komxube", "bd": "Ukwahlulahlulwa komxube", "bdArea": "Umhlaba otshiziweyo", "bdWater": "Amanzi apheleleyo afunekayo", "bdPV": "I-Plantos Verde® epheleleyo efunekayo", "bdHaTank": "Umhlaba ngetanki elizeleyo", "bdFull": "Iitanki ezizeleyo", "bdConcF": "Ukuxinana = Plantos Verde® kg/ha ÷ amanzi L/ha", "optA": "Ukhetho A — itanki yokugqibela ilinganiswe ngokwesilinganiso", "optAd": "Xuba itanki engazelanga kumhlaba oseleyo. Ukusetyenziswa okuchanekileyo, akusali nto.", "optB": "Ukhetho B — xuba iitanki ezizeleyo zonke", "optBd": "Zonke iitanki zixutywa ngokufanayo. Kulula entsimini; okuseleyo kutshiza umhlaba owongezelelweyo.", "lastW": "Amanzi kwitanki yokugqibela", "lastP": "I-Plantos Verde® kwitanki yokugqibela", "tanksTot": "Iitanki zizonke", "surplus": "Umxube oseleyo", "extra": "Umhlaba owongezelelweyo oza kutshizwa", "pvTot": "I-Plantos Verde® esetyenzisiweyo", "exact": "Umhlaba wahlulwa ngokupheleleyo ngeetanki ezizeleyo — zombini iindlela ziyafana.", "howto": "Indlela: zalisa itanki ngamanzi inxalenye, faka i-Plantos Verde® ngelixa isixubi sisebenza, uze uzalise ude ufike kumthamo kwaye uqhubeke uxuba ngexesha lokutshiza.", "prep": "Kulungiswe nge", "print": "Printa / Gcina njenge-PDF", "each": "nganye", "foot": "Agrimedic Global (Pty) Ltd — UMsasazi WeHlabathi we-Plantos Verde®", "fwd": "Dlulisela", "copied": "Iphepha lomxube likhutshelwe — lincamathisele ku-WhatsApp, kwi-imeyile okanye kumyalezo.", "mode": "Imowudi", "modePV": "I-Plantos Verde® kuphela", "modeMix": "Ezinye iimveliso", "products": "Iimveliso etankini", "prodName": "Imveliso", "dose": "Umlinganiselo", "basis": "Isiseko", "bPerHa": "nge-ha", "bPerL": "nge-litha yamanzi", "bPct": "% yomthamo womxube", "bRatio": "ukudambisa 1:N", "addRow": "Yongeza imveliso", "remove": "Susa", "minW": "Amanzi asezantsi afunekayo", "perTankHdr": "Ngetanki elizeleyo", "wholeJob": "Umsebenzi wonke", "perHaCol": "Umlinganiselo nge-ha", "lblLabel": "Ilebhile yemveliso yiyo elawulayo. Ukuba eli phepha nelebhile ziyahluka, landela ilebhile.", "lblCompat": "Ukuhambelana komxube nolandelelwano lokuxuba luxanduva lomsebenzisi. Yenza uvavanyo lwebhotile phambi kokuxuba ngobuninzi.", "emptyRows": "Yongeza ubuncinane imveliso enye.", "ml": "ml", "g": "g", "pvSep": "I-Plantos Verde® itshizwa yodwa kwaye ayixutywa kwitanki enye nezi mveliso. Tshintshela kwimowudi ye-Plantos Verde® ukuze uyibale.", "subOther": "Imilinganiselo yoxubo kwi-drone nakwisitshizi se-boom", "working": "Ilungiselela i-PDF...", "pdfSaved": "I-PDF igcinwe kwiikhuphelo zakho.", "pdfFail": "Ayikwazanga ukwenza i-PDF apha - ithunyelwa njengombhalo."}, "ss": {"title": "Sibali Sekuhlanganisa Kwethangi", "sub": "Plantos Verde® — tilinganiso tekuhlanganisa kwe-drone nesifutfo se-boom", "notice": "Leli lithulusi lelisebentisanako. Vula lelifayela kusiphequluli seweb — ngeke lisebente njenge-PDF.", "lang": "Lulwimi", "equip": "Emathulusi", "drone": "I-drone", "boom": "Sifutfo se-boom", "calcby": "Bala ngekusebentisa", "byarea": "Indzawo letawufutfwa", "bystock": "Umkhicito lokhona", "areaLbl": "Indzawo letawufutfwa", "stockLbl": "I-Plantos Verde® lekhona", "tankLbl": "Bukhulu bethangi", "waterLbl": "Emanti ngehektha", "pvLbl": "Silinganiso se-Plantos Verde®", "ha": "ha", "kg": "kg", "L": "L", "LHa": "L/ha", "kgHa": "kg/ha", "gL": "g/L", "warnMin": "Emanti lamancane ladzingekako nakufutfwa nge-drone ngu-{n} L/ha. Ngaphansi kwaloko ingxube iba shubile kakhulu kutsi ingafutfwa ngalokwetsembekile.", "warnVal": "Faka linani lelingetulu kwelicandza kuto tonkhe tikhala.", "stTanks": "Emathangi ladzingekako", "stPerTank": "I-Plantos Verde® ethangini lelagcwele", "stConc": "Kujiya kwengxube", "bd": "Kuhlatiywa kwengxube", "bdArea": "Indzawo lefutfiwe", "bdWater": "Emanti lonkhe ladzingekako", "bdPV": "I-Plantos Verde® yonkhe ledzingekako", "bdHaTank": "Indzawo ngethangi lelagcwele", "bdFull": "Emathangi lagcwele", "bdConcF": "Kujiya = Plantos Verde® kg/ha ÷ emanti L/ha", "optA": "Inketfo A — lithangi lekugcina lilinganiswe ngesilinganiso", "optAd": "Hlanganisa lithangi lelingakagcwali kuleyo ndzawo lesele. Kusetjentiswa lokucondzile, akusali lutfo.", "optB": "Inketfo B — hlanganisa emathangi lagcwele onkhe", "optBd": "Onkhe emathangi ahlanganiswa ngendlela lefanako. Kulula ensimini; lokusalako kufutfa indzawo lengetiwe.", "lastW": "Emanti ethangini lekugcina", "lastP": "I-Plantos Verde® ethangini lekugcina", "tanksTot": "Emathangi onkhe", "surplus": "Ingxube lesele", "extra": "Indzawo lengetiwe letawufutfwa", "pvTot": "I-Plantos Verde® lesetjentisiwe", "exact": "Indzawo yehlukaniswa ngalokuphelele ngemathangi lagcwele — totimbili tinketfo tiyafana.", "howto": "Indlela: gcwalisa lithangi ngemanti incenye, faka i-Plantos Verde® nangesikhatsi sihlanganisi sisebenta, bese ugcwalisa uze ufike kusilinganiso futsi uchubeke uhlanganisa nawufutfa.", "prep": "Kulungiswe nge", "print": "Phrinta / Gcina njenge-PDF", "each": "ngalinye", "foot": "Agrimedic Global (Pty) Ltd — Umsakati Wemave Ngemave we-Plantos Verde®", "fwd": "Dlulisela", "copied": "Lishidi lengxube likhishiwe — linamatsisele ku-WhatsApp, i-imeyili nome umlayeto.", "mode": "Imodi", "modePV": "I-Plantos Verde® kuphela", "modeMix": "Leminye imikhicito", "products": "Imikhicito ethangini", "prodName": "Umkhicito", "dose": "Silinganiso", "basis": "Sisekelo", "bPerHa": "nge-ha", "bPerL": "nge-lithra yemanti", "bPct": "% yevolumu yengxube", "bRatio": "kuncibilikisa 1:N", "addRow": "Engeta umkhicito", "remove": "Susa", "minW": "Emanti lamancane ladzingekako", "perTankHdr": "Ngethangi lelagcwele", "wholeJob": "Umsebenti wonkhe", "perHaCol": "Silinganiso nge-ha", "lblLabel": "Lilebula lemkhicito ngilo lelibusako. Nangabe lelishidi nelilebula kungafani, landzela lilebula.", "lblCompat": "Kuhambelana kwengxube nekulandzelana kwekuhlanganisa kungumtfwalo wemsebentisi. Yenta luvivinyo lwelibhodlela ngaphambi kwekuhlanganisa ngebunyenti.", "emptyRows": "Engeta lokungenani umkhicito munye.", "ml": "ml", "g": "g", "pvSep": "I-Plantos Verde® ifutfwa yodvwa futsi ayihlanganiswa ethangini linye naletimikhicito. Shintjela kumodi ye-Plantos Verde® kuze uyibale.", "subOther": "Tilinganiso tekuhlanganisa kwe-drone nesifutfo se-boom", "working": "Ilungiselela i-PDF...", "pdfSaved": "I-PDF igcinwe kulokulandziwe kwakho.", "pdfFail": "Ayikhonanga kwenta i-PDF lapha - itfunyelwa njengembhalo."}};
+var LOCALE = {"en": "en-GB", "fr": "fr-FR", "es": "es-ES", "pt": "pt-PT", "de": "de-DE", "it": "it-IT", "pl": "pl-PL", "ru": "ru-RU", "uk": "uk-UA", "ar": "ar-EG-u-nu-latn", "zh": "zh-CN", "hi": "hi-IN", "sw": "sw-KE", "af": "af-ZA", "zu": "zu-ZA", "xh": "xh-ZA", "ss": "en-ZA"};
+var RTL = ["ar"];
+
+var lang = "en", equip = "drone", dir = "area", mode = "pv";
+var LAST = null;
+var rows = [];
+var seq = 0;
+
+function $(id){ return document.getElementById(id); }
+function T(){ return STR[lang] || STR.en; }
+function esc(s){
+  return String(s == null ? "" : s)
+    .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;").replace(/'/g,"&#39;");
+}
+
+function fmt(n, dp){
+  if(!isFinite(n)) return "-";
+  var loc = LOCALE[lang] || "en-GB";
+  try{
+    return new Intl.NumberFormat(loc, {minimumFractionDigits:0, maximumFractionDigits:(dp===undefined?2:dp)}).format(n);
+  }catch(e){ return n.toFixed(dp===undefined?2:dp); }
+}
+function unitv(n, dp, u){ return fmt(n, dp) + " " + u; }
+function num(id){ var v = parseFloat($(id).value); return isFinite(v) ? v : 0; }
+
+/* ---- amounts are held in ml (volume) or g (mass); display auto-scales ---- */
+function fmtAmt(x, fam){
+  var t = T();
+  var big   = (fam === "vol") ? t.L  : t.kg;
+  var small = (fam === "vol") ? t.ml : t.g;
+  if(x >= 1000) return fmt(x/1000, 2) + " " + big;
+  if(x >= 100)  return fmt(x, 0) + " " + small;
+  if(x >= 10)   return fmt(x, 1) + " " + small;
+  return fmt(x, 2) + " " + small;
+}
+
+function family(unit){ return (unit === "ml" || unit === "L") ? "vol" : "mass"; }
+
+/* dose -> amount per litre of water, in ml or g */
+function perLitre(r, waterRate){
+  var v = parseFloat(r.value); if(!isFinite(v) || v <= 0) return 0;
+  var base = v * ((r.unit === "L" || r.unit === "kg") ? 1000 : 1);
+  if(r.basis === "perHa")  return waterRate > 0 ? base / waterRate : 0;
+  if(r.basis === "perL")   return base;
+  if(r.basis === "pct")    return v * 10;        /* 0.5% -> 5 per litre */
+  if(r.basis === "ratio")  return v > 0 ? 1000 / v : 0;  /* 1:500 -> 2 per litre */
+  return 0;
+}
+
+/* how the operator entered it, echoed on the sheet for traceability */
+function doseLabel(r){
+  var t = T(), v = parseFloat(r.value); if(!isFinite(v)) v = 0;
+  if(r.basis === "perHa")  return fmt(v,2) + " " + r.unit + "/" + t.ha;
+  if(r.basis === "perL")   return fmt(v,3) + " " + r.unit + "/" + t.L;
+  if(r.basis === "pct")    return fmt(v,2) + " %";
+  if(r.basis === "ratio")  return "1:" + fmt(v,0);
+  return "";
+}
+
+/* ------------------------- product rows ------------------------- */
+function defaultRows(){
+  /* deliberately NOT seeded with Plantos Verde - it is applied on its own, never tank-mixed here */
+  return [{id: ++seq, name: "", basis: "perL", value: "", unit: "ml"}];
+}
+
+function renderRows(){
+  var t = T();
+  var bases  = [["perHa",t.bPerHa],["perL",t.bPerL],["pct",t.bPct],["ratio",t.bRatio]];
+  var uFull  = [["ml",t.ml],["L",t.L],["g",t.g],["kg",t.kg]];
+  var uFam   = [["ml",t.ml],["g",t.g]];
+
+  $("rowsWrap").innerHTML = rows.map(function(r, i){
+    var famOnly = (r.basis === "pct" || r.basis === "ratio");
+    var units = famOnly ? uFam : uFull;
+    if(famOnly && (r.unit === "L" || r.unit === "kg")) r.unit = (r.unit === "L") ? "ml" : "g";
+    return '<div class="prow" data-id="' + r.id + '">' +
+      '<input class="pname" type="text" value="' + esc(r.name) + '" placeholder="' + esc(t.prodName) + '" aria-label="' + esc(t.prodName) + '">' +
+      '<select class="pbasis" aria-label="' + esc(t.basis) + '">' +
+        bases.map(function(b){ return '<option value="'+b[0]+'"'+(r.basis===b[0]?' selected':'')+'>'+esc(b[1])+'</option>'; }).join("") +
+      '</select>' +
+      '<input class="pval" type="number" min="0" step="any" inputmode="decimal" value="' + esc(r.value) + '" aria-label="' + esc(t.dose) + '">' +
+      '<select class="punit" aria-label="' + esc(t.dose) + '">' +
+        units.map(function(u){ return '<option value="'+u[0]+'"'+(r.unit===u[0]?' selected':'')+'>'+esc(u[1])+'</option>'; }).join("") +
+      '</select>' +
+      '<span class="rowbtns">' +
+        '<button type="button" class="mini up" ' + (i===0?'disabled':'') + ' aria-label="up">\u2191</button>' +
+        '<button type="button" class="mini dn" ' + (i===rows.length-1?'disabled':'') + ' aria-label="down">\u2193</button>' +
+        '<button type="button" class="mini rm" aria-label="' + esc(t.remove) + '">\u00D7</button>' +
+      '</span>' +
+    '</div>';
+  }).join("");
+}
+
+function rowIndex(el){
+  var id = parseInt(el.closest(".prow").getAttribute("data-id"), 10);
+  for(var i=0;i<rows.length;i++){ if(rows[i].id === id) return i; }
+  return -1;
+}
+
+function wireRows(){
+  var w = $("rowsWrap");
+  w.addEventListener("input", function(e){
+    var i = rowIndex(e.target); if(i < 0) return;
+    if(e.target.classList.contains("pname")) rows[i].name = e.target.value;
+    if(e.target.classList.contains("pval"))  rows[i].value = e.target.value;
+    calc();
+  });
+  w.addEventListener("change", function(e){
+    var i = rowIndex(e.target); if(i < 0) return;
+    if(e.target.classList.contains("pbasis")){ rows[i].basis = e.target.value; renderRows(); }
+    if(e.target.classList.contains("punit"))  rows[i].unit  = e.target.value;
+    calc();
+  });
+  w.addEventListener("click", function(e){
+    var b = e.target.closest("button.mini"); if(!b) return;
+    var i = rowIndex(b); if(i < 0) return;
+    if(b.classList.contains("rm")) rows.splice(i,1);
+    if(b.classList.contains("up") && i > 0) rows.splice(i-1, 0, rows.splice(i,1)[0]);
+    if(b.classList.contains("dn") && i < rows.length-1) rows.splice(i+1, 0, rows.splice(i,1)[0]);
+    renderRows(); calc();
+  });
+  $("btnAdd").addEventListener("click", function(){
+    if(rows.length >= 6) return;
+    rows.push({id: ++seq, name: "", basis: "perL", value: "", unit: "ml"});
+    renderRows(); calc();
+  });
+}
+
+/* ------------------------- calculation ------------------------- */
+function calc(){
+  var t = T();
+  var tank = num("tank"), water = num("water"), pvRate = num("pv");
+  var minW = (mode === "mix") ? num("minw") : 30;
+  var area;
+  if(mode === "mix" || dir === "area"){ area = num("area"); }
+  else { area = pvRate > 0 ? num("stock") / pvRate : 0; }
+
+  var warn = $("warn"); warn.className = "warn";
+  var live = (mode === "mix") ? rows.filter(function(r){ return perLitre(r, water) > 0; }) : [];
+
+  var bad = (tank <= 0 || water <= 0 || area <= 0) ||
+            (mode === "pv"  && pvRate <= 0) ||
+            (mode === "mix" && live.length === 0);
+  if(bad){
+    warn.textContent = (mode === "mix" && live.length === 0 && tank > 0 && water > 0 && area > 0)
+      ? t.emptyRows : t.warnVal;
+    warn.className = "warn on";
+    $("s1").textContent = "-"; $("s2").textContent = "-"; $("s3").textContent = "-";
+    $("bdBody").innerHTML = ""; $("optWrap").innerHTML = ""; $("prodBody").innerHTML = "";
+    $("s1note").textContent = ""; $("s2note").textContent = "";
+    LAST = null;
+    return;
+  }
+  if(equip === "drone" && minW > 0 && water < minW){
+    warn.textContent = t.warnMin.replace("{n}", fmt(minW, 0));
+    warn.className = "warn on";
+  }
+
+  var totalW    = area * water;
+  var haPerTank = tank / water;
+  var fullTanks = Math.floor(totalW / tank + 1e-9);
+  var remW      = totalW - fullTanks * tank;
+  if(remW < 1e-6) remW = 0;
+  var ceilTanks = remW > 0 ? fullTanks + 1 : fullTanks;
+
+  LAST = {mode: mode, rows: null, prods: null, opt: null,
+          warn: (equip === "drone" && minW > 0 && water < minW) ? t.warnMin.replace("{n}", fmt(minW,0)) : null};
+
+  /* the headline count rounds up - spell out that the last load is a part tank,
+     or an operator will mix every tank full and over-apply */
+  $("s1note").textContent = remW > 0
+    ? fmt(fullTanks, 0) + " \u00D7 " + unitv(tank, 0, t.L) + "  +  1 \u00D7 " + unitv(remW, 1, t.L)
+    : "";
+
+  var bd, prods = [];
+
+  if(mode === "pv"){
+    var conc = pvRate / water, gL = conc * 1000;
+    var pvPerTank = conc * tank, totalPV = area * pvRate;
+
+    /* mirror of the tanks sub-line: what 6 full, 6 + part, and 7 full each cost in product */
+    $("s2note").innerHTML = (remW > 0)
+      ? "<b>" + fmt(fullTanks,0) + " \u00D7 " + unitv(pvPerTank,2,t.kg)
+          + "  =  " + unitv(pvPerTank*fullTanks,2,t.kg) + "</b>"
+      + "<b>+ " + unitv(conc*remW,2,t.kg) + "  =  " + unitv(totalPV,2,t.kg) + "</b>"
+      + "<b>" + fmt(ceilTanks,0) + " \u00D7 " + unitv(pvPerTank,2,t.kg)
+          + "  =  " + unitv(pvPerTank*ceilTanks,2,t.kg) + "</b>"
+      : "";
+
+    $("s1").textContent = fmt(ceilTanks, 0);
+    $("s2").innerHTML   = fmt(pvPerTank, 2) + ' <small>' + t.kg + '</small>';
+    $("s3").innerHTML   = fmt(gL, 1) + ' <small>' + t.gL + '</small>';
+    $("c1").textContent = t.stTanks; $("c2").textContent = t.stPerTank; $("c3").textContent = t.stConc;
+
+    bd = [
+      [t.tankLbl,   unitv(tank, 0, t.L)],
+      [t.waterLbl,  unitv(water, 0, t.LHa)],
+      [t.pvLbl,     unitv(pvRate, 2, t.kgHa)],
+      [t.bdArea,    unitv(area, 2, t.ha)],
+      [t.bdWater,   unitv(totalW, 0, t.L)],
+      [t.bdPV,      unitv(totalPV, 2, t.kg)],
+      [t.bdHaTank,  unitv(haPerTank, 2, t.ha)],
+      [t.stPerTank, unitv(pvPerTank, 2, t.kg)],
+      [t.stConc,    unitv(gL, 1, t.gL)],
+      [t.bdFull,    fmt(fullTanks, 0)]
+    ];
+    LAST.pv = {perTank: pvPerTank, total: totalPV, last: conc * remW, fam: "mass"};
+  } else {
+    $("s1").textContent = fmt(ceilTanks, 0);
+    $("s2").innerHTML   = fmt(haPerTank, 2) + ' <small>' + t.ha + '</small>';
+    $("s3").innerHTML   = fmt(totalW, 0) + ' <small>' + t.L + '</small>';
+    $("c1").textContent = t.stTanks; $("c2").textContent = t.bdHaTank; $("c3").textContent = t.bdWater;
+    $("s2note").textContent = "";
+
+    prods = live.map(function(r, i){
+      var pl = perLitre(r, water), fam = family(r.unit);
+      return {
+        name: (r.name && r.name.trim()) ? r.name.trim() : (t.prodName + " " + (i+1)),
+        dose: doseLabel(r), fam: fam,
+        perHa: pl * water, perTank: pl * tank,
+        total: pl * water * area, last: pl * remW, perTankB: pl * tank * ceilTanks
+      };
+    });
+
+    /* total water and area-per-tank are already the 2nd and 3rd stat cards
+       directly above this table - do not repeat them here */
+    bd = [
+      [t.tankLbl,  unitv(tank, 0, t.L)],
+      [t.waterLbl, unitv(water, 0, t.LHa)],
+      [t.bdArea,   unitv(area, 2, t.ha)],
+      [t.bdFull,   fmt(fullTanks, 0)]
+    ];
+  }
+
+  LAST.rows = bd; LAST.prods = prods;
+
+  $("bdBody").innerHTML = bd.map(function(r){
+    return '<tr><th scope="row">' + esc(r[0]) + '</th><td class="v">' + esc(r[1]) + '</td></tr>';
+  }).join("");
+
+  var tf = $("t-bdConcF").closest("tfoot");
+  if(tf) tf.style.display = (mode === "pv") ? "" : "none";
+  /* heading carries the area, so the totals column is unambiguously "for this job" */
+  if(mode === "mix"){
+    $("t-products2").innerHTML = esc(t.products) +
+      '<span class="hsub">' + esc(unitv(area, 2, t.ha)) + '</span>';
+  }
+  $("prodPanel").style.display = (mode === "mix") ? "" : "none";
+  $("prodEditor").style.display = (mode === "mix") ? "" : "none";
+  $("caveats").style.display = (mode === "mix") ? "" : "none";
+  $("methodNote").style.display = (mode === "mix") ? "none" : "";
+
+  if(mode === "mix"){
+    /* data-label drives the stacked card layout on narrow screens */
+    $("prodBody").innerHTML = prods.map(function(p){
+      return '<tr><th scope="row">' + esc(p.name) + '<span class="sub">' + esc(p.dose) + '</span></th>' +
+             '<td class="v" data-label="' + esc(t.perHaCol) + '">' + fmtAmt(p.perHa, p.fam) + '</td>' +
+             '<td class="v" data-label="' + esc(t.perTankHdr) + '">' + fmtAmt(p.perTank, p.fam) + '</td>' +
+             '<td class="v" data-label="' + esc(t.wholeJob) + '">' + fmtAmt(p.total, p.fam) + '</td></tr>';
+    }).join("");
+  }
+
+  if(remW === 0){
+    LAST.opt = {exact: t.exact};
+    $("optWrap").innerHTML = '<div class="exact">' + esc(t.exact) + '</div>';
+    return;
+  }
+
+  var surplusW = tank - remW, extraHa = surplusW / water;
+  var aRows = [[t.tanksTot, fmt(fullTanks,0) + " + 1"], [t.lastW, unitv(remW, 1, t.L)]];
+  var bRows = [[t.tanksTot, fmt(ceilTanks,0)], [t.surplus, unitv(surplusW, 1, t.L)], [t.extra, unitv(extraHa, 2, t.ha)]];
+
+  if(mode === "pv"){
+    aRows.push([t.lastP, unitv(LAST.pv.last, 2, t.kg)]);
+    aRows.push([t.pvTot, unitv(LAST.pv.total, 2, t.kg)]);
+    bRows.push([t.stPerTank, unitv(LAST.pv.perTank, 2, t.kg)]);
+    bRows.push([t.pvTot, unitv(LAST.pv.perTank * ceilTanks, 2, t.kg)]);
+  } else {
+    prods.forEach(function(p){ aRows.push([p.name, fmtAmt(p.last, p.fam)]); });
+    prods.forEach(function(p){ bRows.push([p.name, fmtAmt(p.perTankB, p.fam)]); });
+  }
+
+  LAST.opt = {a:{h:t.optA, rows:aRows}, b:{h:t.optB, rows:bRows}};
+
+  function dl(items){
+    return '<dl>' + items.map(function(i){
+      return '<div><dt>' + esc(i[0]) + '</dt><dd>' + esc(i[1]) + '</dd></div>';
+    }).join("") + '</dl>';
+  }
+  $("optWrap").innerHTML =
+    '<div class="opts">' +
+      '<div class="opt"><h3>' + esc(t.optA) + '</h3><p class="d">' + esc(t.optAd) + '</p>' + dl(aRows) + '</div>' +
+      '<div class="opt"><h3>' + esc(t.optB) + '</h3><p class="d">' + esc(t.optBd) + '</p>' + dl(bRows) + '</div>' +
+    '</div>';
+}
+
+/* ------------------------- forward ------------------------- */
+var CONTACTS = {
+  pv: [
+    {t:"www.agrimedic-global.com",        h:"https://www.agrimedic-global.com"},
+    {t:"info@agrimedic-global.com",       h:"mailto:info@agrimedic-global.com"},
+    {t:"linkedin.com/company/agrimedic",  h:"https://www.linkedin.com/company/agrimedic"}
+  ],
+  mix: [
+    {t:"www.agrideltadrones.co.za",       h:"https://www.agrideltadrones.co.za"},
+    {t:"wicus@agrideltadrones.co.za",     h:"mailto:wicus@agrideltadrones.co.za"}
+  ]
+};
+
+function renderContact(){
+  var list = CONTACTS[mode === "pv" ? "pv" : "mix"];
+  $("contact").innerHTML = list.map(function(c){
+    return '<a href="' + c.h + '" target="_blank" rel="noopener noreferrer">' + esc(c.t) + '</a>';
+  }).join('<span class="sep">\u00B7</span>');
+}
+
+function shareText(){
+  if(!LAST) return null;
+  var t = T(), NL = String.fromCharCode(10), out = [];
+  out.push(t.title.toUpperCase());
+  out.push((mode === "pv" ? "Plantos Verde\u00AE" : t.modeMix) + " \u2014 " + (equip === "drone" ? t.drone : t.boom));
+  out.push("");
+  LAST.rows.forEach(function(r){ out.push(r[0] + ": " + r[1]); });
+  if(LAST.prods && LAST.prods.length){
+    out.push("");
+    out.push(t.perTankHdr.toUpperCase());
+    LAST.prods.forEach(function(p){
+      out.push("  " + p.name + " (" + p.dose + "): " + fmtAmt(p.perTank, p.fam));
+    });
+    out.push("");
+    out.push(t.wholeJob.toUpperCase());
+    LAST.prods.forEach(function(p){ out.push("  " + p.name + ": " + fmtAmt(p.total, p.fam)); });
+  }
+  out.push("");
+  if(LAST.opt.exact){ out.push(LAST.opt.exact); }
+  else {
+    [LAST.opt.a, LAST.opt.b].forEach(function(o){
+      out.push(o.h);
+      o.rows.forEach(function(r){ out.push("  " + r[0] + ": " + r[1]); });
+      out.push("");
+    });
+  }
+  if(mode === "pv"){ out.push(t.howto); }
+  else { out.push(t.pvSep); out.push(t.lblLabel); out.push(t.lblCompat); }
+  if(LAST.warn){ out.push(""); out.push("\u26A0 " + LAST.warn); }
+  out.push("");
+  out.push(t.foot);
+  out.push(CONTACTS[mode === "pv" ? "pv" : "mix"].map(function(c){ return c.t; }).join("  |  "));
+  return out.join(NL).replace(new RegExp(NL + "{3,}", "g"), NL + NL);
+}
+
+function toast(msg){
+  var el = $("toast");
+  el.textContent = msg; el.className = "toast on";
+  clearTimeout(el._tid);
+  el._tid = setTimeout(function(){ el.className = "toast"; }, 4500);
+}
+function copyFallback(txt){
+  var ta = document.createElement("textarea");
+  ta.value = txt; ta.setAttribute("readonly","");
+  ta.style.position = "fixed"; ta.style.top = "-1000px"; ta.style.opacity = "0";
+  document.body.appendChild(ta);
+  ta.select(); ta.setSelectionRange(0, ta.value.length);
+  var ok = false;
+  try{ ok = document.execCommand("copy"); }catch(e){ ok = false; }
+  document.body.removeChild(ta);
+  return ok;
+}
+function forwardText(){
+  var t = T(), txt = shareText();
+  if(!txt) return;
+  if(navigator.share){
+    navigator.share({title: "Plantos Verde\u00AE \u2014 " + t.title, text: txt}).catch(function(){});
+    return;
+  }
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(function(){ toast(t.copied); })
+      .catch(function(){ if(copyFallback(txt)) toast(t.copied); });
+    return;
+  }
+  if(copyFallback(txt)) toast(t.copied);
+}
+
+function forward(){
+  var t = T();
+  if(!LAST) return;
+  var btn = $("btnFwd"), label = btn.textContent;
+  btn.disabled = true; btn.textContent = t.working;
+
+  buildPdfBlob().then(function(blob){
+    var name = pdfFilename();
+    var file = null;
+    try{ file = new File([blob], name, {type: "application/pdf"}); }catch(e){ file = null; }
+
+    if(file && navigator.canShare && navigator.canShare({files: [file]}) && navigator.share){
+      return navigator.share({files: [file], title: name}).catch(function(err){
+        /* user cancelling the share sheet is not a failure */
+        if(err && err.name === "AbortError") return;
+        throw err;
+      });
+    }
+    /* no file sharing on this device - hand over the PDF directly */
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url; a.download = name;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(function(){ URL.revokeObjectURL(url); }, 4000);
+    toast(t.pdfSaved);
+  }).catch(function(){
+    /* rasterising can fail on some mobile browsers - never leave the user with nothing */
+    document.body.classList.remove("snapmode");
+    toast(t.pdfFail);
+    forwardText();
+  }).then(function(){
+    btn.disabled = false; btn.textContent = label;
+  });
+}
+
+/* ------------------------- paint ------------------------- */
+function paint(){
+  var t = T();
+  document.documentElement.lang = lang;
+  document.documentElement.dir  = RTL.indexOf(lang) >= 0 ? "rtl" : "ltr";
+  document.title = "Plantos Verde\u00AE \u2014 " + t.title;
+
+  ["title","sub","notice","lang","equip","drone","boom","calcby","byarea","bystock",
+   "areaLbl","stockLbl","tankLbl","waterLbl","pvLbl","bd","bdConcF","howto","foot",
+   "mode","modePV","modeMix","products","addRow","minW","lblLabel","lblCompat","pvSep"].forEach(function(k){
+    var el = $("t-" + k); if(el) el.textContent = t[k];
+  });
+  $("t-sub").textContent = (mode === "pv") ? t.sub : t.subOther;
+  renderContact();
+  $("btnPrint").textContent = t.print;
+  $("btnFwd").textContent   = t.fwd;
+  $("btnAdd").textContent   = t.addRow;
+  $("toast").className = "toast";
+
+  $("t-products2").textContent = t.products;
+  $("h-prod").textContent = t.prodName;
+  $("h-perha").textContent = t.perHaCol;
+  $("h-pertank").textContent = t.perTankHdr;
+  $("h-total").textContent = t.wholeJob;   /* area appended in calc() */
+
+  $("u-area").textContent  = t.ha;
+  $("u-stock").textContent = t.kg;
+  $("u-tank").textContent  = t.L;
+  $("u-water").textContent = t.LHa;
+  $("u-pv").textContent    = t.kgHa;
+  $("u-minw").textContent  = t.LHa;
+
+  var d = new Date(), loc = LOCALE[lang] || "en-GB";
+  try{
+    $("prep").textContent = t.prep + " " + new Intl.DateTimeFormat(loc, {year:"numeric",month:"long",day:"numeric"}).format(d);
+  }catch(e){ $("prep").textContent = t.prep + " " + d.toISOString().slice(0,10); }
+
+  renderRows();
+  calc();
+}
+
+function applyMode(){
+  var pv = (mode === "pv");
+  $("fPV").style.display     = pv ? "" : "none";
+  $("fMinW").style.display   = pv ? "none" : "";
+  $("fsDir").style.display   = pv ? "" : "none";
+  $("prodEditor").style.display = pv ? "none" : "";
+  /* Agri Delta brands the other-products sheet; Agrimedic + PV move to the foot */
+  $("bandPV").style.display     = pv ? "" : "none";
+  $("bandAD").style.display     = pv ? "none" : "flex";
+  $("bottomBand").style.display = pv ? "none" : "flex";
+  if(!pv){ dir = "area"; }
+  $("fArea").style.display  = (pv && dir === "stock") ? "none" : "";
+  $("fStock").style.display = (pv && dir === "stock") ? "" : "none";
+  paint();
+}
+
+function seg(wrapId, cb){
+  var w = $(wrapId);
+  w.addEventListener("click", function(e){
+    var b = e.target.closest("button"); if(!b) return;
+    Array.prototype.forEach.call(w.querySelectorAll("button"), function(x){
+      x.setAttribute("aria-pressed", x === b ? "true" : "false");
+    });
+    cb(b.getAttribute("data-v"));
+  });
+}
+
+seg("segMode", function(v){ mode = v; applyMode(); });
+seg("segEquip", function(v){
+  equip = v;
+  if(v === "drone" && num("water") < 30)  $("water").value = 30;
+  if(v === "boom"  && num("water") < 100) $("water").value = 250;
+  calc();
+});
+seg("segDir", function(v){
+  dir = v;
+  $("fArea").style.display  = v === "area"  ? "" : "none";
+  $("fStock").style.display = v === "stock" ? "" : "none";
+  calc();
+});
+
+["area","stock","tank","water","pv","minw"].forEach(function(id){
+  $(id).addEventListener("input", calc);
+});
+$("lang").addEventListener("change", function(){ lang = this.value; location.hash = lang; paint(); });
+$("btnPrint").addEventListener("click", function(){ window.print(); });
+$("btnFwd").addEventListener("click", forward);
+
+function fromHash(){
+  var h = (location.hash || "").replace("#","").toLowerCase();
+  if(h && STR[h]){ lang = h; $("lang").value = h; paint(); }
+}
+window.addEventListener("hashchange", fromHash);
+
+rows = defaultRows();
+wireRows();
+$("lang").value = "en";
+applyMode();
+fromHash();
+paint();
+
+</script>
+<noscript>
+  <div style="padding:20px;max-width:960px;margin:0 auto">
+    This calculator needs JavaScript. Please open the file in a web browser with JavaScript enabled.
+  </div>
+</noscript>
+
+<!-- ===================================================================
+     Iframe auto-height. Posts this document's height to the parent page
+     so the embedding site can resize the <iframe> and avoid inner
+     scrollbars. Inert when the page is opened directly (not embedded).
+     Message shape: { agrimedicCalculator: "tank-mixing", height: <px> }
+     =================================================================== -->
+<script>
+(function () {
+  if (window.self === window.top) return; // not embedded — do nothing
+  var ID = "tank-mixing", last = 0;
+  function height() {
+    var d = document;
+    return Math.ceil(Math.max(
+      d.body ? d.body.scrollHeight : 0,
+      d.body ? d.body.offsetHeight : 0,
+      d.documentElement.scrollHeight,
+      d.documentElement.offsetHeight,
+      d.documentElement.getBoundingClientRect().height
+    ));
+  }
+  function send() {
+    var h = height();
+    if (h && Math.abs(h - last) > 2) {
+      last = h;
+      try { window.parent.postMessage({ agrimedicCalculator: ID, height: h }, "*"); } catch (e) {}
+    }
+  }
+  if (window.ResizeObserver) {
+    try { new ResizeObserver(send).observe(document.documentElement); } catch (e) {}
+  }
+  window.addEventListener("load", send);
+  window.addEventListener("resize", send);
+  document.addEventListener("input", send, true);
+  document.addEventListener("change", send, true);
+  document.addEventListener("click", function () { setTimeout(send, 60); }, true);
+  setInterval(send, 1000); // belt-and-braces for browsers without ResizeObserver
+  send();
+})();
+</script>
+</body>
+</html>
